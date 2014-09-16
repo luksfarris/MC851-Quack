@@ -1,4 +1,4 @@
-package quack_user;
+package quack.user;
 
 public class QuackUser {
 
