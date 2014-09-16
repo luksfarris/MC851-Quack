@@ -1,4 +1,4 @@
-MC851---Quack
+MC851-Quack
 =============
 
-Projeto final da disciplina de Projeto de Sistema de Informação da Unicamp 
+Projeto final da disciplina de Projeto de Sistema de Informação da Unicamp.
