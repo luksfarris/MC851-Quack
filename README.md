@@ -6,7 +6,7 @@ Projeto de Rede Social.
 
 Tecnologias
 ----
-- Java Web
+- Java Web (VRaptor)
 - Banco de dados MySQL
 - Hibernate
 
