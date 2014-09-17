@@ -17,3 +17,9 @@ Requisitos para rodar
 - *Eclipse EE* instalado [(link)](https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/lunar)
 - Java 7 [(link)](https://www.java.com/en/)
 - Apache tomcat 7.0 (só precisa baixar o [zip](http://tomcat.apache.org/download-70.cgi) e guardar em algum lugar)
+
+Configurando o ambiente
+----
+1. Fazer clone do repositório
+2. Abrir eclipse, File - import - Existing project into workspace
+3. Selecionar local onde o projeto foi baixado
