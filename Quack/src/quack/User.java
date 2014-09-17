@@ -1,10 +1,5 @@
 package quack;
 
-import java.util.*;
+public interface User {
 
-public class User 
-{
-	private long id;
-	private String login, password, profileMsg, avatar, name, email, location, website;
-	private Calendar createdOn;
 }
