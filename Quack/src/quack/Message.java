@@ -1,11 +1,11 @@
-package quack.message;
+package quack;
 
 import java.util.Calendar;
 
-@Entity
+//@Entity
 public class Message {
-	@Id
-	@GeneratedValue
+	//@Id
+	//@GeneratedValue
 	private Long id;
 	
     private	Calendar timestamp;
