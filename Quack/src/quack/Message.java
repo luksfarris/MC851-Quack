@@ -5,47 +5,46 @@ import java.util.List;
 
 public interface Message {
 	
-	//Basic method to post a single message
-	public boolean postMessage(String userId, String message);
+	//Insere uma mensagem com conteudo {message} do usuário {user}
+	//Retorna sucesso ou falha na inserção
+	public boolean postMessage(User user, String message);
 	
-	//Post a message with the place information
-	public boolean postMessage(String userId, String message, String place);
+	//Insere uma mensagem com conteudo {message} do usuário {user} e local {place}
+	//Retorna sucesso ou falha na inserção
+	public boolean postMessage(User user, String message, String place);
 	
-	//Post a message with an image
-	public boolean postMessage(String userId, String message, Long imageId);
+	//Insere uma mensagem que é uma repostagem de outra mensagem identificada por {messageId} 
+	//do usuário {user}
+	//Retorna sucesso ou falha na inserção
+	public boolean postReMessage(User user, Long messageId);
 	
-	//Post a message with place information and an image
-	public boolean postMessage(String userId, String message, String place, Long imageId);
+	//Retorna a lista de mensagens do usuario {user} com no máximo {maxMessages}
+	public List<Message> getUserMessages(User user, int maxMessages);
 	
-	//Post a reMessage (RT)
-	public boolean postReMessage(String userId, Long messageId);
-	
-	//Get all messages from a user
-	public List<Message> getUserMessages(String userId);
-	
-	//Get maxMessages from the people followed by userId
-	//posted before time
+	//Retorna a lista das ultimas mensagens ordenadas por data de postagem com no máximo {maxMessages},
+	//postadas pelas pessoas que o usuário {user} segue.
 	public List<Message> getFollowingMessages(String userId, 
+				int maxMessages);
+	
+	//Retorna a lista de mensagens ordenadas por data de postagem com no máximo {maxMessages},
+	//postadas pelas pessoas que o usuário {user} segue, até a data indicada{time} 
+	public List<Message> getMoreFollowingMessages(String userId, 
 			Calendar time, int maxMessages);
 	
-	//Delete the message identified by messageId
+	
+	//Deleta a mensagem identificada por {messageId} do banco
 	public boolean deleteMessage(Long messageId);
 	
-	//Get the content of a message
+	//Retorna o conteúdo do atributo de texto da mensagem
 	public String getMessage();
 	
-	//Get the author of a message
-	public String getUser();
+	//Retorna o autor da mensagem
+	public User getUser();
 	
-	//Get the date of a message
+	//Retorna a data de publicação da mensagem
 	public Calendar getDate();
 	
-	//Get the place from where the message was posted
-	//Returns null if there is no place information
+	//Retorna o local de publicação da mensagem, ou null se essa informação
+	//não existe
 	public String getPlace();
-	
-	//Get the imageId of a message
-	//Returns null if there is no image associated
-	public Long getImageId();
-	
 }
