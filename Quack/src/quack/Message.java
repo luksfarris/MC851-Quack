@@ -3,12 +3,9 @@ package quack;
 import java.util.Calendar;
 
 public interface Message {
-	//Salva a mensagem no banco de dados
-	//Retorna sucesso ou falha na inserção
-	public boolean save();
-	
+
 	//Deleta a mensagem do banco
-	public boolean deleteMessage();
+	public boolean delete();
 	
 	//Retorna o id no banco da mensagem
 	public Long getId();

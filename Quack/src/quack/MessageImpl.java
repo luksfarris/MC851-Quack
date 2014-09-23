@@ -1,15 +1,17 @@
 package quack;
 
 import java.util.Calendar;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-//@Entity
+@Entity
 public class MessageImpl implements Message {
-	//@Id
-	//@GeneratedValue
+	@Id
+	@GeneratedValue
 	private Long id;
 
 	@Temporal(TemporalType.DATE)
@@ -29,6 +31,7 @@ public class MessageImpl implements Message {
 		this.user = user;
 		this.place = null;
 		this.parent = null;
+		save();
 	}
 	
 	public MessageImpl(Calendar timestamp, String body, 
@@ -40,6 +43,7 @@ public class MessageImpl implements Message {
 		this.user = user;
 		this.place = place;
 		this.parent = null;
+		save();
 	}
 	
 	public MessageImpl(Calendar timestamp, String body, 
@@ -52,6 +56,7 @@ public class MessageImpl implements Message {
 		this.user = user;
 		this.place = null;
 		this.parent = parent;
+		save();
 	}
 	
 	public MessageImpl(Calendar timestamp, String body, 
@@ -64,16 +69,16 @@ public class MessageImpl implements Message {
 		this.user = user;
 		this.place = place;
 		this.parent = parent;
+		save();
 	}
 	
-	@Override
-	public boolean save() {
+	private boolean save() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean deleteMessage() {
+	public boolean delete() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -82,6 +87,7 @@ public class MessageImpl implements Message {
 	public String getText() {
 		if(parent == null)
 			return body;
+		
 		//TODO- mudar o caso de ter parent
 		else return null;
 	}
@@ -105,7 +111,5 @@ public class MessageImpl implements Message {
 	public Long getId() {
 		return id;
 	}
-	
-	
 	
 }
