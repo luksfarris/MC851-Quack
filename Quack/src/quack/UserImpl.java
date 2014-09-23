@@ -100,4 +100,14 @@ public class UserImpl implements User
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	@Override
+	public List<Message> getMessages(int start, int end) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public List<Message> getFollowingMessages(int start, int end) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

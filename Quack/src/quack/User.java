@@ -1,6 +1,6 @@
 package quack;
 
-import java.util.List;
+import java.util.*;
 
 public interface User 
 {	
@@ -57,5 +57,11 @@ public interface User
 
 	// Método que retorna numero de tweets favoritos
 	public int favoriteCount();
+	
+	// Método que retorna uma lista de mensagens do usuário
+	public List<Message> getMessages(int start, int end);
+	
+	// Método que retorna uma lista de mensagens dos usuários seguidos
+	public List<Message> getFollowingMessages(int start, int end);
 	
 }
