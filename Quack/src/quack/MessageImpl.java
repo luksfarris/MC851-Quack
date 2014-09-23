@@ -1,14 +1,18 @@
 package quack;
 
 import java.util.Calendar;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 //@Entity
 public class MessageImpl implements Message {
 	//@Id
 	//@GeneratedValue
-	
 	private Long id;
-		
+
+	@Temporal(TemporalType.DATE)
 	private	Calendar timestamp;
 	private String body;
 	private User user;
