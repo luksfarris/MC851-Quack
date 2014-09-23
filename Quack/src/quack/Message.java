@@ -1,7 +1,6 @@
 package quack;
 
 import java.util.Calendar;
-import java.util.List;
 
 public interface Message {
 	//Salva a mensagem no banco de dados
@@ -11,6 +10,9 @@ public interface Message {
 	//Deleta a mensagem do banco
 	public boolean deleteMessage();
 	
+	//Retorna o id no banco da mensagem
+	public Long getId();
+		
 	//Retorna o conteúdo do atributo de texto da mensagem
 	public String getText();
 	

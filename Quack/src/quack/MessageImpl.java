@@ -96,6 +96,11 @@ public class MessageImpl implements Message {
 	public String getPlace() {
 		return place;
 	}
+
+	@Override
+	public Long getId() {
+		return id;
+	}
 	
 	
 	
