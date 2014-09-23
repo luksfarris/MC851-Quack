@@ -8,7 +8,7 @@ public class SessionImpl implements Session {
 	 * @see quack.Session#createNewSession(java.lang.String)
 	 */
 	@Override
-	public double createNewSession(String userId) {
+	public Session createNewSession(String userId) {
 		// TODO: gerenciar sessão.
 		return 0;
 	}

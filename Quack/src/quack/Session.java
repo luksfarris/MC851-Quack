@@ -9,7 +9,7 @@ public interface Session {
 	 *            identificador único do usuário.
 	 * @return identificador da sessão.
 	 */
-	public double createNewSession(String userId);
+	public Session createNewSession(String userId);
 
 	/**
 	 * Diz se a sessão de um usuário está ativa.
