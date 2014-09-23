@@ -1,7 +1,5 @@
 package br.com.caelum.vraptor.controller;
 
-import javax.inject.Inject;
-
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Result;
@@ -17,8 +15,7 @@ public class IndexController {
 	protected IndexController() {
 		this(null);
 	}
-	
-	@Inject
+
 	public IndexController(Result result) {
 		this.result = result;
 	}
