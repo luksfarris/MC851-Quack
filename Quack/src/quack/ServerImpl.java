@@ -1,6 +1,6 @@
 package quack;
 
-public class ServerImpl implements Server {
+public abstract class ServerImpl implements Server {
 
 	SessionTable sessionTable = null; // Conjunto de sessões abertas.
 	Database database = null; // Conexão com a base de dados persistente.
@@ -9,6 +9,8 @@ public class ServerImpl implements Server {
 	ContactTable contactTable = null; // Usuários seguidos, bloqueados, etc. de
 										// cada usuário.
 	MessageTable messageTable = null; // Conjunto de mensagens armazenadas.
+
+	HTML html = null; // Cria paginas html.
 
 	// ??{ O s procedimentos a seguir deveriam construir e devolver
 	// a construir página HTML de resultado adequada. }??
@@ -33,6 +35,10 @@ public class ServerImpl implements Server {
 		// Cria a tabela de mensagens:
 		this.messageTable = new MessageTableImpl();
 		this.messageTable.initialize(this.database);
+
+		// inicializa o criador de paginas html:
+		html = new HTMLImpl();
+		html = html.initialize();
 	}
 
 	public String processRegistrationReq(String userName, String email,
@@ -40,11 +46,11 @@ public class ServerImpl implements Server {
 		// Verifica se já existe usuário com esse {userName} ou {email}:
 		User user = this.userTable.fromUserName(userName);
 		if (user != null) {
-			return HTML.errorPage("username already taken");
+			return html.errorPage("username already taken");
 		}
 		user = this.userTable.fromEmail(email);
 		if (user != null) {
-			return HTML
+			return html
 					.errorPage("there is already a user account with that email");
 		}
 
@@ -52,21 +58,21 @@ public class ServerImpl implements Server {
 		user = new UserImpl();
 		user.initialize(userName, email, fullName, password);
 		if (user == null) {
-			return HTML.errorPage("user creation failed for unknown reason");
+			return html.errorPage("user creation failed for unknown reason");
 		}
 		this.userTable.add(user);
-		return HTML.loginPage();
+		return html.loginPage();
 	}
 
 	public String processLoginReq(String userName, String password) {
 		// Obtém o objeto que representa o usuário:
 		User user = this.userTable.fromUserName(userName);
 		if (user == null) {
-			return HTML.errorPage("no such user");
+			return html.errorPage("no such user");
 		}
 		// Verifica se a senha bate:
 		if (!user.checkPassword(password)) {
-			return HTML.errorPage("wrong password");
+			return html.errorPage("wrong password");
 		}
 		// Verifica se já existe sessão aberta para este usuário:
 		Session session = this.sessionTable.fromUser(user);
@@ -81,19 +87,19 @@ public class ServerImpl implements Server {
 		String cookie = userName + randomString;
 		session.open(user, cookie);
 		this.sessionTable.add(session);
-		return HTML.loginSuccessfulPage(cookie);
+		return html.loginSuccessfulPage(cookie);
 	}
 
 	public String processLogoutReq(String cookie) {
 		// Obtém a sessão:
 		Session session = this.sessionTable.fromCookie(cookie);
 		if (session == null) {
-			return HTML.errorPage("no session with this cookie.");
+			return html.errorPage("no session with this cookie.");
 		}
 		// Fecha a sessão existente:
 		this.sessionTable.delete(session);
 		session.close();
-		return HTML.homePage();
+		return html.homePage();
 	}
 
 	public String processShowOutMessagesReq(String cookie, String userName,
@@ -101,10 +107,10 @@ public class ServerImpl implements Server {
 		// Obtém a sessão:
 		Session session = this.sessionTable.fromCookie(cookie);
 		if (session == null) {
-			return HTML.errorPage("no session with this cookie.");
+			return html.errorPage("no session with this cookie.");
 		}
 		user = this.userTable.fromUserName(userName);
 		// ??{ ... get specified messages from {user} ... }??
-		return HTML.messageListPage(cookie, user, messages, maxN);
+		return html.messageListPage(cookie, userName, messages, maxN);
 	}
 }

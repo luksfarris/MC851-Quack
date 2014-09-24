@@ -37,5 +37,4 @@ public interface SessionTable {
 	public Session fromCookie(String cookie);
 	// Procura na tabela {this} uma sessão com o {cookie} especificado.
 	// Retorna {null} se não existir.
-
 }
