@@ -4,6 +4,8 @@ import java.util.List;
 
 public class UserTableImpl implements UserTable {
 
+	private List<User> table;
+	
 	@Override
 	public void initialize(Database db) {
 		// TODO Auto-generated method stub

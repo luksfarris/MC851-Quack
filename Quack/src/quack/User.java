@@ -4,67 +4,85 @@ import java.util.*;
 
 public interface User 
 {
-	// Método para obter o ID de um usuário.
 	public long getId();
+	// Retorna o ID de {this}.
 
-	// Método para seguir um usuário
 	public boolean follow(User followed);
+	// Faz com que {followed} passe a ser seguido por {this}.
+	// Retorna se a operação foi bem sucedida.
 	
-	// Método para deixar de seguir um usuário
 	public boolean unfollow(User followed);
+	// Faz com que {followed} deixe de ser seguido por {this}.
+	// Retorna se a operação foi bem sucedida.
 	
-	// Método para mudar mensagem de perfil	
 	public boolean changeProfileMsg(String newMsg);
+	// Altera a mensagem de perfil de {this} para {newMsg}.
+	// Retorna se a operação foi bem sucedida.
 	
-	// Método para mudar imagem de perfil
 	public boolean changeProfilePic(String filename);
+	// Altera a foto de perfil de {this} para o arquivo de imagem 
+	// localizado em {filename}
+	// Retorna se a operação foi bem sucedida.
 	
-	// Método para mudar localização no perfil
 	public boolean changeLocation(String newLocation);
+	// Altera a localização de {this} para {newLocation}.
+	// Retorna se a operação foi bem sucedida.
 	
-	// Método para mudar senha de usuario 
 	public boolean changePassword(String newPassword);
+	// Altera a senha de {this} para {newPassword}.
+	// Retorna se a operação foi bem sucedida.
 	
-	// Método para mudar email de usuario
 	public boolean changeEmail(String newEmail);
+	// Altera o e-mail de {this} para {newEmail}.
+	// Retorna se a operação foi bem sucedida.
 	
-	// Método para bloquear um usuário
 	public boolean block(User user);
+	// Faz com que {user} seja bloqueado por {this}.
+	// Retorna se a operação foi bem sucedida.
 	
-	// Método para desbloquear um usuário
 	public boolean unblock(User user);
+	// Faz com que {user} deixe de ser bloqueado por {this}.
+	// Retorna se a operação foi bem sucedida.
 	
-	// Método para mudar configuração de privacidade
 	public boolean changePrivacy(UserPrivacy privacy);
+	// Altera a privacidade de {this}.
+	// Retorna se a operação foi bem sucedida.
 	
-	// Método para mudar website no perfil
 	public boolean changeWebsite(String newWebsite);
+	// Altera o site de {this} para {newWebsite}.
+	// Retorna se a operação foi bem sucedida.
 	
-	// Método que retorna lista de usuarios seguidos
 	public List<User> following();
+	// Retorna uma lista de todos os usuários que {this} segue.
 	
-	// Método que retorna lista de usuarios que seguem
 	public List<User> followers();
+	// Retorna uma lista de todos os usuários que seguem {this}.
 	
-	// Método que retorna número de tweets do usuario
 	public int tweetCount();
+	// Retorna quantas mensagens {this} postou ou repostou.
 	
-	// Método que retorna numero de imagens postadas
 	public int mediaCount();
+	// Retorna quantos arquivos de mídia {this} postou.
 	
-	// Método que retorna numero de usuarios seguidos
 	public int followingCount();
+	// Retorna quantos usuários {this} segue.
 
-	// Método que retorna número de usuarios seguidores
 	public int followerCount();
+	// Retorna quantos usuários seguem {this}.
 
-	// Método que retorna numero de tweets favoritos
 	public int favoriteCount();
+	// Retorna quantas mensagens {this} marcou como favorita.
 	
-	// Método que retorna uma lista de mensagens do usuário
 	public List<Message> getMessages(int start, int end);
+	// Retorna uma lista de mensagens em ordem cronológica
+	// decrescente postadas por {this} cujo índice
+	// na consulta está no intervalo [{start}, {end}].
 	
 	// Método que retorna uma lista de mensagens dos usuários seguidos
 	public List<Message> getFollowingMessages(int start, int end);
+	// Retorna uma lista de mensagens em ordem cronológica 
+	// decrescente postadas ou repostadas por usuários seguidos por
+	// {this} ou que mencionam {this} cujo índice na consulta
+	// está no intervalo [{start}, {end}].
 	
 }
