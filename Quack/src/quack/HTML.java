@@ -18,6 +18,10 @@ public interface HTML {
 	// inicializa o objeto.
 
 	public String homePage();
+
 	// pagina principal.
+
+	public String loginSuccessfulPage(String cookie);
+	// pagina de sucesso de login.
 
 }

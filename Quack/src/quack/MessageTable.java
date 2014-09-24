@@ -4,10 +4,11 @@ import java.util.List;
 
 public interface MessageTable {
 
-	public void initialize();
+	public void initialize(Database db);
 	
     // Inicializa uma instância recém-criada {this} de {MessageTable},
-    // deixando-a com zero mensagens em memoria.
+    // populando {this} com todos os registros de mensagens do
+	// banco de dados {db}.
     //
     // Este método deve ser chamado uma vez apenas, na partida do
     // servidor {Quack}. Os métodos a seguir só podem ser chamados
@@ -18,7 +19,7 @@ public interface MessageTable {
 	// Aborta se ja existir uma mensagem com o mesmo identificador
 	// de {message}
 	
-	public void remove(Message message);
+	public void delete(Message message);
 	// Remove uma mensagem {message} da tabela {this}
 	// Aborta se não existir uma mensagem com o mesmo identificador
 	// de {message} inserida na tabela
@@ -27,11 +28,9 @@ public interface MessageTable {
 	// Procura na tabela {this} uma mensagem com identificador {id}
 	// Retorna null caso não tenha encontrado nenhum
 	
-	public List<Message> getMessagesByUser(User user);
+	public List<Message> getMessagesByUser(User user, String startTime, String endTime, int maxN);
 	// Procura na tabela {this} mensagens com autor {user}
+	// que estejam no intervalo especificado {startTime} {endTime}.
+	// Retorna uma lista com no maximo {maxN} registros.
 	// Retorna uma lista vazia caso não tenha encontrado nenhum
-	
-	public void cleanTable();
-	// Limpa da tabela {this} registros que não estejam mais sendo
-	// acessados.
 }

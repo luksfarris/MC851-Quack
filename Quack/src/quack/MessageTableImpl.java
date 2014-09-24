@@ -5,7 +5,7 @@ import java.util.List;
 public class MessageTableImpl implements MessageTable {
 
 	@Override
-	public void initialize() {
+	public void initialize(Database db) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -17,7 +17,7 @@ public class MessageTableImpl implements MessageTable {
 	}
 
 	@Override
-	public void remove(Message message) {
+	public void delete(Message message) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -29,15 +29,8 @@ public class MessageTableImpl implements MessageTable {
 	}
 
 	@Override
-	public List<Message> getMessagesByUser(User user) {
+	public List<Message> getMessagesByUser(User user, String startTime, String endTime, int maxN) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public void cleanTable() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
