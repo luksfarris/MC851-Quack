@@ -17,7 +17,7 @@ public class MessageImpl implements Message {
 	@Temporal(TemporalType.DATE)
 	private	Calendar timestamp;
 	private String body;
-	private User user;
+	private long user_id;
 	private String place;
 	private Long parent;
 	
@@ -28,7 +28,7 @@ public class MessageImpl implements Message {
 		this.id = new Long(1);
 		this.timestamp = timestamp;
 		this.body = body;
-		this.user = user;
+		this.user_id = user.getId();
 		this.place = null;
 		this.parent = null;
 		save();
@@ -40,7 +40,7 @@ public class MessageImpl implements Message {
 		this.id = new Long(1);
 		this.timestamp = timestamp;
 		this.body = body;
-		this.user = user;
+		this.user_id = user.getId();
 		this.place = place;
 		this.parent = null;
 		save();
@@ -53,7 +53,7 @@ public class MessageImpl implements Message {
 		this.timestamp = timestamp;
 		//TODO mudar o corpo da mensagem pro corpo da mensagem pai
 		this.body = null;
-		this.user = user;
+		this.user_id = user.getId();
 		this.place = null;
 		this.parent = parent;
 		save();
@@ -66,7 +66,7 @@ public class MessageImpl implements Message {
 		this.timestamp = timestamp;
 		//TODO mudar o corpo da mensagem pro corpo da mensagem pai
 		this.body = null;
-		this.user = user;
+		this.user_id = user.getId();
 		this.place = place;
 		this.parent = parent;
 		save();
@@ -94,7 +94,8 @@ public class MessageImpl implements Message {
 
 	@Override
 	public User getUser() {
-		return user;
+		// TODO: get user from UserImpl controller.
+		return new UserImpl();
 	}
 
 	@Override
