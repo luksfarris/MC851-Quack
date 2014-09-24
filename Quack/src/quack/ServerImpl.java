@@ -6,8 +6,7 @@ public abstract class ServerImpl implements Server {
 	Database database = null; // Conexão com a base de dados persistente.
 	// As tabelas abaixo são cópias na memória dos objetos na base de dados.
 	UserTable userTable = null; // Conjuto de usuários cadastrados.
-	ContactTable contactTable = null; // Usuários seguidos, bloqueados, etc. de
-										// cada usuário.
+	ContactTable contactTable = null; // Usuários seguidos, bloqueados, etc.
 	MessageTable messageTable = null; // Conjunto de mensagens armazenadas.
 
 	HTML html = null; // Cria paginas html.
