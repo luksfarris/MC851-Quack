@@ -19,7 +19,7 @@ public interface MessageTable {
 	// Aborta se ja existir uma mensagem com o mesmo identificador
 	// de {message}
 	
-	public void remove(Message message);
+	public void delete(Message message);
 	// Remove uma mensagem {message} da tabela {this}
 	// Aborta se não existir uma mensagem com o mesmo identificador
 	// de {message} inserida na tabela

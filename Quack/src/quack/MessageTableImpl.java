@@ -17,7 +17,7 @@ public class MessageTableImpl implements MessageTable {
 	}
 
 	@Override
-	public void remove(Message message) {
+	public void delete(Message message) {
 		// TODO Auto-generated method stub
 		
 	}
