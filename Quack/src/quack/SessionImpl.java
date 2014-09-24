@@ -1,23 +1,23 @@
 package quack;
 
-public class SessionImpl implements Session {
+public abstract class SessionImpl implements Session {
 
-	@Override
-	public String createNewSession(String userName, String password) {
+	public void open(User user, String cookie) {
+		// TODO Auto-generated method stub
+	}
+
+	public String getCookie() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public boolean isUserSessionActive(String cookie) {
+	public User getUser() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
-	@Override
-	public void terminateUserSession(String cookie) {
+	public void close() {
 		// TODO Auto-generated method stub
 
 	}
-
 }
