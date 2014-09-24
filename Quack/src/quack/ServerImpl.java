@@ -6,12 +6,9 @@ public class ServerImpl implements Server {
 	Database database = null; // Conexão com a base de dados persistente.
 	// As tabelas abaixo são cópias na memória dos objetos na base de dados.
 	UserTable userTable = null; // Conjuto de usuários cadastrados.
-	ContactTable contactTable = null; // Usuários seguidos, bloqueados, etc. de
-										// cada usuário.
+	ContactTable contactTable = null; // Usuários seguidos, bloqueados, etc.
 	MessageTable messageTable = null; // Conjunto de mensagens armazenadas.
 
-	// ??{ O s procedimentos a seguir deveriam construir e devolver
-	// a construir página HTML de resultado adequada. }??
 
 	public void initialize(String dbName, String dbPassword) {
 		// Cria a tabela de sessões abertas:
