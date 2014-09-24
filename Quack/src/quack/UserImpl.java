@@ -9,7 +9,12 @@ public class UserImpl implements User
 					name, email, location, website;
 	private Calendar createdOn;
 	private UserPrivacy privacy;
-	
+
+	@Override
+	public long getId() {
+		return this.id;
+	}
+
 	@Override
 	public boolean follow(User followed) {
 		// TODO Auto-generated method stub
