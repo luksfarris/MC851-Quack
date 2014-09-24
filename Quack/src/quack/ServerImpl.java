@@ -43,7 +43,7 @@ public class ServerImpl implements Server {
         this.messageTable.initialize(this.database);
     }
     
-    public String processRegistrationReq(String userName, String email, String fulName, String password) {
+    public String processRegistrationReq(String userName, String email, String fullName, String password) {
         // Verifica se já existe usuário com esse {userName} ou {email}:
         User user = this.userTable.fromUserName(userName);
         if (user != null) { return HTML.errorPage("username already taken"); }
