@@ -1,6 +1,6 @@
 package quack;
 
-public abstract class SessionImpl implements Session {
+public class SessionImpl implements Session {
 
 	public void open(User user, String cookie) {
 		// TODO Auto-generated method stub

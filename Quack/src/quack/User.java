@@ -3,7 +3,10 @@ package quack;
 import java.util.*;
 
 public interface User 
-{	
+{
+	// Método para obter o ID de um usuário.
+	public long getId();
+
 	// Método para seguir um usuário
 	public boolean follow(User followed);
 	

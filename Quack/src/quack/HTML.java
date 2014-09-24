@@ -1,18 +1,27 @@
 package quack;
 
-public class HTML {
+public interface HTML {
 
 	// Esta classe especifica funções para construção de páginas HTML
 	// a serem enviadas ao browser através do servidor HTTP.
 
-	public static String errorPage(String msg) {
-		return null;
-	}
+	public String errorPage(String msg);
 
 	// Compõe uma página HTML com a mensagem de erro {msg}.
 
-	public static String loginPage() {
-		return null;
-	}
+	public String loginPage();
+
 	// compoe uma pagina html com o login.
+
+	public HTML initialize();
+
+	// inicializa o objeto.
+
+	public String homePage();
+
+	// pagina principal.
+
+	public String loginSuccessfulPage(String cookie);
+	// pagina de sucesso de login.
+
 }
