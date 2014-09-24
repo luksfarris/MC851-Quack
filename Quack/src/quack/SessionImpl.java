@@ -2,36 +2,22 @@ package quack;
 
 public class SessionImpl implements Session {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see quack.Session#createNewSession(java.lang.String)
-	 */
 	@Override
-	public Session createNewSession(String userId) {
-		// TODO: gerenciar sessão.
-		return 0;
+	public String createNewSession(String userName, String password) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see quack.Session#isUserSessionActive(java.lang.String)
-	 */
 	@Override
-	public boolean isUserSessionActive(String userId) {
-		// TODO: checar se usuario esta ativo.
+	public boolean isUserSessionActive(String cookie) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see quack.Session#terminateUserSession(java.lang.String)
-	 */
 	@Override
-	public void terminateUserSession(String userId) {
-		// TODO: encerra a sessão do usuário.
+	public void terminateUserSession(String cookie) {
+		// TODO Auto-generated method stub
 
 	}
+
 }

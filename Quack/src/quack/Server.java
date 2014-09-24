@@ -22,7 +22,7 @@ public class Server {
 
 	public void saveUserSession() {
 		Session session = new SessionImpl();
-		session.createNewSession("usuarioTeste");
+		session.createNewSession("teste", "teste");
 		session.isUserSessionActive("usuarioTeste");
 		session.terminateUserSession("usuarioTeste");
 	}

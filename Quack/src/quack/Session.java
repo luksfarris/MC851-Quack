@@ -2,30 +2,13 @@ package quack;
 
 public interface Session {
 
-	/**
-	 * Cria uma nova sessão a partir de um usuário logado.
-	 * 
-	 * @param userId
-	 *            identificador único do usuário.
-	 * @return identificador da sessão.
-	 */
-	public Session createNewSession(String userId);
+	// cria uma nova sessão e retorna o cookie gerado pelo browser. Passa como
+	// parametro o nome e a senha do usuario que fez login.
+	public String createNewSession(String userName, String password);
 
-	/**
-	 * Diz se a sessão de um usuário está ativa.
-	 * 
-	 * @param userId
-	 *            identificação única do usuário.
-	 * @return <code>true</code> se o usuário está logado, <code>false</code>
-	 *         caso contrário.
-	 */
-	public boolean isUserSessionActive(String userId);
+	// checa se um usuario esta ativo passando o cookie.
+	public boolean isUserSessionActive(String cookie);
 
-	/**
-	 * Encerra a sessão do usuário.
-	 * 
-	 * @param userIdidentificação
-	 *            única do usuário.
-	 */
-	public void terminateUserSession(String userId);
+	// encerra a sessão do usuário.
+	public void terminateUserSession(String cookie);
 }
