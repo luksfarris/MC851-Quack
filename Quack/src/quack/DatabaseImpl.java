@@ -28,5 +28,10 @@ public class DatabaseImpl implements Database {
 		return false;
 	}
 
-	
+	@Override
+	public void initialize(String dbName, String dbPassword) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
