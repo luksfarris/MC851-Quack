@@ -25,7 +25,16 @@ public class UserImpl implements User
 	}
 	@Override
 	public boolean unfollow(User followed) {
-		// TODO Auto-generated method stub
+		for (Contact c : contatosDiretos) {
+			if (c.target().equals(followed)) {
+				contatosDiretos.remove(c);
+				for (Contact flwContact : followed.getDirectContacts()) {
+					if (flwContact.source().equals(this))
+						followed.getDirectContacts().remove(this);
+				}
+			}
+			return true;
+		}
 		return false;
 	}
 	@Override
@@ -150,5 +159,24 @@ public class UserImpl implements User
 	public Calendar getCreatedDate() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean checkPassword(String password) {
+		return this.password.equals(password);
+	}
+	
+	final String getPassword() {
+		return password;
+	}
+
+	@Override
+	public List<Contact> getDirectContacts() {
+		return contatosDiretos;
+	}
+
+	@Override
+	public List<Contact> getReverseContacts() {
+		return contatosReversos;
 	}
 }
