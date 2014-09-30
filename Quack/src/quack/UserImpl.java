@@ -13,7 +13,6 @@ public class UserImpl implements User
 	private List<Contact> contatosReversos; // Arestas de entrada do vertice {this} no grafo de relacoes.
 	private List<Message> mensagens; // Lista de mensagens de autoria {this}.
 	
-
 	@Override
 	public long getId() {
 		return this.id;
@@ -107,6 +106,48 @@ public class UserImpl implements User
 	}
 	@Override
 	public List<Message> getFollowingMessages(int start, int end) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getLogin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getProfileMsg() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getProfilePic() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getEmail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getWebsite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Calendar getCreatedDate() {
 		// TODO Auto-generated method stub
 		return null;
 	}

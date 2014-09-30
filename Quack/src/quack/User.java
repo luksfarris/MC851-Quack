@@ -6,6 +6,27 @@ public interface User
 {
 	public long getId();
 	// Retorna o ID de {this}.
+	
+	public String getLogin();
+	// Retorna o nome de usuário de {this}.
+	
+	public String getProfileMsg();
+	// Retorna a mensagem de perfil de {this}.
+	
+	public String getProfilePic();
+	// Retorna a URL da foto de perfil de {this}.
+	
+	public String getName();
+	// Retorna o nome de {this}.
+	
+	public String getEmail();
+	// Retorna o e-mail de {this}.
+	
+	public String getWebsite();
+	// Retorna o site de {this}.
+	
+	public Calendar getCreatedDate();
+	// Retorna o timestamp da data em que o perfil de {this} foi criado.
 
 	public boolean follow(User followed);
 	// Faz com que {followed} passe a ser seguido por {this}.
@@ -23,11 +44,7 @@ public interface User
 	// Altera a foto de perfil de {this} para o arquivo de imagem 
 	// localizado em {filename}
 	// Retorna se a operação foi bem sucedida.
-	
-	public boolean changeLocation(String newLocation);
-	// Altera a localização de {this} para {newLocation}.
-	// Retorna se a operação foi bem sucedida.
-	
+		
 	public boolean changePassword(String newPassword);
 	// Altera a senha de {this} para {newPassword}.
 	// Retorna se a operação foi bem sucedida.
@@ -42,10 +59,6 @@ public interface User
 	
 	public boolean unblock(User user);
 	// Faz com que {user} deixe de ser bloqueado por {this}.
-	// Retorna se a operação foi bem sucedida.
-	
-	public boolean changePrivacy(UserPrivacy privacy);
-	// Altera a privacidade de {this}.
 	// Retorna se a operação foi bem sucedida.
 	
 	public boolean changeWebsite(String newWebsite);
@@ -78,7 +91,6 @@ public interface User
 	// decrescente postadas por {this} cujo índice
 	// na consulta está no intervalo [{start}, {end}].
 	
-	// Método que retorna uma lista de mensagens dos usuários seguidos
 	public List<Message> getFollowingMessages(int start, int end);
 	// Retorna uma lista de mensagens em ordem cronológica 
 	// decrescente postadas ou repostadas por usuários seguidos por
