@@ -1,23 +1,33 @@
 package quack;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
 public class SessionImpl implements Session {
 
+	private User loggedUser;
+	private String cookie;
+	private SecureRandom random = new SecureRandom();
+	
 	public void open(User user, String cookie) {
-		// TODO Auto-generated method stub
+		loggedUser = user;
+		if (cookie == null || cookie.length() == 0) {
+			this.cookie =  new BigInteger(130, random).toString(32);
+		} else {
+			this.cookie = cookie;
+		}
 	}
 
 	public String getCookie() {
-		// TODO Auto-generated method stub
-		return null;
+		return cookie;
 	}
 
 	public User getUser() {
-		// TODO Auto-generated method stub
-		return null;
+		return loggedUser;
 	}
 
 	public void close() {
-		// TODO Auto-generated method stub
-
+		loggedUser = null;
+		cookie = null;
 	}
 }
