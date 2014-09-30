@@ -1,6 +1,6 @@
 package quack;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public interface Contact {
 	// cada instancia dessa classe representa um relacionamento entre dois
@@ -13,7 +13,7 @@ public interface Contact {
 	public User target();
 	// Usuario que esta sendo seguido.
 
-	public Date lastModified();
+	public Calendar lastModified();
 	// Data da ultima modificacao nesse relacionamento
 
 	public boolean blocked();

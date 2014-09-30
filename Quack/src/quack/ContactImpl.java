@@ -1,18 +1,19 @@
 package quack;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class ContactImpl implements Contact {
 
 	private User sourceUser;
 	private User targetUser;
-	private Date lastModified;
+	private Calendar lastModified;
 	private boolean blocked;
 	
-	public ContactImpl(User source, User target, Date lastModified, boolean blocked) {
+	public ContactImpl(User source, User target, Calendar calendar, boolean blocked) {
 		sourceUser = source;
 		targetUser = target;
-		this.lastModified = lastModified;
+		this.lastModified = calendar;
 		this.blocked = blocked;
 	}
 	
@@ -27,7 +28,7 @@ public class ContactImpl implements Contact {
 	}
 
 	@Override
-	public Date lastModified() {
+	public Calendar lastModified() {
 		return lastModified;
 	}
 
