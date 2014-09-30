@@ -83,13 +83,25 @@ public class UserImpl implements User
 	}
 	@Override
 	public List<User> following() {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> follow = new LinkedList<User>();
+		
+		for (Contact c : contatosDiretos) {
+			if(!c.blocked())
+				follow.add(c.target());
+		}
+		
+		return follow;
 	}
 	@Override
 	public List<User> followers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> follower = new LinkedList<User>();
+		
+		for (Contact c : contatosReversos) {
+			if(!c.blocked())
+				follower.add(c.target());
+		}
+		
+		return follower;
 	}
 	@Override
 	public int tweetCount() {
@@ -103,13 +115,13 @@ public class UserImpl implements User
 	}
 	@Override
 	public int followingCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return following().size();
 	}
 	@Override
 	public int followerCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return followers().size();
 	}
 	@Override
 	public int favoriteCount() {
@@ -129,42 +141,36 @@ public class UserImpl implements User
 
 	@Override
 	public String getLogin() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.login;
 	}
 
 	@Override
 	public String getProfileMsg() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.profileMsg;
 	}
-
-	@Override
-	public String getProfilePic() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.name;
 	}
 
 	@Override
 	public String getEmail() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.email;
 	}
 
 	@Override
 	public String getWebsite() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.website;
 	}
 
 	@Override
 	public Calendar getCreatedDate() {
+		return this.createdOn;
+	}
+
+	@Override
+	public String getProfilePic() {
 		// TODO Auto-generated method stub
 		return null;
 	}
