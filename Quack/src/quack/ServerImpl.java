@@ -6,7 +6,6 @@ public abstract class ServerImpl implements Server {
 	Database database = null; // Conexão com a base de dados persistente.
 	// As tabelas abaixo são cópias na memória dos objetos na base de dados.
 	UserTable userTable = null; // Conjuto de usuários cadastrados.
-	ContactTable contactTable = null; // Usuários seguidos, bloqueados, etc.
 	MessageTable messageTable = null; // Conjunto de mensagens armazenadas.
 
 	HTML html = null; // Cria paginas html.
@@ -26,10 +25,6 @@ public abstract class ServerImpl implements Server {
 		// Cria a tabela de usuários:
 		this.userTable = new UserTableImpl();
 		this.userTable.initialize(this.database);
-
-		// Cria a tabela de contatos entre usuários:
-		this.contactTable = new ContactTableImpl();
-		this.contactTable.initialize(this.database);
 
 		// Cria a tabela de mensagens:
 		this.messageTable = new MessageTableImpl();
