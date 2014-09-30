@@ -5,7 +5,6 @@ import java.util.List;
 public interface MessageTable {
 
 	public void initialize(Database db);
-	
     // Inicializa uma instância recém-criada {this} de {MessageTable},
     // populando {this} com todos os registros de mensagens do
 	// banco de dados {db}.
