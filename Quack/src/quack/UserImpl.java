@@ -30,12 +30,12 @@ public class UserImpl implements User
 		for (Contact c : directContacts) {
 			if (c.target().equals(followed)) {
 				directContacts.remove(c);
-				for (Contact flwContact : followed.getDirectContacts()) {
+				for (Contact flwContact : followed.getReverseContacts()) {
 					if (flwContact.source().equals(this))
-						followed.getDirectContacts().remove(this);
+						followed.getReverseContacts().remove(flwContact);
 				}
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}
