@@ -31,19 +31,6 @@ public class MessageImpl implements Message {
 		this.user_id = user.getId();
 		this.place = null;
 		this.parent = null;
-		save();
-	}
-	
-	public MessageImpl(Calendar timestamp, String body, 
-			User user, String place){
-		//TODO mudar o id
-		this.id = new Long(1);
-		this.timestamp = timestamp;
-		this.body = body;
-		this.user_id = user.getId();
-		this.place = place;
-		this.parent = null;
-		save();
 	}
 	
 	public MessageImpl(Calendar timestamp, String body, 
@@ -51,36 +38,12 @@ public class MessageImpl implements Message {
 		//TODO mudar o id
 		this.id = new Long(1);
 		this.timestamp = timestamp;
+		
 		//TODO mudar o corpo da mensagem pro corpo da mensagem pai
 		this.body = null;
 		this.user_id = user.getId();
 		this.place = null;
 		this.parent = parent;
-		save();
-	}
-	
-	public MessageImpl(Calendar timestamp, String body, 
-			User user, String place, Long parent){
-		//TODO mudar o id
-		this.id = new Long(1);
-		this.timestamp = timestamp;
-		//TODO mudar o corpo da mensagem pro corpo da mensagem pai
-		this.body = null;
-		this.user_id = user.getId();
-		this.place = place;
-		this.parent = parent;
-		save();
-	}
-	
-	private boolean save() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean delete() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -101,11 +64,6 @@ public class MessageImpl implements Message {
 	@Override
 	public Calendar getDate() {
 		return timestamp;
-	}
-
-	@Override
-	public String getPlace() {
-		return place;
 	}
 
 	@Override

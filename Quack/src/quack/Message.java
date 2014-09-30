@@ -19,16 +19,4 @@ public interface Message {
 	public Calendar getDate();
 	//Retorna a data de publicação da mensagem {this}
 	
-	
-	public String getPlace();
-	//Retorna o local de publicação da mensagem {this}, ou null se essa informação
-	//não existe
-	
-	
-	public boolean delete();
-	//Deleta a mensagem {this} da base de dados
-	//Esse método é normalmente chamado quando o usuário deseja deletar
-	//uma mensagem sua. Devemos pensar como garantir a autenticação para
-	//evitar que um invasor delete as mensagens de outras pessoas.
-	
 }
