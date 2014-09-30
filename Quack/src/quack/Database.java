@@ -4,19 +4,23 @@ import java.util.List;
 
 public interface Database {
 
-	// Metodo para criar conexao com banco de dados
 	public boolean connect();
-
-	// Metodo para fechar a conexao com banco de dados
+	// Abre conexao {this} com banco de dados MySQL
+	
 	public boolean closeConnection();
-
-	// Metodo para executar uma query
+	// Fecha a conexao {this} com banco de dados MySQL
+	
 	public List<Object> runQuery(String query);
-
-	// Metodo para executar um comando no banco de dados
+	// Conexão {this} com banco de dados roda a query {query}
+	// retornando uma lista de objetos correspondentes a
+	// resposta obtida. Retorna uma lista vazia caso a query
+	// não tenha retornado nada.
+	
 	public boolean runCommand(String command);
-
+	// Conexão {this} com o banco de dados roda o comando {command}
+	// na base de dados, retornando se houve sucesso na execução.
+	
 	public void initialize(String dbName, String dbPassword);
-	// Metodo para inicializar o banco de dados utilizando o nome do bando
+	// Metodo para inicializar o banco de dados utilizando o nome do banco
 	// {dbName} e a senha {dbPassword}.
 }
