@@ -6,9 +6,13 @@ public class UserImpl implements User
 {
 	private long id;
 	private String login, password, profileMsg, avatar, 
-					name, email, location, website;
+					name, email, website;
 	private Calendar createdOn;
-
+	
+	private List<Contact> contatosDiretos; // Arestas de saida do vertice {this} no grafo de relacoes.
+	private List<Contact> contatosReversos; // Arestas de entrada do vertice {this} no grafo de relacoes.
+	private List<Message> mensagens; // Lista de mensagens de autoria {this}.
+	
 	@Override
 	public long getId() {
 		return this.id;
@@ -26,28 +30,24 @@ public class UserImpl implements User
 	}
 	@Override
 	public boolean changeProfileMsg(String newMsg) {
-		// TODO Auto-generated method stub
-		return false;
+		this.profileMsg = newMsg;
+		return true;
 	}
 	@Override
 	public boolean changeProfilePic(String filename) {
-		// TODO Auto-generated method stub
-		return false;
+		this.avatar = filename;
+		return true;
 	}
-	@Override
-	public boolean changeLocation(String newLocation) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 	@Override
 	public boolean changePassword(String newPassword) {
-		// TODO Auto-generated method stub
-		return false;
+		this.password = newPassword;
+		return true;
 	}
 	@Override
 	public boolean changeEmail(String newEmail) {
-		// TODO Auto-generated method stub
-		return false;
+		this.email = newEmail;
+		return true;
 	}
 	@Override
 	public boolean block(User user) {
@@ -61,7 +61,7 @@ public class UserImpl implements User
 	}
 	@Override
 	public boolean changeWebsite(String newWebsite) {
-		// TODO Auto-generated method stub
+		this.website = newWebsite;
 		return false;
 	}
 	@Override
@@ -106,6 +106,48 @@ public class UserImpl implements User
 	}
 	@Override
 	public List<Message> getFollowingMessages(int start, int end) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getLogin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getProfileMsg() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getProfilePic() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getEmail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getWebsite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Calendar getCreatedDate() {
 		// TODO Auto-generated method stub
 		return null;
 	}
