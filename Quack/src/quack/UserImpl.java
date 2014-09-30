@@ -9,8 +9,8 @@ public class UserImpl implements User
 					name, email, website;
 	private Calendar createdOn;
 	
-	private List<Contact> contatosDiretos; // Arestas de saida do vertice {this} no grafo de relacoes.
-	private List<Contact> contatosReversos; // Arestas de entrada do vertice {this} no grafo de relacoes.
+	private List<Contact> directContacts; // Arestas de saida do vertice {this} no grafo de relacoes.
+	private List<Contact> reverseContacts; // Arestas de entrada do vertice {this} no grafo de relacoes.
 	private List<Message> mensagens; // Lista de mensagens de autoria {this}.
 	
 	@Override
@@ -18,16 +18,34 @@ public class UserImpl implements User
 		return this.id;
 	}
 
+
 	@Override
 	public boolean follow(User followed) {
-		// TODO Auto-generated method stub
-		return false;
+		Contact relation = new ContactImpl(followed, this, Calendar.getInstance(), false);
+		return directContacts.add(relation) && followed.getReverseContacts().add(relation);
 	}
+	
 	@Override
 	public boolean unfollow(User followed) {
-		// TODO Auto-generated method stub
+		
+		
 		return false;
 	}
+	
+
+	@Override
+	public boolean block(User user) {
+		Contact relation = new ContactImpl(user, this, Calendar.getInstance(), true);
+		return directContacts.add(relation) && user.getReverseContacts().add(relation);
+	}
+	
+	@Override
+	public boolean unblock(User user) {
+
+		
+		return false;
+	}
+	
 	@Override
 	public boolean changeProfileMsg(String newMsg) {
 		this.profileMsg = newMsg;
@@ -49,16 +67,7 @@ public class UserImpl implements User
 		this.email = newEmail;
 		return true;
 	}
-	@Override
-	public boolean block(User user) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean unblock(User user) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
 	@Override
 	public boolean changeWebsite(String newWebsite) {
 		this.website = newWebsite;
@@ -150,5 +159,24 @@ public class UserImpl implements User
 	public Calendar getCreatedDate() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public boolean checkPassword(String password) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public List<Contact> getDirectContacts() {
+		return directContacts;
+	}
+
+
+	@Override
+	public List<Contact> getReverseContacts() {
+		return reverseContacts;
 	}
 }
