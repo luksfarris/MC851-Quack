@@ -85,7 +85,7 @@ public class UserImpl implements User
 	public List<User> following() {
 		List<User> follow = new LinkedList<User>();
 		
-		for (Contact c : contatosDiretos) {
+		for (Contact c : directContacts) {
 			if(!c.blocked())
 				follow.add(c.target());
 		}
@@ -96,7 +96,7 @@ public class UserImpl implements User
 	public List<User> followers() {
 		List<User> follower = new LinkedList<User>();
 		
-		for (Contact c : contatosReversos) {
+		for (Contact c : reverseContacts) {
 			if(!c.blocked())
 				follower.add(c.target());
 		}
