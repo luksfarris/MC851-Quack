@@ -97,4 +97,14 @@ public interface User
 	// {this} ou que mencionam {this} cujo índice na consulta
 	// está no intervalo [{start}, {end}].
 	
+	public boolean checkPassword(String password);
+	// Retorna se a senha de {this} é {password}.
+
+	public List<Contact> getDirectContacts();
+	// Retorna a lista de quem {this} segue/bloqueou.
+	
+	public List<Contact> getReverseContacts();
+	// Retorna a lista de quem segue/bloqueou {this}.
+	
+	
 }
