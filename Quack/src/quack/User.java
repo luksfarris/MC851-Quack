@@ -44,10 +44,6 @@ public interface User
 	// Faz com que {user} deixe de ser bloqueado por {this}.
 	// Retorna se a operação foi bem sucedida.
 	
-	public boolean changePrivacy(UserPrivacy privacy);
-	// Altera a privacidade de {this}.
-	// Retorna se a operação foi bem sucedida.
-	
 	public boolean changeWebsite(String newWebsite);
 	// Altera o site de {this} para {newWebsite}.
 	// Retorna se a operação foi bem sucedida.
@@ -78,7 +74,6 @@ public interface User
 	// decrescente postadas por {this} cujo índice
 	// na consulta está no intervalo [{start}, {end}].
 	
-	// Método que retorna uma lista de mensagens dos usuários seguidos
 	public List<Message> getFollowingMessages(int start, int end);
 	// Retorna uma lista de mensagens em ordem cronológica 
 	// decrescente postadas ou repostadas por usuários seguidos por

@@ -8,7 +8,6 @@ public class UserImpl implements User
 	private String login, password, profileMsg, avatar, 
 					name, email, location, website;
 	private Calendar createdOn;
-	private UserPrivacy privacy;
 
 	@Override
 	public long getId() {
@@ -57,11 +56,6 @@ public class UserImpl implements User
 	}
 	@Override
 	public boolean unblock(User user) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	@Override
-	public boolean changePrivacy(UserPrivacy privacy) {
 		// TODO Auto-generated method stub
 		return false;
 	}
