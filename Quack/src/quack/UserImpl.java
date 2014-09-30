@@ -27,8 +27,16 @@ public class UserImpl implements User
 	
 	@Override
 	public boolean unfollow(User followed) {
-		
-		
+		for (Contact c : directContacts) {
+			if (c.target().equals(followed)) {
+				directContacts.remove(c);
+				for (Contact flwContact : followed.getDirectContacts()) {
+					if (flwContact.source().equals(this))
+						followed.getDirectContacts().remove(this);
+				}
+			}
+			return true;
+		}
 		return false;
 	}
 	
@@ -161,14 +169,6 @@ public class UserImpl implements User
 		return null;
 	}
 
-
-	@Override
-	public boolean checkPassword(String password) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
 	@Override
 	public List<Contact> getDirectContacts() {
 		return directContacts;
@@ -179,4 +179,14 @@ public class UserImpl implements User
 	public List<Contact> getReverseContacts() {
 		return reverseContacts;
 	}
+
+	@Override
+	public boolean checkPassword(String password) {
+		return this.password.equals(password);
+	}
+	
+	final String getPassword() {
+		return password;
+	}
+
 }
