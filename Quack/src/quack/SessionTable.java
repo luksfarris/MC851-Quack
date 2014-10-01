@@ -10,7 +10,6 @@ public interface SessionTable {
 	// {user} ou mesmo {cookie}.
 
 	public void initialize();
-
 	// Inicializa uma instância recém-criada {this} de {SessionTable},
 	// deixando-a com zero sessões abertas.
 	//
@@ -19,22 +18,19 @@ public interface SessionTable {
 	// depois que a tabela tiver sido inicializado.
 
 	public void add(Session session);
-
 	// Acrescenta a sessão aberta {session} à tabela {this}.
 	// Aborta se a sessão estiver fechada, ou se já existir uma
 	// sessão na tabela com mesmo usuário ou mesmo {cookie}.
 
 	public void delete(Session session);
-
 	// Retira a sessão {session} da tabela {this}.
 	// Aborta se a sessão não estiver na tabela.
 
-	public Session fromUser(User user);
-
+	public Session getSessionByUser(User user);
 	// Procura na tabela {this} uma sessão do usuário especificado.
 	// Retorna {null} se não existir.
 
-	public Session fromCookie(String cookie);
+	public Session getSessionByCookie(String cookie);
 	// Procura na tabela {this} uma sessão com o {cookie} especificado.
 	// Retorna {null} se não existir.
 }
