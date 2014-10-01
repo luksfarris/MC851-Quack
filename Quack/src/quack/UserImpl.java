@@ -28,10 +28,10 @@ public class UserImpl implements User
 	@Override
 	public boolean unfollow(User followed) {
 		for (Contact c : directContacts) {
-			if (c.target().equals(followed)) {
+			if (c.target().equals(followed) && !c.blocked()) {
 				directContacts.remove(c);
 				for (Contact flwContact : followed.getReverseContacts()) {
-					if (flwContact.source().equals(this))
+					if (flwContact.source().equals(this) && !flwContact.blocked())
 						followed.getReverseContacts().remove(flwContact);
 				}
 				return true;
@@ -49,8 +49,16 @@ public class UserImpl implements User
 	
 	@Override
 	public boolean unblock(User user) {
-
-		
+		for (Contact c : directContacts) {
+			if (c.target().equals(user) && c.blocked()) {
+				directContacts.remove(c);
+				for (Contact flwContact : user.getReverseContacts()) {
+					if (flwContact.source().equals(this) && !flwContact.blocked())
+						user.getReverseContacts().remove(flwContact);
+				}
+				return true;
+			}
+		}
 		return false;
 	}
 	
@@ -115,12 +123,10 @@ public class UserImpl implements User
 	}
 	@Override
 	public int followingCount() {
-		
 		return following().size();
 	}
 	@Override
 	public int followerCount() {
-		
 		return followers().size();
 	}
 	@Override
