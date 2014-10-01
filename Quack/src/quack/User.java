@@ -106,9 +106,10 @@ public interface User
 	public List<Contact> getReverseContacts();
 	// Retorna a lista de quem segue/bloqueou {this}.
 
-	public void initialize(String userName, String email, String fullName,
+	public boolean initialize(String userName, String email, String fullName,
 			String password);
-	// inicializa um objeto {User} com os parametros passados.
+	// inicializa um objeto {User} com os parametros passados. Retorna <true> se
+	// houve sucesso, ou <false> caso ocorra algum erro.
 	
 	
 }

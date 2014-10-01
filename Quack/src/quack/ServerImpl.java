@@ -49,8 +49,7 @@ public abstract class ServerImpl implements Server {
 
 		// Cria o usuário e acrescenta à tabela:
 		user = new UserImpl();
-		user.initialize(userName, email, fullName, password);
-		if (user == null) {
+		if (!user.initialize(userName, email, fullName, password)) {
 			return html.errorPage("user creation failed for unknown reason");
 		}
 		this.userTable.add(user);

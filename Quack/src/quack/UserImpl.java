@@ -197,9 +197,10 @@ public class UserImpl implements User
 
 
 	@Override
-	public void initialize(String userName, String email, String fullName,
+	public boolean initialize(String userName, String email, String fullName,
 			String password) {
 		// TODO Auto-generated method stub
+		return true;
 	}
 
 }
