@@ -1,6 +1,6 @@
 package quack;
 
-import java.util.List;
+import java.util.*;
 
 public class UserTableImpl implements UserTable {
 
@@ -14,31 +14,35 @@ public class UserTableImpl implements UserTable {
 
 	@Override
 	public User getUserByLogin(String login) {
-		// TODO Auto-generated method stub
+		
+		for(User u: table){
+			if(u.getLogin() == login)
+				return u;
+		}
+		
 		return null;
 	}
 
 	@Override
 	public List<User> getUsersByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<User> getUsersByLocation(String location) {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> l = new LinkedList<User>();
+		
+		for(User u: table){
+			if(u.getName() == name)
+				l.add(u);
+		}
+		return l;
 	}
 
 	@Override
 	public void add(User user) {
 		// TODO Auto-generated method stub
-		
+		table.add(user);
 	}
 
 	@Override
 	public void remove(User user) {
-		// TODO Auto-generated method stub
+		table.remove(user);
 		
 	}
 
