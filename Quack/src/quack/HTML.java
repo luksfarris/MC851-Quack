@@ -28,5 +28,5 @@ public interface HTML {
 
 	public String messageListPage(String cookie, String userName,
 			List<Message> messages, int maxN);
-
+	// pagina que exibe uma lista de mensagens de um usuario.
 }

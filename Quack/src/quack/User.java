@@ -108,6 +108,7 @@ public interface User
 
 	public void initialize(String userName, String email, String fullName,
 			String password);
+	// inicializa um objeto {User} com os parametros passados.
 	
 	
 }
