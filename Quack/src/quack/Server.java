@@ -54,7 +54,7 @@ public interface Server {
     // ----------------------------------------------------------------------
     // INICIALIZAÇÃO
     
-    public void initialize(String dbName, String dbPassword);
+    public void initialize(String dbUserName, String dbName, String dbPassword);
     // Inicializa uma instância recém-criada de {Server}, inicializando 
     // as tabelas de usuários, contatos e mensagens a partir do banco de dados 
     // {dbName} com senha de acesso {dbPassword}.  Também inicializa a tabela

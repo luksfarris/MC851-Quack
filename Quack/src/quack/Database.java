@@ -1,26 +1,23 @@
 package quack;
 
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public interface Database {
 
-	public boolean connect();
+	public Connection getConnection() throws ClassNotFoundException, SQLException;
 	// Abre conexao {this} com banco de dados MySQL
 	
-	public boolean closeConnection();
+	public void closeConnection() throws ClassNotFoundException, SQLException;
 	// Fecha a conexao {this} com banco de dados MySQL
 	
-	public List<Object> runQuery(String query);
-	// Conexão {this} com banco de dados roda a query {query}
-	// retornando uma lista de objetos correspondentes a
-	// resposta obtida. Retorna uma lista vazia caso a query
-	// não tenha retornado nada.
+	public void commit() throws SQLException;
+	// Faz todas as alterações desde o último commit/rollback permanente e libera qualquer lock
+	// do bando de dados para a esta conexão.
 	
-	public boolean runCommand(String command);
-	// Conexão {this} com o banco de dados roda o comando {command}
-	// na base de dados, retornando se houve sucesso na execução.
-	
-	public void initialize(String dbName, String dbPassword);
-	// Metodo para inicializar o banco de dados utilizando o nome do banco
-	// {dbName} e a senha {dbPassword}.
+	public PreparedStatement getStatement(String query) throws ClassNotFoundException, SQLException;
+	// Prepara uma query SQL pré compilada. Essa função não executa a query
+	// para dar liberdade ao usuário de definir argumentos na string SQL
+	// para, enfim, executá-la.
 }

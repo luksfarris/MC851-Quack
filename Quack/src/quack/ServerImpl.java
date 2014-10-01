@@ -13,14 +13,13 @@ public abstract class ServerImpl implements Server {
 	// ??{ O s procedimentos a seguir deveriam construir e devolver
 	// a construir página HTML de resultado adequada. }??
 
-	public void initialize(String dbName, String dbPassword) {
+	public void initialize(String dbUserName, String dbName, String dbPassword) {
 		// Cria a tabela de sessões abertas:
 		this.sessionTable = new SessionTableImpl();
 		this.sessionTable.initialize();
 
 		// Conecta com a base de dados persitente:
-		this.database = new DatabaseImpl();
-		this.database.initialize(dbName, dbPassword);
+		this.database = new DatabaseImpl(dbUserName, dbName, dbPassword);
 
 		// Cria a tabela de usuários:
 		this.userTable = new UserTableImpl();
