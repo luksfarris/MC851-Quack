@@ -16,7 +16,7 @@ public class UserTableImpl implements UserTable {
 	public User getUserByLogin(String login) {
 		
 		for(User u: table){
-			if(u.getLogin() == login)
+			if(u.getUserName() == login)
 				return u;
 		}
 		
@@ -28,7 +28,7 @@ public class UserTableImpl implements UserTable {
 		List<User> l = new LinkedList<User>();
 		
 		for(User u: table){
-			if(u.getName() == name)
+			if(u.getFullName() == name)
 				l.add(u);
 		}
 		return l;
