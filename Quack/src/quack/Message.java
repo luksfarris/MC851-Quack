@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 public interface Message {
 
-	public Long getId();
+	public long getId();
 	//Retorna o id no banco da mensagem de {this}
 		
 	
@@ -15,8 +15,19 @@ public interface Message {
 	public User getUser();
 	//Retorna o autor da mensagem {this}
 	
+	public Message getParent();
+	//Retorna a mensagem pai de {this} (quando retweet) ou {null}
+	
 	
 	public Calendar getDate();
 	//Retorna a data de publicação da mensagem {this}
 	
+	public boolean initialize(String body, User user);
+	//inicializa a mensagem {this} com os atributos {body} do texto
+	//da mensagem, e {user} como autor.
+	
+	public boolean initialize(User user, Message parent);
+	//inicializa a mensagem {this} com autor {user}, e como um "retweet" da mensagem {parent}
+	
 }
+	

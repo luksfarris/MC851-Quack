@@ -12,39 +12,15 @@ import javax.persistence.TemporalType;
 public class MessageImpl implements Message {
 	@Id
 	@GeneratedValue
-	private Long id;
+	private long id;
 
 	@Temporal(TemporalType.DATE)
 	private	Calendar timestamp;
 	private String body;
-	private long user_id;
-	private String place;
-	private Long parent;
+	private String loginName;
+	private Message parent;
 	
-	//Diferentes construtores para a classe, com diferentes parâmetros
-	public MessageImpl(Calendar timestamp, String body, 
-			User user){
-		//TODO mudar o id
-		this.id = new Long(1);
-		this.timestamp = timestamp;
-		this.body = body;
-		this.user_id = user.getId();
-		this.place = null;
-		this.parent = null;
-	}
-	
-	public MessageImpl(Calendar timestamp, String body, 
-			User user, Long parent){
-		//TODO mudar o id
-		this.id = new Long(1);
-		this.timestamp = timestamp;
-		
-		//TODO mudar o corpo da mensagem pro corpo da mensagem pai
-		this.body = null;
-		this.user_id = user.getId();
-		this.place = null;
-		this.parent = parent;
-	}
+	public MessageImpl(){}
 
 	@Override
 	public String getText() {
@@ -58,7 +34,7 @@ public class MessageImpl implements Message {
 	@Override
 	public User getUser() {
 		// TODO: get user from UserImpl controller.
-		return new UserImpl();
+		return new UserTableImpl().getUserByLoginName(loginName);
 	}
 
 	@Override
@@ -67,8 +43,34 @@ public class MessageImpl implements Message {
 	}
 
 	@Override
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
-	
+
+	@Override
+	public boolean initialize(String body, User user) {
+		this.timestamp = Calendar.getInstance();
+		this.body = body;
+		this.loginName = user.getLoginName();
+		this.parent = null;
+		return true;
+	}
+
+	@Override
+	public boolean initialize(User user, Message parent) {
+		if(parent.getParent() == null){
+			this.timestamp = Calendar.getInstance();
+			this.body = parent.getText();
+			this.loginName = user.getLoginName();
+			this.parent = parent;
+			return true;
+		} else {
+			return this.initialize(user, parent.getParent());
+		}
+	}
+
+	@Override
+	public Message getParent() {
+		return parent;
+	}
 }
