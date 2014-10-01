@@ -130,7 +130,7 @@ public class UserImpl implements User
 	}
 	@Override
 	public int tweetCount() {
-		return mensagens.size();
+		return messages.size();
 	}
 	@Override
 	public int mediaCount() {
@@ -229,7 +229,7 @@ public class UserImpl implements User
 
 
 	@Override
-	public List<Message> getMessages() {
+	public List<Message> getAllMessages() {
 		return messages;
 	}
 
