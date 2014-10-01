@@ -105,6 +105,9 @@ public interface User
 	
 	public List<Contact> getReverseContacts();
 	// Retorna a lista de quem segue/bloqueou {this}.
+
+	public void initialize(String userName, String email, String fullName,
+			String password);
 	
 	
 }

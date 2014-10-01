@@ -25,5 +25,11 @@ public interface UserTable {
 	
 	public void remove(User user);
 	// Remove {user} da lista de {this}.
+
+	public User fromUserName(String userName);
+	// Pega do banco de dados um objeto {User} que tem o nome {userName}
+
+	public User fromEmail(String email);
+	// Pega do banco de dados um objeto {User} que tem o email {email}
 	
 }

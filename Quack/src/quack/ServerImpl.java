@@ -77,10 +77,9 @@ public abstract class ServerImpl implements Server {
 		}
 
 		// Cria um cookie para a sessão, e abre a mesma:
-		String cookie = userName + randomString;
-		session.open(user, cookie);
+		session.open(user, null);
 		this.sessionTable.add(session);
-		return html.loginSuccessfulPage(cookie);
+		return html.loginSuccessfulPage(session.getCookie());
 	}
 
 	public String processLogoutReq(String cookie) {
@@ -102,8 +101,8 @@ public abstract class ServerImpl implements Server {
 		if (session == null) {
 			return html.errorPage("no session with this cookie.");
 		}
-		user = this.userTable.fromUserName(userName);
+		User user = this.userTable.fromUserName(userName);
 		// ??{ ... get specified messages from {user} ... }??
-		return html.messageListPage(cookie, userName, messages, maxN);
+		return html.messageListPage(cookie, userName, user.getMessages(0, 10), maxN);
 	}
 }

@@ -195,4 +195,11 @@ public class UserImpl implements User
 		return password;
 	}
 
+
+	@Override
+	public void initialize(String userName, String email, String fullName,
+			String password) {
+		// TODO Auto-generated method stub
+	}
+
 }
