@@ -2,10 +2,21 @@ package quack;
 
 import java.util.*;
 
-public interface User 
-{
-	public long getId();
-	// Retorna o ID de {this}.
+public interface User {
+	
+	// Cada instância desta classe representa um usuário da rede {Quack}.
+	
+	// -------------------------------------------------------------------------------
+	// INICIALIZAÇÃO
+	
+	public boolean initialize(String loginName, String email, String fullName,
+			String password, long dbIndex);
+	// Inicializa um objeto {User} recém-criado com os parametros passados. Retorna <true> se
+	// houve sucesso, ou <false> caso ocorra algum erro.  Atribui ao mesmo o número
+	// {dbIndex} para fins de identificação no banco de dados.
+	
+	public long getDbIndex();
+	// Retorna o índice de {this}.
 	
 	public String getLoginName();
 	// Retorna o nome de usuário de {this}.
@@ -68,11 +79,6 @@ public interface User
 	
 	public List<Contact> getReverseContacts();
 	// Retorna a lista de quem segue/bloqueou {this}.
-
-	public boolean initialize(String userName, String email, String fullName,
-			String password);
-	// inicializa um objeto {User} com os parametros passados. Retorna <true> se
-	// houve sucesso, ou <false> caso ocorra algum erro.
 	
 	public List<Message> getAllMessages();
 	// Retorna a lista de mensagens de {this}.
