@@ -1,5 +1,7 @@
 package quack;
 
+import java.util.List;
+
 public interface HTML {
 
 	// Esta classe especifica funções para construção de páginas HTML
@@ -24,4 +26,7 @@ public interface HTML {
 	public String loginSuccessfulPage(String cookie);
 	// pagina de sucesso de login.
 
+	public String messageListPage(String cookie, String userName,
+			List<Message> messages, int maxN);
+	// pagina que exibe uma lista de mensagens de um usuario.
 }

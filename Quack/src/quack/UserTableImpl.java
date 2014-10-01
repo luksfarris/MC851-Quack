@@ -42,4 +42,16 @@ public class UserTableImpl implements UserTable {
 		
 	}
 
+	@Override
+	public User fromUserName(String userName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User fromEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

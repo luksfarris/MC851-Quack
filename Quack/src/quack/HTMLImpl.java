@@ -1,5 +1,7 @@
 package quack;
 
+import java.util.List;
+
 public class HTMLImpl implements HTML {
 
 	@Override
@@ -28,6 +30,13 @@ public class HTMLImpl implements HTML {
 
 	@Override
 	public String loginSuccessfulPage(String cookie) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String messageListPage(String cookie, String userName,
+			List<Message> messages, int maxN) {
 		// TODO Auto-generated method stub
 		return null;
 	}

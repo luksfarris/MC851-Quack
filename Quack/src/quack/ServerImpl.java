@@ -6,7 +6,6 @@ public abstract class ServerImpl implements Server {
 	Database database = null; // Conexão com a base de dados persistente.
 	// As tabelas abaixo são cópias na memória dos objetos na base de dados.
 	UserTable userTable = null; // Conjuto de usuários cadastrados.
-	MessageTable messageTable = null; // Conjunto de mensagens armazenadas.
 
 	HTML html = null; // Cria paginas html.
 
@@ -24,10 +23,6 @@ public abstract class ServerImpl implements Server {
 		// Cria a tabela de usuários:
 		this.userTable = new UserTableImpl();
 		this.userTable.initialize(this.database);
-
-		// Cria a tabela de mensagens:
-		this.messageTable = new MessageTableImpl();
-		this.messageTable.initialize(this.database);
 
 		// inicializa o criador de paginas html:
 		html = new HTMLImpl();
@@ -49,8 +44,7 @@ public abstract class ServerImpl implements Server {
 
 		// Cria o usuário e acrescenta à tabela:
 		user = new UserImpl();
-		user.initialize(userName, email, fullName, password);
-		if (user == null) {
+		if (!user.initialize(userName, email, fullName, password)) {
 			return html.errorPage("user creation failed for unknown reason");
 		}
 		this.userTable.add(user);
@@ -77,10 +71,9 @@ public abstract class ServerImpl implements Server {
 		}
 
 		// Cria um cookie para a sessão, e abre a mesma:
-		String cookie = userName + randomString;
-		session.open(user, cookie);
+		session.open(user, null);
 		this.sessionTable.add(session);
-		return html.loginSuccessfulPage(cookie);
+		return html.loginSuccessfulPage(session.getCookie());
 	}
 
 	public String processLogoutReq(String cookie) {
@@ -102,8 +95,8 @@ public abstract class ServerImpl implements Server {
 		if (session == null) {
 			return html.errorPage("no session with this cookie.");
 		}
-		user = this.userTable.fromUserName(userName);
+		User user = this.userTable.fromUserName(userName);
 		// ??{ ... get specified messages from {user} ... }??
-		return html.messageListPage(cookie, userName, messages, maxN);
+		return html.messageListPage(cookie, userName, user.getMessages(0, 10), maxN);
 	}
 }
