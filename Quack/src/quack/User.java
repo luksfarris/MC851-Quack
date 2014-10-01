@@ -74,7 +74,7 @@ public interface User
 	// inicializa um objeto {User} com os parametros passados. Retorna <true> se
 	// houve sucesso, ou <false> caso ocorra algum erro.
 	
-	public List<Message> getMessages();
+	public List<Message> getAllMessages();
 	// Retorna a lista de mensagens de {this}.
 	
 }

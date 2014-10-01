@@ -114,8 +114,12 @@ public class UserImpl implements User
 		
 		return follower;
 	}
+
 	
-	
+	public int tweetCount() {
+		return messages.size();
+	}
+
 	public int mediaCount() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -204,7 +208,7 @@ public class UserImpl implements User
 
 
 	@Override
-	public List<Message> getMessages() {
+	public List<Message> getAllMessages() {
 		return messages;
 	}
 
