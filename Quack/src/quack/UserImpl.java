@@ -5,13 +5,13 @@ import java.util.*;
 public class UserImpl implements User
 {
 	private long id;
-	private String login, password, profileMsg, avatar, 
-					name, email, website;
+	private String userName, password, profileMsg, avatar, 
+					fullName, email, website;
 	private Calendar createdOn;
 	
 	private List<Contact> directContacts; // Arestas de saida do vertice {this} no grafo de relacoes.
 	private List<Contact> reverseContacts; // Arestas de entrada do vertice {this} no grafo de relacoes.
-	private List<Message> mensagens; // Lista de mensagens de autoria {this}.
+	private List<Message> messages; // Lista de mensagens de autoria {this}.
 	
 	@Override
 	public long getId() {
@@ -79,16 +79,6 @@ public class UserImpl implements User
 		return false;
 	}
 	
-	@Override
-	public boolean changeProfileMsg(String newMsg) {
-		this.profileMsg = newMsg;
-		return true;
-	}
-	@Override
-	public boolean changeProfilePic(String filename) {
-		this.avatar = filename;
-		return true;
-	}
 
 	@Override
 	public boolean changePassword(String newPassword) {
@@ -101,11 +91,7 @@ public class UserImpl implements User
 		return true;
 	}
 	
-	@Override
-	public boolean changeWebsite(String newWebsite) {
-		this.website = newWebsite;
-		return false;
-	}
+
 	@Override
 	public List<User> following() {
 		List<User> follow = new LinkedList<User>();
@@ -128,24 +114,21 @@ public class UserImpl implements User
 		
 		return follower;
 	}
-	@Override
-	public int tweetCount() {
-		return mensagens.size();
-	}
-	@Override
+	
+	
 	public int mediaCount() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	@Override
+	
 	public int followingCount() {
 		return following().size();
 	}
-	@Override
+	
 	public int followerCount() {
 		return followers().size();
 	}
-	@Override
+	
 	public int favoriteCount() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -162,18 +145,18 @@ public class UserImpl implements User
 	}
 
 	@Override
-	public String getLogin() {
-		return this.login;
+	public String getUserName() {
+		return this.userName;
 	}
 
-	@Override
+	
 	public String getProfileMsg() {
 		return this.profileMsg;
 	}
 	
-	@Override
-	public String getName() {
-		return this.name;
+	
+	public String getFullName() {
+		return this.fullName;
 	}
 
 	@Override
@@ -181,21 +164,13 @@ public class UserImpl implements User
 		return this.email;
 	}
 
-	@Override
-	public String getWebsite() {
-		return this.website;
-	}
+	
 
 	@Override
 	public Calendar getCreatedDate() {
 		return this.createdOn;
 	}
 
-	@Override
-	public String getProfilePic() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Contact> getDirectContacts() {
@@ -220,11 +195,24 @@ public class UserImpl implements User
 	@Override
 	public boolean initialize(String userName, String email, String fullName,
 			String password) {
-		this.login = userName;
-		this.name = fullName;
+		this.userName = userName;
+		this.fullName = fullName;
 		this.email = email;
 		this.password = password;
 		return true;
+	}
+
+
+	@Override
+	public List<Message> getMessages() {
+		return messages;
+	}
+
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

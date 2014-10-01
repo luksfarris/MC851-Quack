@@ -7,7 +7,7 @@ public interface User
 	public long getId();
 	// Retorna o ID de {this}.
 	
-	public String getLogin();
+	public String getUserName();
 	// Retorna o nome de usuário de {this}.
 
 	public String getName();
@@ -74,5 +74,7 @@ public interface User
 	// inicializa um objeto {User} com os parametros passados. Retorna <true> se
 	// houve sucesso, ou <false> caso ocorra algum erro.
 	
+	public List<Message> getMessages();
+	// Retorna a lista de mensagens de {this}.
 	
 }
