@@ -12,7 +12,7 @@ public interface UserTable {
 	// da rede {Quack}.  Quando o {Server} começa a rodar, ele cria 
 	// uma {UserTable} carregando na memória todo o conteúdo
 	// da base de dados persistente (veja {inicialize} abaixo).
-	// Quando um usuário é criado, quem cria deve atualizar esta tabela e também 
+	// Quando um novo usuário é criado, quem cria deve atualizar esta tabela e também 
 	// gravar o usuário na base de dados persistente.
 	
 	// ---------------------------------------------------------------------
