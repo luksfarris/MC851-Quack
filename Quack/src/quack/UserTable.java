@@ -5,7 +5,7 @@ import java.util.*;
 public interface UserTable {
 	
 	// Uma instância desta classe é uma tabela de {User}s que permite
-	// atualizações e buscas iversas.
+	// atualizações e buscas diversas.
 	//
 	// Enquanto o processo {Server} estiver rodando, deve existir apenas 
 	// uma instância desta classe, que é a lista de todos os usuários 
