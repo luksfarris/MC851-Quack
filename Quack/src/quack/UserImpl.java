@@ -220,8 +220,8 @@ public class UserImpl implements User
 	@Override
 	public boolean initialize(String userName, String email, String fullName,
 			String password) {
-		this.login = userName;
-		this.name = fullName;
+		this.userName = userName;
+		this.fullName = fullName;
 		this.email = email;
 		this.password = password;
 		return true;
