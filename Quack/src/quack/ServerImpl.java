@@ -48,6 +48,7 @@ public abstract class ServerImpl implements Server {
 			return html.errorPage("user creation failed for unknown reason");
 		}
 		this.userTable.add(user);
+		// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
 		return html.loginPage();
 	}
 
@@ -62,7 +63,7 @@ public abstract class ServerImpl implements Server {
 			return html.errorPage("wrong password");
 		}
 		// Verifica se já existe sessão aberta para este usuário:
-		Session session = this.sessionTable.fromUser(user);
+		Session session = this.sessionTable.getSessionFromUser(user);
 		if (session != null) { // Fecha a sessão existente:
 			this.sessionTable.delete(session);
 			session.close();
