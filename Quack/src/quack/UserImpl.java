@@ -122,8 +122,7 @@ public class UserImpl implements User
 	}
 	@Override
 	public int tweetCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return mensagens.size();
 	}
 	@Override
 	public int mediaCount() {
@@ -132,7 +131,6 @@ public class UserImpl implements User
 	}
 	@Override
 	public int followingCount() {
-		
 		return following().size();
 	}
 	@Override
