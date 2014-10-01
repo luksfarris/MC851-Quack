@@ -7,7 +7,7 @@ public interface User
 	public long getId();
 	// Retorna o ID de {this}.
 	
-	public String getUserName();
+	public String getLoginName();
 	// Retorna o nome de usuário de {this}.
 	
 	public String getProfileMsg();

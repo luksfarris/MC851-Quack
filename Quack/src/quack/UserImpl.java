@@ -5,7 +5,7 @@ import java.util.*;
 public class UserImpl implements User
 {
 	private long id;
-	private String userName, password, profileMsg, avatar, 
+	private String loginName, password, profileMsg, avatar, 
 					fullName, email, website;
 	private Calendar createdOn;
 	
@@ -162,8 +162,8 @@ public class UserImpl implements User
 	}
 
 	@Override
-	public String getUserName() {
-		return this.userName;
+	public String getLoginName() {
+		return this.loginName;
 	}
 
 	@Override
@@ -220,7 +220,7 @@ public class UserImpl implements User
 	@Override
 	public boolean initialize(String userName, String email, String fullName,
 			String password) {
-		this.userName = userName;
+		this.loginName = userName;
 		this.fullName = fullName;
 		this.email = email;
 		this.password = password;
