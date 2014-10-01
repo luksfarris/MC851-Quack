@@ -29,14 +29,14 @@ public abstract class ServerImpl implements Server {
 		html = html.initialize();
 	}
 
-	public String processRegistrationReq(String userName, String email,
+	public String processRegistrationReq(String loginName, String email,
 			String fullName, String password) {
 		// Verifica se já existe usuário com esse {userName} ou {email}:
-		User user = this.userTable.fromUserName(userName);
+		User user = this.userTable.getUserByLoginName(loginName);
 		if (user != null) {
 			return html.errorPage("username already taken");
 		}
-		user = this.userTable.fromEmail(email);
+		user = this.userTable.getUserByEmail(email);
 		if (user != null) {
 			return html
 					.errorPage("there is already a user account with that email");
@@ -44,16 +44,16 @@ public abstract class ServerImpl implements Server {
 
 		// Cria o usuário e acrescenta à tabela:
 		user = new UserImpl();
-		if (!user.initialize(userName, email, fullName, password)) {
+		if (!user.initialize(loginName, email, fullName, password)) {
 			return html.errorPage("user creation failed for unknown reason");
 		}
 		this.userTable.add(user);
 		return html.loginPage();
 	}
 
-	public String processLoginReq(String userName, String password) {
+	public String processLoginReq(String loginName, String password) {
 		// Obtém o objeto que representa o usuário:
-		User user = this.userTable.fromUserName(userName);
+		User user = this.userTable.getUserByLoginName(loginName);
 		if (user == null) {
 			return html.errorPage("no such user");
 		}
@@ -88,15 +88,15 @@ public abstract class ServerImpl implements Server {
 		return html.homePage();
 	}
 
-	public String processShowOutMessagesReq(String cookie, String userName,
+	public String processShowOutMessagesReq(String cookie, String loginName,
 			String startTime, String endTime, int maxN) {
 		// Obtém a sessão:
 		Session session = this.sessionTable.fromCookie(cookie);
 		if (session == null) {
 			return html.errorPage("no session with this cookie.");
 		}
-		User user = this.userTable.fromUserName(userName);
+		User user = this.userTable.getUserByLoginName(loginName);
 		// ??{ ... get specified messages from {user} ... }??
-		return html.messageListPage(cookie, userName, user.getMessages(0, 10), maxN);
+		return html.messageListPage(cookie, loginName, user.getMessages(0, 10), maxN);
 	}
 }

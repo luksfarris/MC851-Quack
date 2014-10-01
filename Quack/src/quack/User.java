@@ -10,7 +10,7 @@ public interface User
 	public String getLoginName();
 	// Retorna o nome de usuário de {this}.
 
-	public String getName();
+	public String getFullName();
 	// Retorna o nome de {this}.
 	
 	public String getEmail();

@@ -13,10 +13,10 @@ public class UserTableImpl implements UserTable {
 	}
 
 	@Override
-	public User getUserByLogin(String login) {
+	public User getUserByLoginName(String loginName) {
 		
 		for(User u: table){
-			if(u.getUserName() == login)
+			if(u.getLoginName() == loginName)
 				return u;
 		}
 		
@@ -24,11 +24,11 @@ public class UserTableImpl implements UserTable {
 	}
 
 	@Override
-	public List<User> getUsersByName(String name) {
+	public List<User> getUsersByFullName(String fullName) {
 		List<User> l = new LinkedList<User>();
 		
 		for(User u: table){
-			if(u.getFullName() == name)
+			if(u.getFullName() == fullName)
 				l.add(u);
 		}
 		return l;
@@ -46,14 +46,9 @@ public class UserTableImpl implements UserTable {
 		
 	}
 
-	@Override
-	public User fromUserName(String userName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public User fromEmail(String email) {
+	public User getUserByEmail(String email) {
 		// TODO Auto-generated method stub
 		return null;
 	}

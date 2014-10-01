@@ -212,11 +212,4 @@ public class UserImpl implements User
 		return messages;
 	}
 
-
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
