@@ -212,4 +212,12 @@ public class UserImpl implements User
 		return password;
 	}
 
+
+	@Override
+	public boolean initialize(String userName, String email, String fullName,
+			String password) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }
