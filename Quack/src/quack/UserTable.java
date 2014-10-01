@@ -35,6 +35,7 @@ public interface UserTable {
 	public User getUserByEmail(String email);
 	// Retorna o {User} na tabela {this} que tem o email {email}, ou {null} se não existir.
 	
+	// ------------------------------------------------------------------------------
 	// BUSCA DE USUÁRIOS POR OUTROS CRITÉRIOS
 	
 	public List<User> listUsersByFullName(String name);
