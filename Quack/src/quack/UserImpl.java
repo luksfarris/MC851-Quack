@@ -5,13 +5,13 @@ import java.util.*;
 public class UserImpl implements User
 {
 	private long id;
-	private String login, password, profileMsg, avatar, 
-					name, email, website;
+	private String userName, password, profileMsg, avatar, 
+					fullName, email, website;
 	private Calendar createdOn;
 	
 	private List<Contact> directContacts; // Arestas de saida do vertice {this} no grafo de relacoes.
 	private List<Contact> reverseContacts; // Arestas de entrada do vertice {this} no grafo de relacoes.
-	private List<Message> mensagens; // Lista de mensagens de autoria {this}.
+	private List<Message> messages; // Lista de mensagens de autoria {this}.
 	
 	@Override
 	public long getId() {
@@ -163,8 +163,8 @@ public class UserImpl implements User
 	}
 
 	@Override
-	public String getLogin() {
-		return this.login;
+	public String getUserName() {
+		return this.userName;
 	}
 
 	@Override
@@ -173,8 +173,8 @@ public class UserImpl implements User
 	}
 	
 	@Override
-	public String getName() {
-		return this.name;
+	public String getFullName() {
+		return this.fullName;
 	}
 
 	@Override
@@ -224,6 +224,12 @@ public class UserImpl implements User
 			String password) {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+
+	@Override
+	public List<Message> getMessages() {
+		return messages;
 	}
 
 }
