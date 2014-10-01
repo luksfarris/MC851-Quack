@@ -9,21 +9,12 @@ public interface User
 	
 	public String getLogin();
 	// Retorna o nome de usuário de {this}.
-	
-	public String getProfileMsg();
-	// Retorna a mensagem de perfil de {this}.
-	
-	public String getProfilePic();
-	// Retorna a URL da foto de perfil de {this}.
-	
+
 	public String getName();
 	// Retorna o nome de {this}.
 	
 	public String getEmail();
-	// Retorna o e-mail de {this}.
-	
-	public String getWebsite();
-	// Retorna o site de {this}.
+	// Retorna o e-mail de {this}..
 	
 	public Calendar getCreatedDate();
 	// Retorna o timestamp da data em que o perfil de {this} foi criado.
@@ -35,16 +26,7 @@ public interface User
 	public boolean unfollow(User followed);
 	// Faz com que {followed} deixe de ser seguido por {this}.
 	// Retorna se a operação foi bem sucedida.
-	
-	public boolean changeProfileMsg(String newMsg);
-	// Altera a mensagem de perfil de {this} para {newMsg}.
-	// Retorna se a operação foi bem sucedida.
-	
-	public boolean changeProfilePic(String filename);
-	// Altera a foto de perfil de {this} para o arquivo de imagem 
-	// localizado em {filename}
-	// Retorna se a operação foi bem sucedida.
-		
+
 	public boolean changePassword(String newPassword);
 	// Altera a senha de {this} para {newPassword}.
 	// Retorna se a operação foi bem sucedida.
@@ -60,32 +42,13 @@ public interface User
 	public boolean unblock(User user);
 	// Faz com que {user} deixe de ser bloqueado por {this}.
 	// Retorna se a operação foi bem sucedida.
-	
-	public boolean changeWebsite(String newWebsite);
-	// Altera o site de {this} para {newWebsite}.
-	// Retorna se a operação foi bem sucedida.
-	
+
 	public List<User> following();
 	// Retorna uma lista de todos os usuários que {this} segue.
 	
 	public List<User> followers();
 	// Retorna uma lista de todos os usuários que seguem {this}.
-	
-	public int tweetCount();
-	// Retorna quantas mensagens {this} postou ou repostou.
-	
-	public int mediaCount();
-	// Retorna quantos arquivos de mídia {this} postou.
-	
-	public int followingCount();
-	// Retorna quantos usuários {this} segue.
 
-	public int followerCount();
-	// Retorna quantos usuários seguem {this}.
-
-	public int favoriteCount();
-	// Retorna quantas mensagens {this} marcou como favorita.
-	
 	public List<Message> getMessages(int start, int end);
 	// Retorna uma lista de mensagens em ordem cronológica
 	// decrescente postadas por {this} cujo índice
