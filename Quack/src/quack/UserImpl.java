@@ -130,8 +130,7 @@ public class UserImpl implements User
 	}
 	@Override
 	public int tweetCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return mensagens.size();
 	}
 	@Override
 	public int mediaCount() {
@@ -218,11 +217,13 @@ public class UserImpl implements User
 		return password;
 	}
 
-
 	@Override
 	public boolean initialize(String userName, String email, String fullName,
 			String password) {
-		// TODO Auto-generated method stub
+		this.login = userName;
+		this.name = fullName;
+		this.email = email;
+		this.password = password;
 		return true;
 	}
 
