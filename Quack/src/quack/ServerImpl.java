@@ -38,8 +38,7 @@ public abstract class ServerImpl implements Server {
 		}
 		user = this.userTable.getUserByEmail(email);
 		if (user != null) {
-			return html
-					.errorPage("there is already a user account with that email");
+			return html.errorPage("there is already a user account with that email");
 		}
 
 		// Cria o usuário e acrescenta à tabela:
@@ -63,7 +62,7 @@ public abstract class ServerImpl implements Server {
 			return html.errorPage("wrong password");
 		}
 		// Verifica se já existe sessão aberta para este usuário:
-		Session session = this.sessionTable.getSessionFromUser(user);
+		Session session = this.sessionTable.getSessionByUser(user);
 		if (session != null) { // Fecha a sessão existente:
 			this.sessionTable.delete(session);
 			session.close();
@@ -79,7 +78,7 @@ public abstract class ServerImpl implements Server {
 
 	public String processLogoutReq(String cookie) {
 		// Obtém a sessão:
-		Session session = this.sessionTable.fromCookie(cookie);
+		Session session = this.sessionTable.getSessionByCookie(cookie);
 		if (session == null) {
 			return html.errorPage("no session with this cookie.");
 		}
@@ -92,7 +91,7 @@ public abstract class ServerImpl implements Server {
 	public String processShowOutMessagesReq(String cookie, String loginName,
 			String startTime, String endTime, int maxN) {
 		// Obtém a sessão:
-		Session session = this.sessionTable.fromCookie(cookie);
+		Session session = this.sessionTable.getSessionByCookie(cookie);
 		if (session == null) {
 			return html.errorPage("no session with this cookie.");
 		}
