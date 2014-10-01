@@ -1,6 +1,6 @@
 package quack;
 
-import java.util.List;
+import java.util.*;
 
 public interface UserTable {
 
@@ -16,9 +16,6 @@ public interface UserTable {
 	// Retorna uma lista de {User} com todos os usuários cujo nome
 	// contém {name}, ou uma lista vazia se não houver.
 	
-	public List<User> getUsersByLocation(String location);
-	// Retorna uma lista de {User} com todos os usuários cujo local
-	// contém {location}, ou uma lista vazia se não houver.
 	
 	public void add(User user);
 	// Adiciona {user} à lista de {this}.
