@@ -7,7 +7,7 @@ public interface User
 	public long getId();
 	// Retorna o ID de {this}.
 	
-	public String getLogin();
+	public String getUserName();
 	// Retorna o nome de usuário de {this}.
 	
 	public String getProfileMsg();
@@ -16,7 +16,7 @@ public interface User
 	public String getProfilePic();
 	// Retorna a URL da foto de perfil de {this}.
 	
-	public String getName();
+	public String getFullName();
 	// Retorna o nome de {this}.
 	
 	public String getEmail();
@@ -110,5 +110,8 @@ public interface User
 			String password);
 	// inicializa um objeto {User} com os parametros passados. Retorna <true> se
 	// houve sucesso, ou <false> caso ocorra algum erro.
+	
+	public List<Message> getAllMessages();
+	// Retorna a lista de mensagens de {this}.
 	
 }

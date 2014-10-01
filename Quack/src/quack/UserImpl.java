@@ -5,13 +5,13 @@ import java.util.*;
 public class UserImpl implements User
 {
 	private long id;
-	private String login, password, profileMsg, avatar, 
-					name, email, website;
+	private String userName, password, profileMsg, avatar, 
+					fullName, email, website;
 	private Calendar createdOn;
 	
 	private List<Contact> directContacts; // Arestas de saida do vertice {this} no grafo de relacoes.
 	private List<Contact> reverseContacts; // Arestas de entrada do vertice {this} no grafo de relacoes.
-	private List<Message> mensagens; // Lista de mensagens de autoria {this}.
+	private List<Message> messages; // Lista de mensagens de autoria {this}.
 	
 	@Override
 	public long getId() {
@@ -130,7 +130,7 @@ public class UserImpl implements User
 	}
 	@Override
 	public int tweetCount() {
-		return mensagens.size();
+		return messages.size();
 	}
 	@Override
 	public int mediaCount() {
@@ -162,8 +162,8 @@ public class UserImpl implements User
 	}
 
 	@Override
-	public String getLogin() {
-		return this.login;
+	public String getUserName() {
+		return this.userName;
 	}
 
 	@Override
@@ -172,8 +172,8 @@ public class UserImpl implements User
 	}
 	
 	@Override
-	public String getName() {
-		return this.name;
+	public String getFullName() {
+		return this.fullName;
 	}
 
 	@Override
@@ -220,11 +220,17 @@ public class UserImpl implements User
 	@Override
 	public boolean initialize(String userName, String email, String fullName,
 			String password) {
-		this.login = userName;
-		this.name = fullName;
+		this.userName = userName;
+		this.fullName = fullName;
 		this.email = email;
 		this.password = password;
 		return true;
+	}
+
+
+	@Override
+	public List<Message> getAllMessages() {
+		return messages;
 	}
 
 }
