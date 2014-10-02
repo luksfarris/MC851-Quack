@@ -45,7 +45,7 @@ public abstract class ServerImpl implements Server {
 	}
 	
 	public String processHomePageReq() {
-		return html.homePage(this.numUsers, this.numContacts, this.numMessages, this.numSessions);
+		return html.homePage();
 	}
 
 	public String processRegistrationReq(String loginName, String email,
@@ -92,7 +92,7 @@ public abstract class ServerImpl implements Server {
 		// Cria um cookie para a sessão, e abre a mesma:
 		session.open(user, null);
 		this.sessionTable.add(session);
-		return html.loginSuccessfulPage(session.getCookie());
+		return html.loginSuccessfulPage(session.getCookie(), user);
 	}
 
 	public String processLogoutReq(String cookie) {
@@ -104,7 +104,7 @@ public abstract class ServerImpl implements Server {
 		// Fecha a sessão existente:
 		this.sessionTable.delete(session);
 		session.close();
-		return html.homePage(this.numUsers, this.numContacts, this.numMessages, this.numSessions);
+		return html.homePage();
 	}
 	
 	public String processShowUserProfileReq(String cookie, String loginName) {
@@ -122,7 +122,7 @@ public abstract class ServerImpl implements Server {
 		if (target == null) {
 			return html.errorPage("no such user.");
 		}
-		return html.userProfilePage(source, target);
+		return html.userProfilePage(cookie, source, target);
 	}
 
 	public String processShowPostedMessagesReq(String cookie, String loginName,
@@ -137,7 +137,8 @@ public abstract class ServerImpl implements Server {
 			return html.errorPage("no such user.");
 		}
 		// ??{ ... get specified messages from {target} ... }??
-		return html.messageListPage(cookie, loginName, target.getMessages(-1, -1, maxN), maxN);
+		List<Message> messages = target.getMessages(-1, -1, maxN);
+		return html.messageListPage(cookie, "posted", target, messages, maxN);
 	}
 	
 	public String processModifyContactReq(string cookie, String loginName, String newStatus) {
@@ -172,7 +173,7 @@ public abstract class ServerImpl implements Server {
 			source.addDirectContact(c);
 			target.addReverseContact(c);
 		}
-		return html.userProfilePage(source, target);
+		return html.userProfilePage(cookie, source, target);
 	}
 	
 	@override
