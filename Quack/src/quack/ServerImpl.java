@@ -95,8 +95,43 @@ public abstract class ServerImpl implements Server {
 		if (session == null) {
 			return html.errorPage("no session with this cookie.");
 		}
-		User user = this.userTable.getUserByLoginName(loginName);
-		// ??{ ... get specified messages from {user} ... }??
-		return html.messageListPage(cookie, loginName, user.getMessages(0, 10), maxN);
+		User target = this.userTable.getUserByLoginName(loginName);
+		if (target == null) { 
+			return html.errorPage("no such user.");
+		}
+		// ??{ ... get specified messages from {target} ... }??
+		return html.messageListPage(cookie, loginName, target.getMessages(-1, -1, maxN), maxN);
 	}
+	
+	public String processModifyContactReq(string cookie, String loginName, String newStatus) {
+		// Obtém a sessão:
+		Session session = this.sessionTable.getSessionByCookie(cookie);
+		if (session == null) {
+			return html.errorPage("no session with this cookie.");
+		}
+		// Obtém os usuários de origem e alvo:
+		User source = session.getUser();
+		User target = this.userTable.getUserByLoginName(loginName);
+		if (target == null) { 
+			return html.errorPage("no such user.");
+		}
+		// Obtém o contato entre eles, se já existir:
+		Contact cdir = source.getDirectContact(target);
+		Contact crev = target.getReverseContact(source);
+		assert((cdir == null) == (crev == null));
+		if (cdir != null) {
+			// Já existe contato entre eles, apenas altera seu estado:
+			cdir.setStatus(newStatus);
+			// ??{ Deveria aqui atualizar o estado do contato na base persistente. }??
+		} else {
+			// Não há ainda contato entre eles, acrescenta:
+			Contact c = new ContactImpl();
+			c.initialize(source, target, Calendar.getInstance(), newStatus);
+			// ??{ Deveria aqui acrescentar o contato na base persistente. }??
+			source.addDirectContact(c);
+			target.addReverseContact(c);
+		}
+		return html.otherUserPage(target);
+	}
+	
 }
