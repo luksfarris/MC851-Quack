@@ -12,31 +12,36 @@ public interface User {
 	public boolean initialize(String loginName, String email, String fullName,
 			String password, long dbIndex);
 	// Inicializa um objeto {User} recém-criado com os parametros passados. Retorna <true> se
-	// houve sucesso, ou <false> caso ocorra algum erro.  O parâmetro {dbIndex} 
-	// vai identificar o usuário no banco de dados persistente.
+	// houve sucesso, ou <false> caso ocorra algum erro.
+	
+	// A cadeia {loginName} deve começar com letra, terminar letra ou dígito, e
+	// conter apenas letras, dígitos, pontos "." e hífens. Seu comprimento
+	// deve ser no mínimo 3 e no máximo 20 caracteres. ??{ Números arbitrários }??
+	// A cadeia {email} deve conter apenas caratcteres válidos em e-mails.
+	// A cadeia {fullname} pode conter quaisquer caracteres UNICODE na representação
+	// UTF-8.  A cadeia {password} deve ser a senha, por enquanto sem criptografar.
+	// O inteiro {dbIndex} vai identificar o usuário no banco de dados persistente.
 	
 	// -------------------------------------------------------------------------------
 	// ATRIBUTOS BÁSICOS
 	
 	public String getLoginName();
-	// Retorna o nome de usuário de {this}.
+	// Retorna o nome de login de {this}.
 
 	public String getFullName();
-	// Retorna o nome de {this}.
+	// Retorna o nome completo de {this} (Unicode na representação UTF-8).
 	
 	public String getEmail();
 	// Retorna o e-mail de {this}.
 	
-	public boolean changeEmail(String newEmail);
+	public void setEmail(String newEmail);
 	// Altera o e-mail de {this} para {newEmail}.
-	// Retorna {true} se a operação foi bem sucedida.
 
-	public boolean changePassword(String newPassword);
+	public void setPassword(String newPassword);
 	// Altera a senha de {this} para {newPassword}.
-	// Retorna {true} se a operação foi bem sucedida.
 	
 	public boolean checkPassword(String password);
-	// Retorna se a senha de {this} é {password}.
+	// Retorna {true} sse a senha de {this} é {password}.
 	
 	public Calendar getCreateTime();
 	// Retorna o timestamp da data em que o usuário {this} foi acrescentado à rede {Quack}.
