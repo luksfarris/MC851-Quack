@@ -28,7 +28,7 @@ public abstract class ServerImpl implements Server {
 
 		// Inicializa o criador de paginas html:
 		html = new HTMLImpl();
-		html = html.initialize();
+		html = html.initialize(this);
 
 		// Conecta com a base de dados persitente e carrega na memória:
 		this.database = new DatabaseImpl();
@@ -175,4 +175,23 @@ public abstract class ServerImpl implements Server {
 		return html.userProfilePage(source, target);
 	}
 	
+	@override
+	public long getNumUsers() {
+		return this.numUsers;
+	}
+	
+	@override
+	public long getNumContacts() {
+		return this.numContacts;
+	}
+	
+	@override
+	public long getNumMessages() {
+		return this.numMessages;
+	}
+	
+	@override
+	public long getNumSessions() {
+		return this.numSessions;
+	}
 }
