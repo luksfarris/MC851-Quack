@@ -6,35 +6,54 @@ public abstract class ServerImpl implements Server {
 	Database database = null; // Conexão com a base de dados persistente.
 	// As tabelas abaixo são cópias na memória dos objetos na base de dados.
 	UserTable userTable = null; // Conjuto de usuários cadastrados.
+	
+	long numUsers = 0;     // Número de usuários na rede {Quack}.
+	long numContacts = 0;  // Número total de contatos criados (incluindo inativos).
+	long numMessages = 0;  // Número total de mensagens postadas (incuindo re-postagens).
+	long numSessions = 0;  // Número total de sessões abertas no momento. 
 
 	HTML html = null; // Cria paginas html.
 
 	// ??{ O s procedimentos a seguir deveriam construir e devolver
 	// a construir página HTML de resultado adequada. }??
 
-	public void initialize(String dbUserName, String dbName, String dbPassword) {
-		// Cria a tabela de sessões abertas:
+	public void initialize(String dbLoginName, String dbName, String dbPassword) {
+		// Cria a tabela de sessões abertas, vazia:
 		this.sessionTable = new SessionTableImpl();
 		this.sessionTable.initialize();
 
-		// Conecta com a base de dados persitente:
-		this.database = new DatabaseImpl(dbUserName, dbName, dbPassword);
-
-		// Cria a tabela de usuários:
+		// Cria a tabela de usuários, vazia:
 		this.userTable = new UserTableImpl();
-		this.userTable.initialize(this.database);
+		this.userTable.initialize();
 
-		// inicializa o criador de paginas html:
+		// Inicializa o criador de paginas html:
 		html = new HTMLImpl();
 		html = html.initialize();
+
+		// Conecta com a base de dados persitente e carrega na memória:
+		this.database = new DatabaseImpl();
+		this.database.initialize(dbLoginName, dbName, dbPassword);
+		this.loadDatabase();
+	}
+	
+	private void loadDatabase() 
+	// Carrega a base de dados {this.database} na memória, criando os objetos 
+	// {User,Message,Contact} e ligando-os entre si.  Supõe que a conexão com o
+	// servidor da base de dados já foi estabelecida.
+	{
+		// ??{ Implementar }??
+	}
+	
+	public String processHomePageReq() {
+		return html.homePage(this.numUsers, this.numContacts, this.numMessages, this.numSessions);
 	}
 
 	public String processRegistrationReq(String loginName, String email,
 			String fullName, String password) {
-		// Verifica se já existe usuário com esse {userName} ou {email}:
+		// Verifica se já existe usuário com esse {loginName} ou {email}:
 		User user = this.userTable.getUserByLoginName(loginName);
 		if (user != null) {
-			return html.errorPage("username already taken");
+			return html.errorPage("login name already taken");
 		}
 		user = this.userTable.getUserByEmail(email);
 		if (user != null) {
@@ -85,10 +104,28 @@ public abstract class ServerImpl implements Server {
 		// Fecha a sessão existente:
 		this.sessionTable.delete(session);
 		session.close();
-		return html.homePage();
+		return html.homePage(this.numUsers, this.numContacts, this.numMessages, this.numSessions);
+	}
+	
+	public String processShowUserProfileReq(String cookie, String loginName) {
+		// Obtém a sessão:
+		Session session = null; // Current session or {null}.
+		User source = null; // Session owner or {null}.
+		if (! cookie.equals(")) { 
+			session = this.sessionTable.getSessionByCookie(cookie); 
+		 	if (session == null) {
+				return html.errorPage("no session with this cookie.");
+			}
+			source = session.getUser();
+		}
+		User target = this.userTable.getUserByLoginName(loginName);
+		if (target == null) {
+			return html.errorPage("no such user.");
+		}
+		return html.userProfilePage(source, target);
 	}
 
-	public String processShowOutMessagesReq(String cookie, String loginName,
+	public String processShowPostedMessagesReq(String cookie, String loginName,
 			String startTime, String endTime, int maxN) {
 		// Obtém a sessão:
 		Session session = this.sessionTable.getSessionByCookie(cookie);
@@ -135,7 +172,7 @@ public abstract class ServerImpl implements Server {
 			source.addDirectContact(c);
 			target.addReverseContact(c);
 		}
-		return html.otherUserPage(target);
+		return html.userProfilePage(source, target);
 	}
 	
 }
