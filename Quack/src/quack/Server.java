@@ -69,6 +69,17 @@ public interface Server {
     // Também inicializa a tabela de sessões abertas, incialmente vazia.
     
     // ----------------------------------------------------------------------
+    // ESTADO DO SERVIDOR
+    
+    public long getNumUsers();
+	public long getNumContacts();
+	public long getNumMessages();
+	// Retornam os contadores totais dos principais elementos da rede {Quack}.
+	
+	public long getNumSessions();
+	// Retorna o número de sessões abertas no momento.
+    
+    // ----------------------------------------------------------------------
     // PROCESSAMENTO DE PEDIDOS HTTP
     // 
     // Os métodos abaixo são ativados pelo servidor HTTP ao receber 
