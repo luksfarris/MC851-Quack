@@ -115,10 +115,14 @@ public abstract class ServerImpl implements Server {
 		if (target == null) { 
 			return html.errorPage("no such user.");
 		}
+		if (source == target) {
+			return html.errorPage("you cannot have contact with yourself");
+		}
 		// Obtém o contato entre eles, se já existir:
 		Contact cdir = source.getDirectContact(target);
 		Contact crev = target.getReverseContact(source);
 		assert((cdir == null) == (crev == null));
+		
 		if (cdir != null) {
 			// Já existe contato entre eles, apenas altera seu estado:
 			cdir.setStatus(newStatus);
