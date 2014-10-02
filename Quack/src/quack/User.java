@@ -43,7 +43,7 @@ public interface User {
 	public boolean checkPassword(String password);
 	// Retorna {true} sse a senha de {this} é {password}.
 	
-	public Calendar getCreateTime();
+	public Calendar getCreationTime();
 	// Retorna o timestamp da data em que o usuário {this} foi acrescentado à rede {Quack}.
 
 	public long getDbIndex();
