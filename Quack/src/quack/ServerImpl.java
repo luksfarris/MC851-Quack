@@ -6,40 +6,58 @@ public abstract class ServerImpl implements Server {
 	Database database = null; // Conexão com a base de dados persistente.
 	// As tabelas abaixo são cópias na memória dos objetos na base de dados.
 	UserTable userTable = null; // Conjuto de usuários cadastrados.
+	
+	long numUsers = 0;     // Número de usuários na rede {Quack}.
+	long numContacts = 0;  // Número total de contatos criados (incluindo inativos).
+	long numMessages = 0;  // Número total de mensagens postadas (incuindo re-postagens).
+	long numSessions = 0;  // Número total de sessões abertas no momento. 
 
 	HTML html = null; // Cria paginas html.
 
 	// ??{ O s procedimentos a seguir deveriam construir e devolver
 	// a construir página HTML de resultado adequada. }??
 
-	public void initialize(String dbUserName, String dbName, String dbPassword) {
-		// Cria a tabela de sessões abertas:
+	public void initialize(String dbLoginName, String dbName, String dbPassword) {
+		// Cria a tabela de sessões abertas, vazia:
 		this.sessionTable = new SessionTableImpl();
 		this.sessionTable.initialize();
 
-		// Conecta com a base de dados persitente:
-		this.database = new DatabaseImpl(dbUserName, dbName, dbPassword);
-
-		// Cria a tabela de usuários:
+		// Cria a tabela de usuários, vazia:
 		this.userTable = new UserTableImpl();
-		this.userTable.initialize(this.database);
+		this.userTable.initialize();
 
-		// inicializa o criador de paginas html:
+		// Inicializa o criador de paginas html:
 		html = new HTMLImpl();
-		html = html.initialize();
+		html = html.initialize(this);
+
+		// Conecta com a base de dados persitente e carrega na memória:
+		this.database = new DatabaseImpl();
+		this.database.initialize(dbLoginName, dbName, dbPassword);
+		this.loadDatabase();
+	}
+	
+	private void loadDatabase() 
+	// Carrega a base de dados {this.database} na memória, criando os objetos 
+	// {User,Message,Contact} e ligando-os entre si.  Supõe que a conexão com o
+	// servidor da base de dados já foi estabelecida.
+	{
+		// ??{ Implementar }??
+	}
+	
+	public String processHomePageReq() {
+		return html.homePage();
 	}
 
 	public String processRegistrationReq(String loginName, String email,
 			String fullName, String password) {
-		// Verifica se já existe usuário com esse {userName} ou {email}:
+		// Verifica se já existe usuário com esse {loginName} ou {email}:
 		User user = this.userTable.getUserByLoginName(loginName);
 		if (user != null) {
-			return html.errorPage("username already taken");
+			return html.errorPage("login name already taken");
 		}
 		user = this.userTable.getUserByEmail(email);
 		if (user != null) {
-			return html
-					.errorPage("there is already a user account with that email");
+			return html.errorPage("there is already a user account with that email");
 		}
 
 		// Cria o usuário e acrescenta à tabela:
@@ -48,6 +66,7 @@ public abstract class ServerImpl implements Server {
 			return html.errorPage("user creation failed for unknown reason");
 		}
 		this.userTable.add(user);
+		// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
 		return html.loginPage();
 	}
 
@@ -62,7 +81,7 @@ public abstract class ServerImpl implements Server {
 			return html.errorPage("wrong password");
 		}
 		// Verifica se já existe sessão aberta para este usuário:
-		Session session = this.sessionTable.fromUser(user);
+		Session session = this.sessionTable.getSessionByUser(user);
 		if (session != null) { // Fecha a sessão existente:
 			this.sessionTable.delete(session);
 			session.close();
@@ -73,12 +92,12 @@ public abstract class ServerImpl implements Server {
 		// Cria um cookie para a sessão, e abre a mesma:
 		session.open(user, null);
 		this.sessionTable.add(session);
-		return html.loginSuccessfulPage(session.getCookie());
+		return html.loginSuccessfulPage(session.getCookie(), user);
 	}
 
 	public String processLogoutReq(String cookie) {
 		// Obtém a sessão:
-		Session session = this.sessionTable.fromCookie(cookie);
+		Session session = this.sessionTable.getSessionByCookie(cookie);
 		if (session == null) {
 			return html.errorPage("no session with this cookie.");
 		}
@@ -87,16 +106,93 @@ public abstract class ServerImpl implements Server {
 		session.close();
 		return html.homePage();
 	}
+	
+	public String processShowUserProfileReq(String cookie, String loginName) {
+		// Obtém a sessão:
+		Session session = null; // Current session or {null}.
+		User source = null; // Session owner or {null}.
+		if (! cookie.equals(")) { 
+			session = this.sessionTable.getSessionByCookie(cookie); 
+		 	if (session == null) {
+				return html.errorPage("no session with this cookie.");
+			}
+			source = session.getUser();
+		}
+		User target = this.userTable.getUserByLoginName(loginName);
+		if (target == null) {
+			return html.errorPage("no such user.");
+		}
+		return html.userProfilePage(cookie, source, target);
+	}
 
-	public String processShowOutMessagesReq(String cookie, String loginName,
+	public String processShowPostedMessagesReq(String cookie, String loginName,
 			String startTime, String endTime, int maxN) {
 		// Obtém a sessão:
-		Session session = this.sessionTable.fromCookie(cookie);
+		Session session = this.sessionTable.getSessionByCookie(cookie);
 		if (session == null) {
 			return html.errorPage("no session with this cookie.");
 		}
-		User user = this.userTable.getUserByLoginName(loginName);
-		// ??{ ... get specified messages from {user} ... }??
-		return html.messageListPage(cookie, loginName, user.getMessages(0, 10), maxN);
+		User target = this.userTable.getUserByLoginName(loginName);
+		if (target == null) { 
+			return html.errorPage("no such user.");
+		}
+		// ??{ ... get specified messages from {target} ... }??
+		List<Message> messages = target.getMessages(-1, -1, maxN);
+		return html.messageListPage(cookie, "posted", target, messages, maxN);
+	}
+	
+	public String processModifyContactReq(string cookie, String loginName, String newStatus) {
+		// Obtém a sessão:
+		Session session = this.sessionTable.getSessionByCookie(cookie);
+		if (session == null) {
+			return html.errorPage("no session with this cookie.");
+		}
+		// Obtém os usuários de origem e alvo:
+		User source = session.getUser();
+		User target = this.userTable.getUserByLoginName(loginName);
+		if (target == null) { 
+			return html.errorPage("no such user.");
+		}
+		if (source == target) {
+			return html.errorPage("you cannot have contact with yourself");
+		}
+		// Obtém o contato entre eles, se já existir:
+		Contact cdir = source.getDirectContact(target);
+		Contact crev = target.getReverseContact(source);
+		assert((cdir == null) == (crev == null));
+		
+		if (cdir != null) {
+			// Já existe contato entre eles, apenas altera seu estado:
+			cdir.setStatus(newStatus);
+			// ??{ Deveria aqui atualizar o estado do contato na base persistente. }??
+		} else {
+			// Não há ainda contato entre eles, acrescenta:
+			Contact c = new ContactImpl();
+			c.initialize(source, target, Calendar.getInstance(), newStatus);
+			// ??{ Deveria aqui acrescentar o contato na base persistente. }??
+			source.addDirectContact(c);
+			target.addReverseContact(c);
+		}
+		return html.userProfilePage(cookie, source, target);
+	}
+	
+	@override
+	public long getNumUsers() {
+		return this.numUsers;
+	}
+	
+	@override
+	public long getNumContacts() {
+		return this.numContacts;
+	}
+	
+	@override
+	public long getNumMessages() {
+		return this.numMessages;
+	}
+	
+	@override
+	public long getNumSessions() {
+		return this.numSessions;
 	}
 }
