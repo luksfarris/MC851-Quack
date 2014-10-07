@@ -206,7 +206,6 @@ public class UserImpl implements User
 		return true;
 	}
 
-
 	@Override
 	public List<Message> getAllMessages() {
 		return messages;
