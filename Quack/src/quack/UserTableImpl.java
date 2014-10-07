@@ -25,6 +25,16 @@ public class UserTableImpl implements UserTable {
 		}
 		return null;
 	}
+			
+	public List<User> listUsersByFullName(String fullName) {
+		List<User> l = new LinkedList<User>();
+		
+		for(User u: table){
+			if(u.getFullName() == fullName)
+				l.add(u);
+		}
+		return null;
+	}
 
 	@Override
 	public User getUserByEmail(String email) {
@@ -34,12 +44,5 @@ public class UserTableImpl implements UserTable {
 		}		return null;
 	}
 
-	@Override
-	public List<User> listUsersByFullName(String name) {
-		for(User u : this.table){
-			if(u.getFullName() == name)
-				return u;
-		}		
-		return null;
-	}
+
 }
