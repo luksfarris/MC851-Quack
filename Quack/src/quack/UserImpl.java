@@ -4,26 +4,148 @@ import java.util.*;
 
 public class UserImpl implements User
 {
-	private long dbIndex;
-	private String loginName;
-	private String password; 
-	private String fullName; 
-	private String email;
-	private Calendar creationTime;
+	private long id;
+	private String loginName, password, profileMsg, avatar, 
+					fullName, email, website;
+	private Calendar createdOn;
 	
 	private List<Contact> directContacts; // Arestas de saida do vertice {this} no grafo de relacoes.
 	private List<Contact> reverseContacts; // Arestas de entrada do vertice {this} no grafo de relacoes.
 	private List<Message> messages; // Lista de mensagens de autoria {this}.
+	
+	@Override
+	public long getId() {
+		return this.id;
+	}
+
 
 	@Override
-	public boolean initialize(String loginName, String email, String fullName, String password, long dbIndex) {
-		this.loginName = loginName;
-		this.fullName = fullName;
-		this.email = email;
-		this.password = password;
-		this.dbIndex = dbIndex;
-		this.creationTime = Calendar.getInstance();
+	public boolean follow(User followed) {
+		for (Contact c : reverseContacts) {
+			if (c.source().equals(followed) && c.blocked()) {
+				return false;
+			}
+		}
+		
+		for (Contact c : directContacts) {
+			if (c.target().equals(followed) && c.blocked()) {
+				return false;
+			}
+		}
+		
+		Contact relation = new ContactImpl(followed, this, Calendar.getInstance(), false);
+		return directContacts.add(relation) && followed.getReverseContacts().add(relation);
+	}
+	
+	
+	
+	@Override
+	public boolean unfollow(User followed) {
+		for (Contact c : directContacts) {
+			if (c.target().equals(followed) && !c.blocked()) {
+				directContacts.remove(c);
+				for (Contact flwContact : followed.getReverseContacts()) {
+					if (flwContact.source().equals(this) && !flwContact.blocked())
+						followed.getReverseContacts().remove(flwContact);
+				}
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+
+	@Override
+	public boolean block(User user) {
+		unfollow(user);
+		user.unfollow(this);
+		Contact relation = new ContactImpl(user, this, Calendar.getInstance(), true);
+		return directContacts.add(relation) && user.getReverseContacts().add(relation);
+	}
+	
+	@Override
+	public boolean unblock(User user) {
+		for (Contact c : directContacts) {
+			if (c.target().equals(user) && c.blocked()) {
+				directContacts.remove(c);
+				for (Contact flwContact : user.getReverseContacts()) {
+					if (flwContact.source().equals(this) && !flwContact.blocked())
+						user.getReverseContacts().remove(flwContact);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	
+
+	@Override
+	public boolean changePassword(String newPassword) {
+		this.password = newPassword;
 		return true;
+	}
+	@Override
+	public boolean changeEmail(String newEmail) {
+		this.email = newEmail;
+		return true;
+	}
+	
+
+	@Override
+	public List<User> following() {
+		List<User> follow = new LinkedList<User>();
+		
+		for (Contact c : directContacts) {
+			if(!c.blocked())
+				follow.add(c.target());
+		}
+		
+		return follow;
+	}
+	@Override
+	public List<User> followers() {
+		List<User> follower = new LinkedList<User>();
+		
+		for (Contact c : reverseContacts) {
+			if(!c.blocked())
+				follower.add(c.target());
+		}
+		
+		return follower;
+	}
+
+	
+	public int tweetCount() {
+		return messages.size();
+	}
+
+	public int mediaCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	public int followingCount() {
+		return following().size();
+	}
+	
+	public int followerCount() {
+		return followers().size();
+	}
+	
+	public int favoriteCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public List<Message> getMessages(int start, int end) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public List<Message> getFollowingMessages(int start, int end) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -31,6 +153,12 @@ public class UserImpl implements User
 		return this.loginName;
 	}
 
+	
+	public String getProfileMsg() {
+		return this.profileMsg;
+	}
+	
+	
 	public String getFullName() {
 		return this.fullName;
 	}
@@ -39,10 +167,24 @@ public class UserImpl implements User
 	public String getEmail() {
 		return this.email;
 	}
+
 	
+
 	@Override
-	public void setEmail(String newEmail) {
-		this.email = newEmail;
+	public Calendar getCreatedDate() {
+		return this.createdOn;
+	}
+
+
+	@Override
+	public List<Contact> getDirectContacts() {
+		return directContacts;
+	}
+
+
+	@Override
+	public List<Contact> getReverseContacts() {
+		return reverseContacts;
 	}
 
 	@Override
@@ -50,74 +192,23 @@ public class UserImpl implements User
 		return this.password.equals(password);
 	}
 	
-	@Override
-	public void setPassword(String newPassword) {
-		this.password = newPassword;
+	final String getPassword() {
+		return password;
 	}
 
 	@Override
-	public Calendar getCreationTime() {
-		return this.creationTime;
-	}
-	
-	@Override
-	public long getDbIndex() {
-		return this.dbIndex;
-	}
-
-	@Override
-	public List<Contact> getDirectContacts() {
-		return this.directContacts;
+	public boolean initialize(String userName, String email, String fullName,
+			String password) {
+		this.loginName = userName;
+		this.fullName = fullName;
+		this.email = email;
+		this.password = password;
+		return true;
 	}
 
 	@Override
-	public List<Contact> getReverseContacts() {
-		return this.reverseContacts;
-	}
-	
-	@Override
-	public Contact getDirectContact(User target) {
-		for (Contact c : this.directContacts) {
-			if (c.target().equals(target)) {
-				return c;
-			}
-		}
-		return null;
-	}
-	
-	@Override
-	public Contact getReverseContact(User source) {
-		for (Contact c : this.reverseContacts) {
-			if (c.source().equals(source)) {
-				return c;
-			}
-		}
-		return null;
-	}
-	
-	@Override
-	public void addDirectContact(Contact contact) {
-		assert(this.getDirectContact(contact.target()) == null);
-		this.directContacts.add(contact);
-	}		
-	
-	@Override
-	public void addReverseContact(Contact contact) {
-		assert(this.getReverseContact(contact.source()) == null);
-		this.reverseContacts.add(contact);
-	}
-
-	@Override
-	public List<Message> getPostedMessages() {
-		return this.messages;
-	}
-	
-
-	@Override
-	public List<Message> getPostedMessages(Calendar startTime,
-			Calendar endTime, long maxN) {
-		// TODO Auto-generated method stub
-		return null; //Message.extractMessageListSegment(this.messages, startTime, endTime, maxN);;
+	public List<Message> getAllMessages() {
+		return messages;
 	}
 
 }
