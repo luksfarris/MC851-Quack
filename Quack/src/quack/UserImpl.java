@@ -120,7 +120,8 @@ public class UserImpl implements User
 		for (Message m : this.messages) {
 			if (m.getDate().before(startTime) || i > maxN)
 				break;
-			if (m.getDate().after(endTime)) {
+			if (m.getDate().after(startTime) && 
+					(endTime != null && m.getDate().before(endTime))) {
 				trechoMsgs.add(m);
 				i++;
 			}
