@@ -9,12 +9,8 @@ public class DatabaseImpl implements Database {
 	private Connection con = null;
 
 	private String db_name;
-	private String bd_user_name;
-	private String bd_pass;
-
-
-	public DatabaseImpl() {
-	}
+	private String db_login_name;
+	private String db_pass;
 
 	@Override
 	public Connection getConnection() throws ClassNotFoundException, SQLException {
@@ -22,8 +18,7 @@ public class DatabaseImpl implements Database {
 			return con;
 
 		Class.forName("com.mysql.jdbc.Driver");
-		// TODO: definir URL.
-		con = DriverManager.getConnection("url" + db_name, bd_user_name, bd_pass);
+		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db_name, db_login_name, db_pass);
 		con.setAutoCommit(false);
 
 		return con;
@@ -47,8 +42,8 @@ public class DatabaseImpl implements Database {
 
 	@Override
 	public void initialize(String dbLoginName, String dbName, String dbPassword) {
-		bd_user_name = dbLoginName;
+		db_login_name = dbLoginName;
 		db_name = dbName;
-		bd_pass = dbPassword;
+		db_pass = dbPassword;
 	}
 }
