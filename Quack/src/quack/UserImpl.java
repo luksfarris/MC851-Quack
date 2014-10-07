@@ -114,10 +114,21 @@ public class UserImpl implements User
 	
 
 	@Override
-	public List<Message> getPostedMessages(Calendar startTime,
-			Calendar endTime, long maxN) {
-		// TODO Auto-generated method stub
-		return null; //Message.extractMessageListSegment(this.messages, startTime, endTime, maxN);;
+	public List<Message> getPostedMessages(Calendar startTime, Calendar endTime, long maxN) {
+		List<Message> trechoMsgs = new LinkedList<Message>();
+		long i = 0;
+		for (Message m : this.messages) {
+			if (m.getDate().before(startTime) || i > maxN)
+				break;
+			if (m.getDate().after(endTime)) {
+				trechoMsgs.add(m);
+				i++;
+			}
+		}
+		return trechoMsgs;
+		
+		/*// TODO Auto-generated method stub
+		return null; //Message.extractMessageListSegment(this.messages, startTime, endTime, maxN);;*/
 	}
 
 }
