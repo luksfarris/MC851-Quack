@@ -20,4 +20,8 @@ public interface Database {
 	// Prepara uma query SQL pré compilada. Essa função não executa a query
 	// para dar liberdade ao usuário de definir argumentos na string SQL
 	// para, enfim, executá-la.
+
+	public void initialize(String dbLoginName, String dbName, String dbPassword);
+	// Inicializa um banco de dados com parametros de login {dbLoginName}, senha {dbPassword}
+	// e banco de nome {dbName}
 }

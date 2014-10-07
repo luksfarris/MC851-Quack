@@ -19,4 +19,15 @@ public interface Contact {
 	public boolean blocked();
 	// Se esse valor for <true> o relacionamento eh de bloqueio, 
 	// caso contrario eh apenas um relacionamento.
+
+	public void setStatus(String newStatus);
+	// Muda o status do contato para {newStatus}
+	// Se {newStatus}.equals("Follow"), passa a ter {this.blocked} = false
+	// Senao passa a ser bloqueado
+	
+	public void initialize(User source, User target, Calendar instance,
+			String newStatus);
+	// Inicializa um objeto Contact com {source}, {target}, 
+	// timestamp {instance} e status {newStatus}
+	
 }

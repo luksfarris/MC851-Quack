@@ -13,10 +13,7 @@ public class DatabaseImpl implements Database {
 	private String bd_pass;
 
 
-	public DatabaseImpl(String userName, String dbName, String dbPassword) {
-		bd_user_name = userName;
-		db_name = dbName;
-		bd_pass = dbPassword;
+	public DatabaseImpl() {
 	}
 
 	@Override
@@ -46,5 +43,12 @@ public class DatabaseImpl implements Database {
 	@Override
 	public PreparedStatement getStatement(String query) throws ClassNotFoundException, SQLException {
 		return con.prepareStatement(query);
+	}
+
+	@Override
+	public void initialize(String dbLoginName, String dbName, String dbPassword) {
+		bd_user_name = dbLoginName;
+		db_name = dbName;
+		bd_pass = dbPassword;
 	}
 }

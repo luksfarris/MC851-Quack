@@ -9,11 +9,8 @@ public class ContactImpl implements Contact {
 	private Calendar lastModified;
 	private boolean blocked;
 	
-	public ContactImpl(User source, User target, Calendar calendar, boolean blocked) {
-		sourceUser = source;
-		targetUser = target;
-		this.lastModified = calendar;
-		this.blocked = blocked;
+	public ContactImpl() {
+		
 	}
 	
 	@Override
@@ -34,6 +31,26 @@ public class ContactImpl implements Contact {
 	@Override
 	public boolean blocked() {
 		return blocked;
+	}
+
+	@Override
+	public void initialize(User source, User target, Calendar instance,
+			String newStatus) {
+		sourceUser = source;
+		targetUser = target;
+		this.lastModified = instance;
+		if(newStatus.equals("Follow"))
+			this.blocked = false;
+		else
+			this.blocked = true;
+	}
+
+	@Override
+	public void setStatus(String newStatus) {
+		if(newStatus.equals("Follow"))
+			this.blocked = false;
+		else
+			this.blocked = true;
 	}
 
 }
