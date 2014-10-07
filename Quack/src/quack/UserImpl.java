@@ -21,8 +21,8 @@ public class UserImpl implements User
 		this.fullName = fullName;
 		this.email = email;
 		this.password = password;
-		this.dbIndex = dbIndex
-		this.creationTime = Calendar.getCurrentTime();
+		this.dbIndex = dbIndex;
+		this.creationTime = Calendar.getInstance();
 		return true;
 	}
 
@@ -97,13 +97,13 @@ public class UserImpl implements User
 	
 	@Override
 	public void addDirectContact(Contact contact) {
-		assert(this.getDirectContact(contact.getTarget()) == null)
+		assert(this.getDirectContact(contact.target()) == null);
 		this.directContacts.add(contact);
 	}		
 	
 	@Override
 	public void addReverseContact(Contact contact) {
-		assert(this.getReverseContact(contact.getSource()) == null)
+		assert(this.getReverseContact(contact.source()) == null);
 		this.reverseContacts.add(contact);
 	}
 
@@ -111,10 +111,13 @@ public class UserImpl implements User
 	public List<Message> getPostedMessages() {
 		return this.messages;
 	}
+	
+
 	@Override
-	public List<Message> getMessages(Calendar startTime, Calendar endTime, long maxN) {
+	public List<Message> getPostedMessages(Calendar startTime,
+			Calendar endTime, long maxN) {
 		// TODO Auto-generated method stub
-		return Message.extractMessageListSegment(this.messages, startTime, endTime, maxN);
+		return null; //Message.extractMessageListSegment(this.messages, startTime, endTime, maxN);;
 	}
 
 }

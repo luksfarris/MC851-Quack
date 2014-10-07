@@ -29,7 +29,13 @@ public class SessionTableImpl implements SessionTable {
 	}
 
 	@Override
-	public Session fromCookie(String cookie) {
+	public Session getSessionByUser(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Session getSessionByCookie(String cookie) {
 		// TODO Auto-generated method stub
 		return null;
 	}
