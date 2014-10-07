@@ -16,12 +16,27 @@ public class HTMLImpl implements HTML {
 		return null;
 	}
 
+
+	@Override
+
+	public String userProfilePage(String cookie, User source, User target) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+
+	public String messageListPage(String cookie, String title, User user,
+			List<Message> messages, int maxN) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
 	public String homePage() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	@Override
 	public HTML initialize(Server server) {
@@ -34,18 +49,4 @@ public class HTMLImpl implements HTML {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public String userProfilePage(String cookie, User source, User target) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String messageListPage(String cookie, String title, User user,
-			List<Message> messages, int maxN) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

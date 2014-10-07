@@ -24,7 +24,7 @@ public class UserTableImpl implements UserTable {
 	}
 
 	@Override
-	public List<User> getUsersByFullName(String fullName) {
+	public List<User> listUsersByFullName(String fullName) {
 		List<User> l = new LinkedList<User>();
 		
 		for(User u: table){
@@ -40,12 +40,13 @@ public class UserTableImpl implements UserTable {
 		table.add(user);
 	}
 
+	/*
 	@Override
 	public void remove(User user) {
 		table.remove(user);
 		
 	}
-
+	 */
 
 	@Override
 	public User getUserByEmail(String email) {
