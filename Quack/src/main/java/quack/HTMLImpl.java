@@ -44,7 +44,7 @@ public class HTMLImpl implements HTML {
 		return null;
 	}
 
-	@Override
+	@Override	
 	public String loginSuccessfulPage(String cookie, User user) {
 		// TODO Auto-generated method stub
 		return null;
