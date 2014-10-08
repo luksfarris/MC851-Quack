@@ -1,5 +1,9 @@
 package quack;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 public abstract class ServerImpl implements Server {
 
 	SessionTable sessionTable = null; // Conjunto de sessões abertas.
@@ -18,22 +22,23 @@ public abstract class ServerImpl implements Server {
 	// a construir página HTML de resultado adequada. }??
 
 	public void initialize(String dbLoginName, String dbName, String dbPassword) {
+		// Conecta com a base de dados persitente e carrega na memória:
+		this.database = new DatabaseImpl();
+		this.database.initialize(dbLoginName, dbName, dbPassword);
+		
 		// Cria a tabela de sessões abertas, vazia:
 		this.sessionTable = new SessionTableImpl();
 		this.sessionTable.initialize();
 
 		// Cria a tabela de usuários, vazia:
 		this.userTable = new UserTableImpl();
-		this.userTable.initialize();
+		this.userTable.initialize(database);
 
+		this.loadDatabase();
+		
 		// Inicializa o criador de paginas html:
 		html = new HTMLImpl();
 		html = html.initialize(this);
-
-		// Conecta com a base de dados persitente e carrega na memória:
-		this.database = new DatabaseImpl();
-		this.database.initialize(dbLoginName, dbName, dbPassword);
-		this.loadDatabase();
 	}
 	
 	private void loadDatabase() 
@@ -111,7 +116,7 @@ public abstract class ServerImpl implements Server {
 		// Obtém a sessão:
 		Session session = null; // Current session or {null}.
 		User source = null; // Session owner or {null}.
-		if (! cookie.equals(")) { 
+		if (! cookie.equals("")) { 
 			session = this.sessionTable.getSessionByCookie(cookie); 
 		 	if (session == null) {
 				return html.errorPage("no session with this cookie.");
@@ -137,11 +142,11 @@ public abstract class ServerImpl implements Server {
 			return html.errorPage("no such user.");
 		}
 		// ??{ ... get specified messages from {target} ... }??
-		List<Message> messages = target.getMessages(-1, -1, maxN);
+		List<Message> messages = target.getPostedMessages(-1, -1, maxN);
 		return html.messageListPage(cookie, "posted", target, messages, maxN);
 	}
 	
-	public String processModifyContactReq(string cookie, String loginName, String newStatus) {
+	public String processModifyContactReq(String cookie, String loginName, String newStatus) {
 		// Obtém a sessão:
 		Session session = this.sessionTable.getSessionByCookie(cookie);
 		if (session == null) {
@@ -176,22 +181,22 @@ public abstract class ServerImpl implements Server {
 		return html.userProfilePage(cookie, source, target);
 	}
 	
-	@override
+	@Override 
 	public long getNumUsers() {
 		return this.numUsers;
 	}
 	
-	@override
+	@Override
 	public long getNumContacts() {
 		return this.numContacts;
 	}
 	
-	@override
+	@Override
 	public long getNumMessages() {
 		return this.numMessages;
 	}
 	
-	@override
+	@Override
 	public long getNumSessions() {
 		return this.numSessions;
 	}
