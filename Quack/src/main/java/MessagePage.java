@@ -1,4 +1,4 @@
-
+﻿
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.w3c.dom.html.HTMLUListElement;
+
 /**
  * Servlet implementation class MessagePage
  */
@@ -16,8 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 public class MessagePage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private static final String htmlHeader = "<html><head><title>Mensagem</title></head><body>";
-	private static final String htmlFooter = "</body></html>";
+	private static final String htmlHeader = "<!DOCTYPE html>\n<html>\n<head>\n"
+			+ "<title>Mensagem</title>\n</head>\n<body>\n";
+	private static final String htmlFooter = "</body>\n</html>";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -32,7 +35,10 @@ public class MessagePage extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
-		out.println(htmlHeader + "<p>@autor</p><h1>Mensagem vai aqui.</h1>" + htmlFooter);
+		
+		
+		out.println(htmlHeader + "<p style=\"color: #22F;\">@autor</p>\n"
+				+ "<h1>À noite, vovô Kowalsky vê o ímã cair no pé do pinguim queixoso e vovó põe açúcar no chá de tâmaras do jabuti feliz.</h1>" + htmlFooter);
 	}
 
 	/**
