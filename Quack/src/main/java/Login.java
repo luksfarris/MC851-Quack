@@ -1,4 +1,4 @@
-package main.webapp;
+
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,20 +12,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class Testando
+ * Servlet implementation class Login
  */
-@WebServlet(description = "Testando", urlPatterns = { "/Testando"}, initParams = {@WebInitParam(name="id",value="1"),@WebInitParam(name="name",value="pankaj")})
-public class Testando extends HttpServlet {
-	
+@WebServlet(description = "Login", urlPatterns = { "/Login"})
+public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String HTML_START="<html><body>";
-    public static final String HTML_END="</body></html>";
+    public static final String HTML_END="</body></html>";   
 	
     /**
-     * Default constructor. 
+     * @see HttpServlet#HttpServlet()
      */
-    public Testando() {
-        // TODO Auto-generated constructor stub
+    public Login() {
+        super();
     }
 
 	/**
@@ -34,7 +33,7 @@ public class Testando extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
         Date date = new Date();
-        out.println(HTML_START + "<h2>Hi There!</h2><br/><h3>Date="+date +"</h3>"+HTML_END);
+        out.println(HTML_START + "<h2>Login</h2><br/><h3>Date="+date +"</h3>"+HTML_END);
 	}
 
 	/**
