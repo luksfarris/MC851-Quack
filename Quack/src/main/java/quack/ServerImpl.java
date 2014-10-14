@@ -4,17 +4,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public abstract class ServerImpl implements Server {
+public class ServerImpl implements Server {
 
 	SessionTable sessionTable = null; // Conjunto de sessões abertas.
 	Database database = null; // Conexão com a base de dados persistente.
 	// As tabelas abaixo são cópias na memória dos objetos na base de dados.
 	UserTable userTable = null; // Conjuto de usuários cadastrados.
-	
-	long numUsers = 0;     // Número de usuários na rede {Quack}.
-	long numContacts = 0;  // Número total de contatos criados (incluindo inativos).
-	long numMessages = 0;  // Número total de mensagens postadas (incuindo re-postagens).
-	long numSessions = 0;  // Número total de sessões abertas no momento. 
+
+	long numUsers = 0; // Número de usuários na rede {Quack}.
+	long numContacts = 0; // Número total de contatos criados (incluindo
+							// inativos).
+	long numMessages = 0; // Número total de mensagens postadas (incuindo
+							// re-postagens).
+	long numSessions = 0; // Número total de sessões abertas no momento.
 
 	HTML html = null; // Cria paginas html.
 
@@ -25,7 +27,7 @@ public abstract class ServerImpl implements Server {
 		// Conecta com a base de dados persitente e carrega na memória:
 		this.database = new DatabaseImpl();
 		this.database.initialize(dbLoginName, dbName, dbPassword);
-		
+
 		// Cria a tabela de sessões abertas, vazia:
 		this.sessionTable = new SessionTableImpl();
 		this.sessionTable.initialize();
@@ -35,20 +37,20 @@ public abstract class ServerImpl implements Server {
 		this.userTable.initialize(database);
 
 		this.loadDatabase();
-		
+
 		// Inicializa o criador de paginas html:
 		html = new HTMLImpl();
 		html = html.initialize(this);
 	}
-	
-	private void loadDatabase() 
-	// Carrega a base de dados {this.database} na memória, criando os objetos 
-	// {User,Message,Contact} e ligando-os entre si.  Supõe que a conexão com o
+
+	private void loadDatabase()
+	// Carrega a base de dados {this.database} na memória, criando os objetos
+	// {User,Message,Contact} e ligando-os entre si. Supõe que a conexão com o
 	// servidor da base de dados já foi estabelecida.
 	{
 		// ??{ Implementar }??
 	}
-	
+
 	public String processHomePageReq() {
 		return html.homePage();
 	}
@@ -62,7 +64,8 @@ public abstract class ServerImpl implements Server {
 		}
 		user = this.userTable.getUserByEmail(email);
 		if (user != null) {
-			return html.errorPage("there is already a user account with that email");
+			return html
+					.errorPage("there is already a user account with that email");
 		}
 
 		// Cria o usuário e acrescenta à tabela:
@@ -111,14 +114,14 @@ public abstract class ServerImpl implements Server {
 		session.close();
 		return html.homePage();
 	}
-	
+
 	public String processShowUserProfileReq(String cookie, String loginName) {
 		// Obtém a sessão:
 		Session session = null; // Current session or {null}.
 		User source = null; // Session owner or {null}.
-		if (! cookie.equals("")) { 
-			session = this.sessionTable.getSessionByCookie(cookie); 
-		 	if (session == null) {
+		if (!cookie.equals("")) {
+			session = this.sessionTable.getSessionByCookie(cookie);
+			if (session == null) {
 				return html.errorPage("no session with this cookie.");
 			}
 			source = session.getUser();
@@ -138,15 +141,16 @@ public abstract class ServerImpl implements Server {
 			return html.errorPage("no session with this cookie.");
 		}
 		User target = this.userTable.getUserByLoginName(loginName);
-		if (target == null) { 
+		if (target == null) {
 			return html.errorPage("no such user.");
 		}
 		// ??{ ... get specified messages from {target} ... }??
 		List<Message> messages = target.getPostedMessages(-1, -1, maxN);
 		return html.messageListPage(cookie, "posted", target, messages, maxN);
 	}
-	
-	public String processModifyContactReq(String cookie, String loginName, String newStatus) {
+
+	public String processModifyContactReq(String cookie, String loginName,
+			String newStatus) {
 		// Obtém a sessão:
 		Session session = this.sessionTable.getSessionByCookie(cookie);
 		if (session == null) {
@@ -155,7 +159,7 @@ public abstract class ServerImpl implements Server {
 		// Obtém os usuários de origem e alvo:
 		User source = session.getUser();
 		User target = this.userTable.getUserByLoginName(loginName);
-		if (target == null) { 
+		if (target == null) {
 			return html.errorPage("no such user.");
 		}
 		if (source == target) {
@@ -164,40 +168,56 @@ public abstract class ServerImpl implements Server {
 		// Obtém o contato entre eles, se já existir:
 		Contact cdir = source.getDirectContact(target);
 		Contact crev = target.getReverseContact(source);
-		assert((cdir == null) == (crev == null));
-		
+		assert ((cdir == null) == (crev == null));
+
 		if (cdir != null) {
 			// Já existe contato entre eles, apenas altera seu estado:
 			cdir.setStatus(newStatus);
-			// ??{ Deveria aqui atualizar o estado do contato na base persistente. }??
+			// ??{ Deveria aqui atualizar o estado do contato na base
+			// persistente. }??
 		} else {
 			// Não há ainda contato entre eles, acrescenta:
 			Contact c = new ContactImpl();
-			c.initialize(source, target, Calendar.getInstance(), newStatus);
+			c.initialize(source, target, Calendar.getInstance()
+					.getTimeInMillis() / 1000, newStatus);
 			// ??{ Deveria aqui acrescentar o contato na base persistente. }??
 			source.addDirectContact(c);
 			target.addReverseContact(c);
 		}
 		return html.userProfilePage(cookie, source, target);
 	}
-	
-	@Override 
+
+	@Override
 	public long getNumUsers() {
 		return this.numUsers;
 	}
-	
+
 	@Override
 	public long getNumContacts() {
 		return this.numContacts;
 	}
-	
+
 	@Override
 	public long getNumMessages() {
 		return this.numMessages;
 	}
-	
+
 	@Override
 	public long getNumSessions() {
 		return this.numSessions;
+	}
+
+	@Override
+	public String processSendMessageReq(String cookie, String text,
+			String replyLoginName, String replyTime) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String processShowReceivedMessagesReq(String cookie,
+			String startTime, String endTime, int maxN) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
