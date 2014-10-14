@@ -10,7 +10,7 @@ public interface User {
 	// INICIALIZAÇÃO
 	
 	public boolean initialize(String loginName, String email, String fullName,
-			String password, long dbIndex);
+			String password);
 	// Inicializa um objeto {User} recém-criado com os parametros passados. Retorna <true> se
 	// houve sucesso, ou <false> caso ocorra algum erro.
 	
@@ -20,7 +20,6 @@ public interface User {
 	// A cadeia {email} deve conter apenas caratcteres válidos em e-mails.
 	// A cadeia {fullname} pode conter quaisquer caracteres UNICODE na representação
 	// UTF-8.  A cadeia {password} deve ser a senha, por enquanto sem criptografar.
-	// O inteiro {dbIndex} vai identificar o usuário no banco de dados persistente.
 	
 	// -------------------------------------------------------------------------------
 	// ATRIBUTOS BÁSICOS

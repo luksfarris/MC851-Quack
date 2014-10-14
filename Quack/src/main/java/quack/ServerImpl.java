@@ -3,6 +3,7 @@ package quack;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public abstract class ServerImpl implements Server {
 
@@ -142,7 +143,7 @@ public abstract class ServerImpl implements Server {
 			return html.errorPage("no such user.");
 		}
 		// ??{ ... get specified messages from {target} ... }??
-		List<Message> messages = target.getPostedMessages(-1, -1, maxN);
+		List<Message> messages = target.getPostedMessages(timestampFromString(startTime), timestampFromString(endTime), maxN);
 		return html.messageListPage(cookie, "posted", target, messages, maxN);
 	}
 	
@@ -199,5 +200,19 @@ public abstract class ServerImpl implements Server {
 	@Override
 	public long getNumSessions() {
 		return this.numSessions;
+	}
+	
+	private long timestampFromString(String time){
+		time = time.replaceAll("[()]", "");
+		String date[] = time.split("-: ");
+		
+		// TODO - consertar timezone (ID de TimeZone eh uma string 
+		// do tipo "Brazil/East", e nao (-0300))
+		Calendar a = Calendar.getInstance();
+		a.set(  Integer.parseInt(date[0]), Integer.parseInt(date[1]), 
+				Integer.parseInt(date[2]), Integer.parseInt(date[3]),
+				Integer.parseInt(date[4]), Integer.parseInt(date[5]));
+		
+		return a.getTimeInMillis();
 	}
 }
