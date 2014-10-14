@@ -24,13 +24,15 @@
 </head>
 <body>
 	<%
-		int numPosts = 10, followers = 3, follows = 20;
+		//DADOS DO USUARIO (pegar do BD)
+		int numPosts = 10, followers = 3, follows = 20; 
 		String UserName = "UserName";
+		String PicAddress = "https://www.wevi.com.br/static/img/placeholder/placeholder_user.png";
 	%>
 
 	<div class='container'>
 	pagina de usuario (Implementação Inicial)<br><br>
-	<img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" alt="User Picture" style="width:150px;height:150px">
+	<img src= <%out.println(PicAddress);%> alt="User Picture" style="width:150px;height:150px">
 	<br>
 	<a href="/FollowUser">Seguir</a> | <a href="BlockUser">Bloquear</a>
 	<table border='1'style='width:100%'>
@@ -51,10 +53,10 @@
 	<hr>
 	<center>Feed de Mensagens</center>
 	<br>
-	<%
+	<% //Printa Mensagens
 		for(int i = 0; i < numPosts; i++)
-			
-			out.println("<center> <div class='mensagem', align='center'><br><br>Mensagem " + i + "</div></center><br>");
+			out.println("<center> <div class='mensagem', align='center'><br><br>Mensagem " + i
+			+ "<br><br><a href='/repost'>RePostar</a> | <a href='/favorite'>Favorita</a></div></center><br>");
 	%>
 	</div>
 </body>
