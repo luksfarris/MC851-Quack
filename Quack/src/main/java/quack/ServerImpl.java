@@ -1,7 +1,6 @@
 package quack;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -213,6 +212,6 @@ public abstract class ServerImpl implements Server {
 				Integer.parseInt(date[2]), Integer.parseInt(date[3]),
 				Integer.parseInt(date[4]), Integer.parseInt(date[5]));
 		
-		return a.getTimeInMillis()/100;
+		return a.getTimeInMillis()/1000;
 	}
 }
