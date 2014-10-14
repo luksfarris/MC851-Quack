@@ -15,30 +15,30 @@ public class MessageImpl implements Message {
 	private long id;
 
 	@Temporal(TemporalType.DATE)
-	private	Calendar timestamp;
+	private long timestamp;
 	private String body;
-	private String loginName;
+	private User user;
 	private Message parent;
-	
-	public MessageImpl(){}
+
+	public MessageImpl() {
+	}
 
 	@Override
 	public String getText() {
-		if(parent == null)
+		if (parent == null)
 			return body;
-		
-		//TODO- mudar o caso de ter parent
-		else return null;
+
+		else
+			return parent.getText();
 	}
 
 	@Override
 	public User getUser() {
-		// TODO: get user from UserImpl controller.
-		return new UserTableImpl().getUserByLoginName(loginName);
+		return user;
 	}
 
 	@Override
-	public Calendar getDate() {
+	public long getDate() {
 		return timestamp;
 	}
 
@@ -49,19 +49,19 @@ public class MessageImpl implements Message {
 
 	@Override
 	public boolean initialize(String body, User user) {
-		this.timestamp = Calendar.getInstance();
+		this.timestamp = Calendar.getInstance().getTimeInMillis() / 1000;
 		this.body = body;
-		this.loginName = user.getLoginName();
+		this.user = user;
 		this.parent = null;
 		return true;
 	}
 
 	@Override
 	public boolean initialize(User user, Message parent) {
-		if(parent.getParent() == null){
-			this.timestamp = Calendar.getInstance();
+		if (parent.getParent() == null) {
+			this.timestamp = Calendar.getInstance().getTimeInMillis() / 1000;
 			this.body = parent.getText();
-			this.loginName = user.getLoginName();
+			this.user = user;
 			this.parent = parent;
 			return true;
 		} else {

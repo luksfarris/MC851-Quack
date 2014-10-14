@@ -45,8 +45,12 @@ public class Login extends HttpServlet {
 			// novo login
 			username = request.getParameter("username");
 			password = request.getParameter("password");
+
+			// TODO: validar informações de login fornecidas.
 			requestSession.setAttribute(usernameKey, username);
 			requestSession.setAttribute(passwordKey, password);
+			response.sendRedirect("/Quack/Login");
+			return;
 		} else {
 			// dados da sessão
 			username = (String) requestSession.getAttribute(usernameKey);
@@ -55,21 +59,14 @@ public class Login extends HttpServlet {
 
 		PrintWriter out = response.getWriter();
 		if (username != null) {
-			// constroi a pagina.
+			// TODO: redireciona para a pagina principal
 			out.println(HTML_START + "<h2>Login</h2><br/>Cookie ID: "
 					+ cookieId + "<br/>Session Creation: "
 					+ new Date(creationDate) + "<br/>Username: " + username
 					+ "<br/>Password: " + password + HTML_END);
 		} else {
-			out.println(getLoginPage());
+			// carrega o form de login
+			response.sendRedirect("/Quack/loginrequest.jsp");
 		}
-	}
-
-	private String getLoginPage() {
-		return "<!DOCTYPE html><html><head><title>HTML5 Login</title>"
-				+ "</head><body><section><form name=\"login\" action=\"Login\" method=\"get\" accept-charset=\"utf-8\">"
-				+ "<ul><li><label for=\"username\">Email</label><input type=\"email\" name=\"username\" placeholder=\"yourname@email.com\""
-				+ "required></li><li><label for=\"password\">Password</label><input type=\"password\" name=\"password\" placeholder=\"password\""
-				+ "required></li><li><input type=\"submit\" value=\"Login\"></li></ul></form></section></body></html>";
 	}
 }
