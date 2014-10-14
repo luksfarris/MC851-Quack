@@ -174,7 +174,7 @@ public abstract class ServerImpl implements Server {
 		} else {
 			// Não há ainda contato entre eles, acrescenta:
 			Contact c = new ContactImpl();
-			c.initialize(source, target, Calendar.getInstance(), newStatus);
+			c.initialize(source, target, Calendar.getInstance().getTimeInMillis()/1000, newStatus);
 			// ??{ Deveria aqui acrescentar o contato na base persistente. }??
 			source.addDirectContact(c);
 			target.addReverseContact(c);
@@ -213,6 +213,6 @@ public abstract class ServerImpl implements Server {
 				Integer.parseInt(date[2]), Integer.parseInt(date[3]),
 				Integer.parseInt(date[4]), Integer.parseInt(date[5]));
 		
-		return a.getTimeInMillis();
+		return a.getTimeInMillis()/100;
 	}
 }
