@@ -17,13 +17,15 @@ public class UserImpl implements User {
 	private List<Message> messages; // Lista de mensagens de autoria {this}.
 
 	@Override
-	public boolean initialize(String loginName, String email, String fullName,
-			String password, long dbIndex) {
+
+	public boolean initialize(String loginName, String email, String fullName, String password) {
 		this.loginName = loginName;
 		this.fullName = fullName;
 		this.email = email;
 		this.password = password;
-		this.dbIndex = dbIndex;
+		
+		// TODO - calcular o dbindex do banco e colocar no objeto
+		this.dbIndex = -1;
 		this.creationTime = Calendar.getInstance().getTimeInMillis() / 1000;
 		return true;
 	}

@@ -1,7 +1,6 @@
 package quack;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class ServerImpl implements Server {
@@ -135,17 +134,44 @@ public class ServerImpl implements Server {
 
 	public String processShowPostedMessagesReq(String cookie, String loginName,
 			String startTime, String endTime, int maxN) {
+		List<Message> messages;
 		// Obtém a sessão:
 		Session session = this.sessionTable.getSessionByCookie(cookie);
 		if (session == null) {
 			return html.errorPage("no session with this cookie.");
 		}
+		
+		// Obtem o autor das mensagens procuradas
 		User target = this.userTable.getUserByLoginName(loginName);
 		if (target == null) {
 			return html.errorPage("no such user.");
 		}
-		// ??{ ... get specified messages from {target} ... }??
-		List<Message> messages = target.getPostedMessages(-1, -1, maxN);
+		
+		// Obtem as mensagens, de acordo com os intervalos estabelecidos
+		// (se nao em {startTime}, vem desde o epoch e se nao tem
+		// {endTime} vem até agora
+		if(startTime == null || startTime.equals("")){
+			if(endTime == null || endTime.equals("")){
+				messages = target.getPostedMessages(
+						0, Calendar.getInstance().getTimeInMillis()/1000, maxN);
+			}
+			else {
+				messages = target.getPostedMessages(
+						0, timestampFromString(endTime), maxN);
+			}
+		} else {
+			if(endTime == null || endTime.equals("")){
+				messages = target.getPostedMessages(
+						timestampFromString(startTime), 
+						Calendar.getInstance().getTimeInMillis()/1000, maxN);
+			}
+			else {
+				messages = target.getPostedMessages(
+						timestampFromString(startTime), 
+						timestampFromString(endTime), maxN);
+			}
+		}
+		
 		return html.messageListPage(cookie, "posted", target, messages, maxN);
 	}
 
@@ -178,8 +204,8 @@ public class ServerImpl implements Server {
 		} else {
 			// Não há ainda contato entre eles, acrescenta:
 			Contact c = new ContactImpl();
-			c.initialize(source, target, Calendar.getInstance()
-					.getTimeInMillis() / 1000, newStatus);
+			c.initialize(source, target, Calendar.getInstance().getTimeInMillis()/1000, newStatus);
+
 			// ??{ Deveria aqui acrescentar o contato na base persistente. }??
 			source.addDirectContact(c);
 			target.addReverseContact(c);
@@ -208,16 +234,31 @@ public class ServerImpl implements Server {
 	}
 
 	@Override
-	public String processSendMessageReq(String cookie, String text,
-			String replyLoginName, String replyTime) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String processShowReceivedMessagesReq(String cookie,
 			String startTime, String endTime, int maxN) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public String processSendMessageReq(String cookie, String text,
+			String replyLoginName, long replyTime) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	private long timestampFromString(String time){
+		time = time.replaceAll("[()]", "");
+		String date[] = time.split("-: ");
+		
+		// TODO - consertar timezone (ID de TimeZone eh uma string 
+		// do tipo "Brazil/East", e nao (-0300))
+		Calendar a = Calendar.getInstance();
+		a.set(  Integer.parseInt(date[0]), Integer.parseInt(date[1]), 
+				Integer.parseInt(date[2]), Integer.parseInt(date[3]),
+				Integer.parseInt(date[4]), Integer.parseInt(date[5]));
+		
+		return a.getTimeInMillis()/1000;
+
 	}
 }
