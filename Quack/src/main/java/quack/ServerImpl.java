@@ -132,17 +132,44 @@ public abstract class ServerImpl implements Server {
 
 	public String processShowPostedMessagesReq(String cookie, String loginName,
 			String startTime, String endTime, int maxN) {
+		List<Message> messages;
 		// Obtém a sessão:
 		Session session = this.sessionTable.getSessionByCookie(cookie);
 		if (session == null) {
 			return html.errorPage("no session with this cookie.");
 		}
+		
+		// Obtem o autor das mensagens procuradas
 		User target = this.userTable.getUserByLoginName(loginName);
 		if (target == null) { 
 			return html.errorPage("no such user.");
 		}
-		// ??{ ... get specified messages from {target} ... }??
-		List<Message> messages = target.getPostedMessages(timestampFromString(startTime), timestampFromString(endTime), maxN);
+		
+		// Obtem as mensagens, de acordo com os intervalos estabelecidos
+		// (se nao em {startTime}, vem desde o epoch e se nao tem
+		// {endTime} vem até agora
+		if(startTime == null || startTime.equals("")){
+			if(endTime == null || endTime.equals("")){
+				messages = target.getPostedMessages(
+						0, Calendar.getInstance().getTimeInMillis()/1000, maxN);
+			}
+			else {
+				messages = target.getPostedMessages(
+						0, timestampFromString(endTime), maxN);
+			}
+		} else {
+			if(endTime == null || endTime.equals("")){
+				messages = target.getPostedMessages(
+						timestampFromString(startTime), 
+						Calendar.getInstance().getTimeInMillis()/1000, maxN);
+			}
+			else {
+				messages = target.getPostedMessages(
+						timestampFromString(startTime), 
+						timestampFromString(endTime), maxN);
+			}
+		}
+		
 		return html.messageListPage(cookie, "posted", target, messages, maxN);
 	}
 	
