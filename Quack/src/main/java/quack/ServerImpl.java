@@ -77,7 +77,7 @@ public class ServerImpl implements Server {
 		return html.loginPage();
 	}
 
-	public String processLoginReq(String loginName, String password) {
+	public String processLoginReq(String loginName, String password, String cookie) {
 		// Obtém o objeto que representa o usuário:
 		User user = this.userTable.getUserByLoginName(loginName);
 		if (user == null) {
@@ -97,7 +97,7 @@ public class ServerImpl implements Server {
 		}
 
 		// Cria um cookie para a sessão, e abre a mesma:
-		session.open(user, null);
+		session.open(user, cookie);
 		this.sessionTable.add(session);
 		return html.loginSuccessfulPage(session.getCookie(), user);
 	}
