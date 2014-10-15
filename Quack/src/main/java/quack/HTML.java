@@ -1,7 +1,6 @@
 package quack;
 
 import java.util.List;
-import quack.Server;
 
 public interface HTML {
 
@@ -10,7 +9,7 @@ public interface HTML {
 	// Enquanto o servidor {Quack} estiver sendo executado, haverá 
 	// apenas uma instância desta classe existente.
 
-	public HTML initialize(Server server);
+	public void initialize(Server server);
 	// Inicializa o construtor de páginas HTML.
 	// Guarda referência ao estado {server} do servidor {Quack},
 	// para obter por exemplo o número de usuários, sessões, etc.

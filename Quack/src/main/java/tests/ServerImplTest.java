@@ -72,12 +72,12 @@ public class ServerImplTest implements ServerTest {
 	}
 
 	private void thenThereIsAtLeastOneLoggedUser() {
-		Assert.assertTrue(server.getNumUsers() > 0);
-		Assert.assertTrue(server.getNumSessions() > 0);
+		Assert.assertTrue("Tem que haver ao menos um usuario logado", server.getNumUsers() > 0);
+		Assert.assertTrue("Tem que haver ao menos uma sessao iniciada", server.getNumSessions() > 0);
 	}
 
 	private void thenThereIsAtLeastOneMessage() {
-		Assert.assertTrue(server.getNumMessages() > 0);
+		Assert.assertTrue("Deve haver ao menos uma mensagem", server.getNumMessages() > 0);
 	}
 
 	private void whenNewUserRegistersAndLogsIn() {
