@@ -19,6 +19,7 @@
     height: 100px;
     background-color:#eeeeee;
     align: center;
+    border-radius: 15px;
 }
 </style>
 </head>
@@ -30,7 +31,7 @@
 		String PicAddress = "https://www.wevi.com.br/static/img/placeholder/placeholder_user.png";
 	%>
 
-	<div class='container'>
+	<div id='container' class='container'>
 	pagina de usuario (Implementação Inicial)<br><br>
 	<img src= <%out.println(PicAddress);%> alt="User Picture" style="width:150px;height:150px">
 	<br>
@@ -55,9 +56,21 @@
 	<br>
 	<% //Printa Mensagens
 		for(int i = 0; i < numPosts; i++)
-			out.println("<center> <div class='mensagem', align='center'><br><br>Mensagem " + i
+			out.println("<center> <div id='msg"+ i + "'class='mensagem', align='center'>"+
+		"<a onclick='hideMsg("+ i +")''><font color = blue>Esconder</font></a><br><br>Mensagem " + i
 			+ "<br><br><a href='/repost'>RePostar</a> | <a href='/favorite'>Favorita</a></div></center><br>");
 	%>
 	</div>
 </body>
+
+<script>
+function hideMsg(i){
+	var msg = document.getElementById('msg' + i);
+	var container = msg.parentElement;
+	container.removeChild(msg);
+}
+
+
+</script>
+
 </html>
