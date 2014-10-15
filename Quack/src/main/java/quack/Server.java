@@ -133,7 +133,7 @@ public interface Server {
 	// cadastramento tiver
 	// sucesso, devolve uma página que mostra o perfil público do usuário.
 
-	public String processLoginReq(String loginName, String password);
+	public String processLoginReq(String loginName, String password, String cookie);
 
 	// Chamado quando o servidor HTTP recebe um pedido de login de um usuário
 	// existente
