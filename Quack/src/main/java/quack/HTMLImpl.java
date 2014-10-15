@@ -39,9 +39,7 @@ public class HTMLImpl implements HTML {
 	}
 
 	@Override
-	public HTML initialize(Server server) {
-		// TODO Auto-generated method stub
-		return null;
+	public void initialize(Server server) {
 	}
 
 	@Override	

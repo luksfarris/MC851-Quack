@@ -1,6 +1,6 @@
 package quack;
 
-import java.util.*;
+import java.util.List;
 
 public interface UserTable {
 	
@@ -41,6 +41,8 @@ public interface UserTable {
 	public List<User> listUsersByFullName(String name);
 	// Retorna uma lista de {User} com todos os usuários cujo nome completo
 	// contém {name}, ou uma lista vazia se não houver.
-	
+
+	public int getUserCount();
+	// Retorna a quantidade de usuários no banco de dados.
 	
 }

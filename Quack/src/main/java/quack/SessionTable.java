@@ -33,4 +33,7 @@ public interface SessionTable {
 	public Session getSessionByCookie(String cookie);
 	// Procura na tabela {this} uma sessão com o {cookie} especificado.
 	// Retorna {null} se não existir.
+
+	public int getSessionCount();
+	// Obtem a quantidade de sessões abertas.
 }
