@@ -1,10 +1,12 @@
 package quack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class UserTableImpl implements UserTable {
 
-	private List<User> table;
+	private List<User> table = new ArrayList<User>();
 
 	@Override
 	public void initialize(Database db) {
@@ -42,6 +44,11 @@ public class UserTableImpl implements UserTable {
 			if(u.getEmail() == email)
 				return u;
 		}		return null;
+	}
+
+	@Override
+	public int getUserCount() {
+		return table.size();
 	}
 
 

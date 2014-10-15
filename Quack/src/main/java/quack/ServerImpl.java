@@ -17,7 +17,7 @@ public class ServerImpl implements Server {
 							// re-postagens).
 	long numSessions = 0; // Número total de sessões abertas no momento.
 
-	HTML html = null; // Cria paginas html.
+	HTML html; // Cria paginas html.
 
 	// ??{ O s procedimentos a seguir deveriam construir e devolver
 	// a construir página HTML de resultado adequada. }??
@@ -39,7 +39,7 @@ public class ServerImpl implements Server {
 
 		// Inicializa o criador de paginas html:
 		html = new HTMLImpl();
-		html = html.initialize(this);
+		html.initialize(this);
 	}
 
 	private void loadDatabase()
@@ -215,7 +215,7 @@ public class ServerImpl implements Server {
 
 	@Override
 	public long getNumUsers() {
-		return this.numUsers;
+		return userTable.getUserCount();
 	}
 
 	@Override
@@ -230,7 +230,7 @@ public class ServerImpl implements Server {
 
 	@Override
 	public long getNumSessions() {
-		return this.numSessions;
+		return sessionTable.getSessionCount();
 	}
 
 	@Override
