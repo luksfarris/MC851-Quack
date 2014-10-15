@@ -32,7 +32,7 @@ public class ServerImplTest implements ServerTest {
 		thenThereIsAtLeastOneMessage();
 	}
 	
-	@Override
+	@Test
 	public void testLogout() {
 		givenThatServerStarted();
 		whenNewUserRegistersAndLogsIn();
@@ -40,6 +40,24 @@ public class ServerImplTest implements ServerTest {
 		thenThereAreNoSessions();
 	}
 
+	@Test
+	public void testFollowUser() {
+		givenThatServerStarted();
+		whenNewUserRegisters();
+		whenNewUserRegistersAndLogsIn();
+		whenUserFollowAnotherUser();
+		thenThereAreTwoContacts();
+	}
+
+	@Test
+	public void testBlockUser() {
+		givenThatServerStarted();
+		whenNewUserRegisters();
+		whenNewUserRegistersAndLogsIn();
+		whenUserBlockAnotherUser();
+		thenThereAreTwoContacts();
+	}
+	
 	private void thenThereAreNoSessions() {
 		Assert.assertTrue(server.getNumSessions() == 0);
 	}
@@ -68,10 +86,27 @@ public class ServerImplTest implements ServerTest {
 		server.processLoginReq("Marcela", "mah123");
 		cookie = "123";
 	}
+	
+	private void whenNewUserRegisters() {
+		server.processRegistrationReq("Marcelo", "marcelo@supermail.br",
+				"Marcelo dos Santos Pereira", "mah123");
+	}
 
 	private void givenThatServerStarted() {
 		server = new ServerImpl();
 		server.initialize("", "", "");
+	}
+	
+	private void whenUserFollowAnotherUser() {
+		server.processModifyContactReq(cookie, "Marcelo", "following");	
+	}
+	
+	private void thenThereAreTwoContacts() {
+		Assert.assertTrue(server.getNumContacts() == 2);
+	}
+
+	private void whenUserBlockAnotherUser() {
+		server.processModifyContactReq(cookie, "Marcelo", "blocking");	
 	}
 
 }
