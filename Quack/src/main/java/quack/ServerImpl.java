@@ -243,7 +243,24 @@ public class ServerImpl implements Server {
 	@Override
 	public String processSendMessageReq(String cookie, String text,
 			String replyLoginName, long replyTime) {
-		// TODO Auto-generated method stub
+
+		Session session = this.sessionTable.getSessionByCookie(cookie);
+		if(session == null)
+			return html.errorPage("no session with this cookie.");
+		
+		User user = session.getUser();
+		Message message = new MessageImpl();
+		
+		if(replyLoginName == null || replyLoginName.equals("")){
+			if(!message.initialize(text, user)){	
+				return html.errorPage("message creation failed.");
+			}
+			user.addMessage(message);
+			this.numMessages++;
+			return html.homePage();
+		}
+		
+		// TODO Tratar de mensagens de reply
 		return null;
 	}
 	

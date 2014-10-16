@@ -1,6 +1,8 @@
 package tests;
 
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -59,7 +61,7 @@ public class ServerImplTest implements ServerTest {
 	}
 	
 	private void thenThereAreNoSessions() {
-		Assert.assertTrue(server.getNumSessions() == 0);
+		Assert.assertTrue("A sessao deve ser removida", server.getNumSessions() == 0);
 	}
 
 	private void whenUserLogsOut() {
@@ -84,7 +86,8 @@ public class ServerImplTest implements ServerTest {
 		server.processRegistrationReq("Marcela", "marcela@supermail.br",
 				"Marcela dos Santos Pereira", "mah123");
 		server.processLoginReq("Marcela", "mah123");
-		cookie = "123";
+        cookie = "123";
+
 	}
 	
 	private void whenNewUserRegisters() {
@@ -102,7 +105,7 @@ public class ServerImplTest implements ServerTest {
 	}
 	
 	private void thenThereAreTwoContacts() {
-		Assert.assertTrue(server.getNumContacts() == 2);
+		Assert.assertTrue("Deve haver 2 contatos no servidor", server.getNumContacts() == 2);
 	}
 
 	private void whenUserBlockAnotherUser() {

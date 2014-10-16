@@ -139,4 +139,10 @@ public class UserImpl implements User {
 		 */
 	}
 
+	@Override
+	public void addMessage(Message message) {
+		assert(message.getUser().getLoginName().equals(loginName));
+		this.messages.add(message);		
+	}
+
 }

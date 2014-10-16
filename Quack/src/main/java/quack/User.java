@@ -126,6 +126,10 @@ public interface User {
 	// Cada usuário tem uma lista de mensagens que ele postou (incluindo
 	// re-postagens)
 
+	public void addMessage(Message message);
+	// Acresenta a lista {this.getPostMessages()} a mensagem {message} que deve ter
+	// o usuario {this} como autor (campo {message.user})
+	
 	public List<Message> getPostedMessages();
 
 	// Retorna a lista de mensagens postadas pelo usuário {this}, em ordem
