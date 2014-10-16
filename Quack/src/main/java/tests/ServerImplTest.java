@@ -17,7 +17,7 @@ public class ServerImplTest implements ServerTest {
 
 	/** Servidor que sera testado. */
 	private Server server;
-	private String cookie;
+	private String cookie = "123";
 
 	@Test
 	public void testLogin() {
@@ -85,9 +85,7 @@ public class ServerImplTest implements ServerTest {
 	private void whenNewUserRegistersAndLogsIn() {
 		server.processRegistrationReq("Marcela", "marcela@supermail.br",
 				"Marcela dos Santos Pereira", "mah123");
-		server.processLoginReq("Marcela", "mah123");
-        cookie = "123";
-
+		server.processLoginReq("Marcela", "mah123", cookie);
 	}
 	
 	private void whenNewUserRegisters() {
