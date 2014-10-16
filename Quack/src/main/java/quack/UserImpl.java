@@ -27,6 +27,10 @@ public class UserImpl implements User {
 		// TODO - calcular o dbindex do banco e colocar no objeto
 		this.dbIndex = -1;
 		this.creationTime = Calendar.getInstance().getTimeInMillis() / 1000;
+		
+		this.directContacts = new LinkedList<Contact>();
+		this.reverseContacts = new LinkedList<Contact>();
+		this.messages = new LinkedList<Message>();
 		return true;
 	}
 

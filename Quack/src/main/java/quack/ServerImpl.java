@@ -251,6 +251,9 @@ public class ServerImpl implements Server {
 		User user = session.getUser();
 		Message message = new MessageImpl();
 		
+		if(user == null)
+			return html.errorPage("session without user.");
+		
 		if(replyLoginName == null || replyLoginName.equals("")){
 			if(!message.initialize(text, user)){	
 				return html.errorPage("message creation failed.");
