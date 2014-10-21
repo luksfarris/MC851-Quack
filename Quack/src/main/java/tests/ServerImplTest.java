@@ -20,6 +20,14 @@ public class ServerImplTest implements ServerTest {
 	private String cookie = "123";
 
 	@Test
+	public void testRegisterUser() {
+		givenThatServerStarted();
+		whenNewUserRegisters();
+		thenThereIsAtLeastOneRegisteredUser();
+	}
+	
+
+	@Test
 	public void testLogin() {
 		givenThatServerStarted();
 		whenNewUserRegistersAndLogsIn();
@@ -108,6 +116,10 @@ public class ServerImplTest implements ServerTest {
 
 	private void whenUserBlockAnotherUser() {
 		server.processModifyContactReq(cookie, "Marcelo", "blocking");	
+	}
+
+	private void thenThereIsAtLeastOneRegisteredUser() {
+		Assert.assertTrue("Tem que haver ao menos um usuario registrado", server.getNumUsers() > 0);
 	}
 
 }

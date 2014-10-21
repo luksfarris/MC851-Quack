@@ -5,6 +5,10 @@ public interface ServerTest {
 	// instancias de Server. Cada teste tera suas proprias assertivas, e a
 	// interface do JUnit indicara quais testes deram certo, e quais deram
 	// errado.
+	
+	public void testRegisterUser();
+	// testa o registro de um usuario novo
+	// e verifica se ao final existe pelo menos um usuario no sistema
 
 	public void testLogin();
 	// testa o login: registra um usuario novo, realiza o login com ele, e
