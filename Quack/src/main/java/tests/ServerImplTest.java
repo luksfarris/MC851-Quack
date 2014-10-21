@@ -97,11 +97,11 @@ public class ServerImplTest implements ServerTest {
 	}
 	
 	private void whenUserFollowAnotherUser() {
-		server.processModifyContactReq(cookie, "Marcelo", "following");	
+		server.processModifyContactReq(cookie, "Marcelo", "Follow");	
 	}
 
 	private void whenUserBlockAnotherUser() {
-		server.processModifyContactReq(cookie, "Marcelo", "blocking");	
+		server.processModifyContactReq(cookie, "Marcelo", "Block");	
 	}
 
 	

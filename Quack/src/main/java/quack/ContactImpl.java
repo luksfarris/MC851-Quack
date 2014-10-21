@@ -1,11 +1,13 @@
 package quack;
 
+import java.util.Calendar;
+
 public class ContactImpl implements Contact {
 
 	private User sourceUser;
 	private User targetUser;
 	private long lastModified;
-	private boolean blocked;
+	private String status;
 
 	public ContactImpl() {
 
@@ -26,9 +28,10 @@ public class ContactImpl implements Contact {
 		return lastModified;
 	}
 
+	
 	@Override
-	public boolean blocked() {
-		return blocked;
+	public String status() {
+		return status;
 	}
 
 	@Override
@@ -37,18 +40,17 @@ public class ContactImpl implements Contact {
 		sourceUser = source;
 		targetUser = target;
 		this.lastModified = instance;
-		if (newStatus.equals("Follow"))
-			this.blocked = false;
-		else
-			this.blocked = true;
+		if (newStatus.equals("Follow") || newStatus.equals("Block"))
+			this.status = newStatus;
 	}
 
 	@Override
 	public void setStatus(String newStatus) {
-		if (newStatus.equals("Follow"))
-			this.blocked = false;
-		else
-			this.blocked = true;
+		if (newStatus.equals("Inactive") || newStatus.equals("Follow") 
+				|| newStatus.equals("Block")){
+			this.status = newStatus;
+			this.lastModified = Calendar.getInstance().getTimeInMillis()/1000;
+		}
 	}
 
 }

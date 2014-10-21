@@ -16,21 +16,25 @@ public interface Contact {
 	public long lastModified();
 
 	// Data da ultima modificacao nesse relacionamento
+	
 
-	public boolean blocked();
+	public String status();
 
-	// Se esse valor for <true> o relacionamento eh de bloqueio,
-	// caso contrario eh apenas um relacionamento.
+	// Se esse valor for "Block" o relacionamento é de bloqueio,
+	// Se for "Follow" é um relacionamento normal
+	// Se for "Inactive" é um relacionamento inativo (desligado após unfollow ou unblock)
 
 	public void setStatus(String newStatus);
 
 	// Muda o status do contato para {newStatus}
-	// Se {newStatus}.equals("Follow"), passa a ter {this.blocked} = false
-	// Senao passa a ser bloqueado
+	// Se {newStatus}.equals("Inactive") passa a ser inativo
+	// Se {newStatus}.equals("Follow"), passa a ser de seguimento 
+	// Se {newStatus}.equals("Block") passa a ser bloqueado
+	// Qualquer outro valor é ignorado
 
 	public void initialize(User source, User target, long instance,
 			String newStatus);
 	// Inicializa um objeto Contact com {source}, {target},
-	// timestamp {instance} e status {newStatus}
-
+	// timestamp {instance} e status {newStatus} que pode ser "Follow" ou "Block"
+	// status inicial "Inactive" não é aceito
 }
