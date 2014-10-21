@@ -208,7 +208,6 @@ public class ServerImpl implements Server {
 
 			// ??{ Deveria aqui acrescentar o contato na base persistente. }??
 			source.addDirectContact(c);
-			this.numContacts+=1;
 			target.addReverseContact(c);
 			this.numContacts+=1;
 		}

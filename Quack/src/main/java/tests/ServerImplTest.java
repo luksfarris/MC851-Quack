@@ -55,7 +55,7 @@ public class ServerImplTest implements ServerTest {
 		whenNewUserRegisters();
 		whenNewUserRegistersAndLogsIn();
 		whenUserFollowAnotherUser();
-		thenThereAreTwoContacts();
+		thenThereIsOneContact();
 	}
 
 	@Test
@@ -64,7 +64,7 @@ public class ServerImplTest implements ServerTest {
 		whenNewUserRegisters();
 		whenNewUserRegistersAndLogsIn();
 		whenUserBlockAnotherUser();
-		thenThereAreTwoContacts();
+		thenThereIsOneContact();
 	}
 	
 	
@@ -119,8 +119,8 @@ public class ServerImplTest implements ServerTest {
 		Assert.assertTrue("Deve haver ao menos uma mensagem", server.getNumMessages() > 0);
 	}
 
-	private void thenThereAreTwoContacts() {
-		Assert.assertTrue("Deve haver 2 contatos no servidor", server.getNumContacts() == 2);
+	private void thenThereIsOneContact() {
+		Assert.assertTrue("Deve haver 1 contato no servidor", server.getNumContacts() == 1);
 	}
 
 	private void thenThereIsAtLeastOneRegisteredUser() {
