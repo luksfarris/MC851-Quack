@@ -25,7 +25,6 @@ public class ServerImplTest implements ServerTest {
 		whenNewUserRegisters();
 		thenThereIsAtLeastOneRegisteredUser();
 	}
-	
 
 	@Test
 	public void testLogin() {
@@ -68,10 +67,15 @@ public class ServerImplTest implements ServerTest {
 		thenThereAreTwoContacts();
 	}
 	
-	private void thenThereAreNoSessions() {
-		Assert.assertTrue("A sessao deve ser removida", server.getNumSessions() == 0);
+	
+	
+	private void givenThatServerStarted() {
+		server = new ServerImpl();
+		server.initialize("", "", "");
 	}
-
+	
+	
+	
 	private void whenUserLogsOut() {
 		server.processLogoutReq(cookie);
 	}
@@ -79,6 +83,31 @@ public class ServerImplTest implements ServerTest {
 	private void whenUserPostsMessage() {
 		server.processSendMessageReq(cookie, "New message.", "", Calendar
 				.getInstance().getTimeInMillis() / 1000);
+	}
+	
+	private void whenNewUserRegistersAndLogsIn() {
+		server.processRegistrationReq("Marcela", "marcela@supermail.br",
+				"Marcela dos Santos Pereira", "mah123");
+		server.processLoginReq("Marcela", "mah123", cookie);
+	}
+	
+	private void whenNewUserRegisters() {
+		server.processRegistrationReq("Marcelo", "marcelo@supermail.br",
+				"Marcelo dos Santos Pereira", "mah123");
+	}
+	
+	private void whenUserFollowAnotherUser() {
+		server.processModifyContactReq(cookie, "Marcelo", "following");	
+	}
+
+	private void whenUserBlockAnotherUser() {
+		server.processModifyContactReq(cookie, "Marcelo", "blocking");	
+	}
+
+	
+	
+	private void thenThereAreNoSessions() {
+		Assert.assertTrue("A sessao deve ser removida", server.getNumSessions() == 0);
 	}
 
 	private void thenThereIsAtLeastOneLoggedUser() {
@@ -90,32 +119,8 @@ public class ServerImplTest implements ServerTest {
 		Assert.assertTrue("Deve haver ao menos uma mensagem", server.getNumMessages() > 0);
 	}
 
-	private void whenNewUserRegistersAndLogsIn() {
-		server.processRegistrationReq("Marcela", "marcela@supermail.br",
-				"Marcela dos Santos Pereira", "mah123");
-		server.processLoginReq("Marcela", "mah123", cookie);
-	}
-	
-	private void whenNewUserRegisters() {
-		server.processRegistrationReq("Marcelo", "marcelo@supermail.br",
-				"Marcelo dos Santos Pereira", "mah123");
-	}
-
-	private void givenThatServerStarted() {
-		server = new ServerImpl();
-		server.initialize("", "", "");
-	}
-	
-	private void whenUserFollowAnotherUser() {
-		server.processModifyContactReq(cookie, "Marcelo", "following");	
-	}
-	
 	private void thenThereAreTwoContacts() {
 		Assert.assertTrue("Deve haver 2 contatos no servidor", server.getNumContacts() == 2);
-	}
-
-	private void whenUserBlockAnotherUser() {
-		server.processModifyContactReq(cookie, "Marcelo", "blocking");	
 	}
 
 	private void thenThereIsAtLeastOneRegisteredUser() {
