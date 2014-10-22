@@ -59,11 +59,11 @@ public class Login extends HttpServlet {
 
 		PrintWriter out = response.getWriter();
 		if (username != null) {
-			// TODO: redireciona para a pagina principal
-			out.println(HTML_START + "<h2>Login</h2><br/>Cookie ID: "
-					+ cookieId + "<br/>Session Creation: "
-					+ new Date(creationDate) + "<br/>Username: " + username
-					+ "<br/>Password: " + password + HTML_END);
+			response.sendRedirect("/Quack/UserPage.jsp");
+//			out.println(HTML_START + "<h2>Login</h2><br/>Cookie ID: "
+//					+ cookieId + "<br/>Session Creation: "
+//					+ new Date(creationDate) + "<br/>Username: " + username
+//					+ "<br/>Password: " + password + HTML_END);
 		} else {
 			// carrega o form de login
 			response.sendRedirect("/Quack/loginrequest.jsp");

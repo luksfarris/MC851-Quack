@@ -63,25 +63,39 @@
 	text-decoration: underline;
 	}
 	</style>
+<%
+String msgText = "À noite, vovô Kowalsky vê o ímã cair no pé do pinguim queixoso e vovó põe açúcar no chá de tâmaras do jabuti feliz. ★";
+String loginName = "usra", fullName = "Usuário A";
+int reposts = 23, favorites = 5;
+int maxposts = Integer.parseInt(request.getParameter("notes"));
+List<String[]> notes = new LinkedList<String[]>();
+notes.add(new String[] { "usrq", "Usuário Q", "Usuário K" });
+notes.add(new String[] { "usro", "Usuário O", "Usuário K" });
+notes.add(new String[] { "usrk", "Usuário K", null });
+notes.add(new String[] { "usrk", "Usuário K", "Usuário D" });
+notes.add(new String[] { "usrh", "Usuário H", "Usuário B" });
+notes.add(new String[] { "usrg", "Usuário G", "Usuário E" });
+notes.add(new String[] { "usre", "Usuário E", null });
+notes.add(new String[] { "usre", "Usuário E", "Usuário D" });
+notes.add(new String[] { "usrd", "Usuário D", "Usuário A" });
+notes.add(new String[] { "usrb", "Usuário B", "Usuário A" });
+%>	
 	</head>
 	<body>
 		<div style="width: 700px; margin-left: auto; margin-right: auto;">
 			<div class="box">
 				<div style="float: left;">
-					<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="64" height="64" viewBox="0 0 64 64" preserveAspectRatio="xMinYMin">
-						<rect x="0" y="0" width="64" height="64" fill="#0FF" />
-					</svg>
+					<img src="img/profilepics/<%= loginName %>.png" style="width: 64px;" alt="Imagem de <%= fullName %>" />
 				</div>
 				<div style="float: left; padding-left: 8px; vertical-align: top;">
 					<p>
-						<span id="fullname">Usuário A</span><br />
-						<span id="loginname">@usra</span>
+						<span id="fullname"><%= fullName %></span><br />
+						<span id="loginname">@<%= loginName %></span>
 					</p>
 				</div>
 				<div style="float: left; clear: left;">
 					<hr />
-					<p id="message">À noite, vovô Kowalsky vê o ímã cair no pé do pinguim queixoso e 
-					vovó põe açúcar no chá de tâmaras do jabuti feliz. ★</p>
+					<p id="message"><%= msgText %></p>
 					<p class="datetime">Postado em 
 					<%
 						DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss");
@@ -96,8 +110,8 @@
 					
 					<table style="margin-left: auto; margin-right: auto; color: #888;">
 						<tr>
-							<th>23</th>
-							<th>5</th>
+							<th><%= reposts %></th>
+							<th><%= favorites %></th>
 						</tr>
 						<tr>
 							<td>REPOSTAGENS</td>
@@ -107,95 +121,26 @@
 					<hr />
 				
 					<ul style="list-style-type: none;">
+					<%
+					for (int i = 0; i < maxposts; i++)
+					{
+					%>
 						<li>
-							<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="16" height="16" viewBox="0 0 16 16" preserveAspectRatio="xMinYMin">
-								<rect x="0" y="0" width="16" height="16" fill="#808" />
-							</svg>
+							<img src="img/profilepics/<%= notes.get(i)[0] %>.png" style="width: 16px;" />
 							<p style="display: inline;">
-								<a href="#">Usuário Q</a> repostou isto de <a href="#">Usuário K</a>
+								<a href="#"><%= notes.get(i)[1] %></a>
+								<% if (notes.get(i)[2] == null) { %>
+								marcou isto como favorito
+								<% } else { %>
+								repostou isto de <a href="#"><%= notes.get(i)[2] %></a>
+								<% } %>
 							</p>
 						</li>
-						
-						<li>
-							<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="16" height="16" viewBox="0 0 16 16" preserveAspectRatio="xMinYMin">
-								<rect x="0" y="0" width="16" height="16" fill="#088" />
-							</svg>
-							<p style="display: inline;">
-								<a href="#">Usuário O</a> repostou isto de <a href="#">Usuário K</a>
-							</p>
-						</li>
-						
-						<li>
-							<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="16" height="16" viewBox="0 0 16 16" preserveAspectRatio="xMinYMin">
-								<rect x="0" y="0" width="16" height="16" fill="#880" />
-							</svg>
-							<p style="display: inline;">
-								<a href="#">Usuário K</a> marcou isto como favorito
-							</p>
-						</li>
-						
-						<li>
-							<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="16" height="16" viewBox="0 0 16 16" preserveAspectRatio="xMinYMin">
-								<rect x="0" y="0" width="16" height="16" fill="#880" />
-							</svg>
-							<p style="display: inline;">
-								<a href="#">Usuário K</a> repostou isto de <a href="#">Usuário D</a>
-							</p>
-						</li>
-						
-						<li>
-							<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="16" height="16" viewBox="0 0 16 16" preserveAspectRatio="xMinYMin">
-								<rect x="0" y="0" width="16" height="16" fill="#FF0" />
-							</svg>
-							<p style="display: inline;">	
-								<a href="#">Usuário H</a> repostou isto de <a href="#">Usuário B</a>
-							</p>
-						</li>
-						
-						<li>
-							<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="16" height="16" viewBox="0 0 16 16" preserveAspectRatio="xMinYMin">
-								<rect x="0" y="0" width="16" height="16" fill="#F0F" />
-							</svg>
-							<p style="display: inline;">
-								<a href="#">Usuário G</a> repostou isto de <a href="#">Usuário E</a>
-							</p>
-						</li>
-						
-						<li>
-							<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="16" height="16" viewBox="0 0 16 16" preserveAspectRatio="xMinYMin">
-								<rect x="0" y="0" width="16" height="16" fill="#00F" />
-							</svg>
-							<p style="display: inline;">
-								<a href="#">Usuário E</a> marcou isto como favorito</a>
-							</p>
-						</li>
-						
-						<li>
-							<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="16" height="16" viewBox="0 0 16 16" preserveAspectRatio="xMinYMin">
-								<rect x="0" y="0" width="16" height="16" fill="#00F" />
-							</svg>
-							<p style="display: inline;">
-								<a href="#">Usuário E</a> repostou isto de <a href="#">Usuário D</a>
-							</p>
-						</li>
-						
-						<li>
-							<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="16" height="16" viewBox="0 0 16 16" preserveAspectRatio="xMinYMin">
-								<rect x="0" y="0" width="16" height="16" fill="#0F0" />
-							</svg>
-							<p style="display: inline;">
-								<a href="#">Usuário D</a> repostou isto de <a href="#">Usuário A</a>
-							</p>
-						</li>
-						
-						<li>
-							<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="16" height="16" viewBox="0 0 16 16" preserveAspectRatio="xMinYMin">
-								<rect x="0" y="0" width="16" height="16" fill="#F00" />
-							</svg>
-							<p style="display: inline;">
-								<a href="#">Usuário B</a> repostou isto de <a href="#">Usuário A</a>
-							</p>
-						</li>
+					<%
+					}
+					maxposts += 5;
+					%>
+					
 					</ul>
 					
 					<p style="text-align: center;"><a href="#">↓ Mostrar mais ↓</a></p>
