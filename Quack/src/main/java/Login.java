@@ -66,7 +66,8 @@ public class Login extends HttpServlet {
 					+ "<br/>Password: " + password + HTML_END);
 		} else {
 			// carrega o form de login
-			response.sendRedirect("/Quack/loginrequest.jsp");
+			//response.sendRedirect("/Quack/loginrequest.jsp");
+			response.sendRedirect("/Quack/UserPage.jsp");
 		}
 	}
 }
