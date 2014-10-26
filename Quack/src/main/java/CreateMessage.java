@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import quack.ServerImpl;
+import quack.Server;
+import service.QuackService;
 
 
 /**
@@ -46,11 +46,9 @@ public class CreateMessage extends HttpServlet {
 			// nova mensagem
 			message = request.getParameter("messageText");
 			
-			ServerImpl server = new ServerImpl();
-			server.initialize("mc851u4", "mc851db4", "ohjairah");
+			Server server = QuackService.getServer(getServletContext());
 			
 			server.processSendMessageReq(cookieId, message, "", Calendar.getInstance().getTimeInMillis()/1000);
-
 			
 			PrintWriter out = response.getWriter();
 			//TODO pegar username da sessao

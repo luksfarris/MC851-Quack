@@ -1,5 +1,11 @@
 package quack;
 
+import java.io.IOException;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 public interface Server {
 
 	// Uma instância desta classe armazena o estado do servidor {Quack}.
@@ -133,7 +139,8 @@ public interface Server {
 	// cadastramento tiver
 	// sucesso, devolve uma página que mostra o perfil público do usuário.
 
-	public String processLoginReq(String loginName, String password, String cookie);
+	public void processLoginReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
 
 	// Chamado quando o servidor HTTP recebe um pedido de login de um usuário
 	// existente

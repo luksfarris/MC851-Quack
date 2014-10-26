@@ -1,9 +1,15 @@
 package quack;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
-public class ServerImpl implements Server {
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public final class ServerImpl implements Server {
 
 	SessionTable sessionTable = null; // Conjunto de sessões abertas.
 	Database database = null; // Conexão com a base de dados persistente.
@@ -19,6 +25,9 @@ public class ServerImpl implements Server {
 
 	HTML html; // Cria paginas html.
 
+	private static final String passwordKey = "QUACK_PASSWORD";
+	private static final String usernameKey = "QUACK_USERNAME";
+	
 	// ??{ O s procedimentos a seguir deveriam construir e devolver
 	// a construir página HTML de resultado adequada. }??
 
@@ -57,49 +66,59 @@ public class ServerImpl implements Server {
 	public String processRegistrationReq(String loginName, String email,
 			String fullName, String password) {
 		// Verifica se já existe usuário com esse {loginName} ou {email}:
-		User user = this.userTable.getUserByLoginName(loginName);
-		if (user != null) {
-			return html.errorPage("login name already taken");
-		}
-		user = this.userTable.getUserByEmail(email);
-		if (user != null) {
-			return html
-					.errorPage("there is already a user account with that email");
-		}
-
-		// Cria o usuário e acrescenta à tabela:
-		user = new UserImpl();
-		if (!user.initialize(loginName, email, fullName, password)) {
-			return html.errorPage("user creation failed for unknown reason");
-		}
-		this.userTable.add(user);
-		// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
+//		User user = this.userTable.getUserByLoginName(loginName);
+//		if (user != null) {
+//			return html.errorPage("login name already taken");
+//		}
+//		user = this.userTable.getUserByEmail(email);
+//		if (user != null) {
+//			return html
+//					.errorPage("there is already a user account with that email");
+//		}
+//
+//		// Cria o usuário e acrescenta à tabela:
+//		user = new UserImpl();
+//		if (!user.initialize(loginName, email, fullName, password)) {
+//			return html.errorPage("user creation failed for unknown reason");
+//		}
+//		this.userTable.add(user);
+//		// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
 		return html.loginPage();
 	}
 
-	public String processLoginReq(String loginName, String password, String cookie) {
-		// Obtém o objeto que representa o usuário:
-		User user = this.userTable.getUserByLoginName(loginName);
-		if (user == null) {
-			return html.errorPage("no such user");
-		}
-		// Verifica se a senha bate:
-		if (!user.checkPassword(password)) {
-			return html.errorPage("wrong password");
-		}
-		// Verifica se já existe sessão aberta para este usuário:
-		Session session = this.sessionTable.getSessionByUser(user);
-		if (session != null) { // Fecha a sessão existente:
-			this.sessionTable.delete(session);
-			session.close();
-		} else { // Cria instâcia de sessão:
-			session = new SessionImpl();
-		}
+	public void processLoginReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException {
 
-		// Cria um cookie para a sessão, e abre a mesma:
-		session.open(user, cookie);
-		this.sessionTable.add(session);
-		return html.loginSuccessfulPage(session.getCookie(), user);
+		// pega os dados da sessão
+		HttpSession requestSession = request.getSession();
+
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		boolean remember = "true".equals(request.getParameter("remember"));
+		User user = this.userTable.getUserByLogin(username, password);
+		
+		
+		// se o usuario acabou de fazer login
+		if (user != null) {
+//			request.
+			
+//			} else {
+//				// usuario valido, salva na sessão do browser e recarrega a pagina
+//				requestSession.setAttribute(usernameKey, username);
+//				requestSession.setAttribute(passwordKey, password);
+//				response.sendRedirect("/Quack/Login");
+//				return;
+//			}
+		} else {
+			// usuario invalido, mostra pagina de erro.
+			response.sendRedirect("/Quack/loginerror.jsp");
+		}
+		if (username != null) {
+			response.sendRedirect("/Quack/UserPage.jsp");
+		} else {
+			// carrega o form de login
+			response.sendRedirect("/Quack/loginrequest.jsp");
+		}
 	}
 
 	public String processLogoutReq(String cookie) {
@@ -125,7 +144,7 @@ public class ServerImpl implements Server {
 			}
 			source = session.getUser();
 		}
-		User target = this.userTable.getUserByLoginName(loginName);
+		User target = this.userTable.getUserByLogin(loginName, "SENHA_AQUI");
 		if (target == null) {
 			return html.errorPage("no such user.");
 		}
@@ -140,38 +159,36 @@ public class ServerImpl implements Server {
 		if (session == null) {
 			return html.errorPage("no session with this cookie.");
 		}
-		
+
 		// Obtem o autor das mensagens procuradas
-		User target = this.userTable.getUserByLoginName(loginName);
+		User target = this.userTable.getUserByLogin(loginName, "");
 		if (target == null) {
 			return html.errorPage("no such user.");
 		}
-		
+
 		// Obtem as mensagens, de acordo com os intervalos estabelecidos
 		// (se nao em {startTime}, vem desde o epoch e se nao tem
 		// {endTime} vem até agora
-		if(startTime == null || startTime.equals("")){
-			if(endTime == null || endTime.equals("")){
-				messages = target.getPostedMessages(
-						0, Calendar.getInstance().getTimeInMillis()/1000, maxN);
-			}
-			else {
-				messages = target.getPostedMessages(
-						0, timestampFromString(endTime), maxN);
+		if (startTime == null || startTime.equals("")) {
+			if (endTime == null || endTime.equals("")) {
+				messages = target.getPostedMessages(0, Calendar.getInstance()
+						.getTimeInMillis() / 1000, maxN);
+			} else {
+				messages = target.getPostedMessages(0,
+						timestampFromString(endTime), maxN);
 			}
 		} else {
-			if(endTime == null || endTime.equals("")){
+			if (endTime == null || endTime.equals("")) {
 				messages = target.getPostedMessages(
-						timestampFromString(startTime), 
-						Calendar.getInstance().getTimeInMillis()/1000, maxN);
-			}
-			else {
+						timestampFromString(startTime), Calendar.getInstance()
+								.getTimeInMillis() / 1000, maxN);
+			} else {
 				messages = target.getPostedMessages(
-						timestampFromString(startTime), 
+						timestampFromString(startTime),
 						timestampFromString(endTime), maxN);
 			}
 		}
-		
+
 		return html.messageListPage(cookie, "posted", target, messages, maxN);
 	}
 
@@ -184,7 +201,7 @@ public class ServerImpl implements Server {
 		}
 		// Obtém os usuários de origem e alvo:
 		User source = session.getUser();
-		User target = this.userTable.getUserByLoginName(loginName);
+		User target = this.userTable.getUserByLogin(loginName, "SENHA_AQUI");
 		if (target == null) {
 			return html.errorPage("no such user.");
 		}
@@ -201,17 +218,18 @@ public class ServerImpl implements Server {
 			cdir.setStatus(newStatus);
 			// TODO ??{ Deveria aqui atualizar o estado do contato na base
 			// persistente. }??
-			
+
 		} else {
 			// Não há ainda contato entre eles, acrescenta:
 			Contact c = new ContactImpl();
-			c.initialize(source, target, Calendar.getInstance().getTimeInMillis()/1000, newStatus);
+			c.initialize(source, target, Calendar.getInstance()
+					.getTimeInMillis() / 1000, newStatus);
 
-			// TODO ??{ Deveria aqui acrescentar o contato na base 
+			// TODO ??{ Deveria aqui acrescentar o contato na base
 			// persistente. }??
 			source.addDirectContact(c);
 			target.addReverseContact(c);
-			this.numContacts+=1;
+			this.numContacts += 1;
 		}
 		return html.userProfilePage(cookie, source, target);
 	}
@@ -242,46 +260,46 @@ public class ServerImpl implements Server {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public String processSendMessageReq(String cookie, String text,
 			String replyLoginName, long replyTime) {
 
 		Session session = this.sessionTable.getSessionByCookie(cookie);
-		if(session == null)
+		if (session == null)
 			return html.errorPage("no session with this cookie.");
-		
+
 		User user = session.getUser();
 		Message message = new MessageImpl();
-		
-		if(user == null)
+
+		if (user == null)
 			return html.errorPage("session without user.");
-		
-		if(replyLoginName == null || replyLoginName.equals("")){
-			if(!message.initialize(text, user)){	
+
+		if (replyLoginName == null || replyLoginName.equals("")) {
+			if (!message.initialize(text, user)) {
 				return html.errorPage("message creation failed.");
 			}
 			user.addMessage(message);
 			this.numMessages++;
 			return html.homePage();
 		}
-		
+
 		// TODO Tratar de mensagens de reply
 		return null;
 	}
-	
-	private long timestampFromString(String time){
+
+	private long timestampFromString(String time) {
 		time = time.replaceAll("[()]", "");
 		String date[] = time.split("-: ");
-		
-		// TODO - consertar timezone (ID de TimeZone eh uma string 
+
+		// TODO - consertar timezone (ID de TimeZone eh uma string
 		// do tipo "Brazil/East", e nao (-0300))
 		Calendar a = Calendar.getInstance();
-		a.set(  Integer.parseInt(date[0]), Integer.parseInt(date[1]), 
+		a.set(Integer.parseInt(date[0]), Integer.parseInt(date[1]),
 				Integer.parseInt(date[2]), Integer.parseInt(date[3]),
 				Integer.parseInt(date[4]), Integer.parseInt(date[5]));
-		
-		return a.getTimeInMillis()/1000;
+
+		return a.getTimeInMillis() / 1000;
 
 	}
 }

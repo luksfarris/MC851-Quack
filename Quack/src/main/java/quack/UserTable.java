@@ -29,7 +29,7 @@ public interface UserTable {
 	// ------------------------------------------------------------------------------
 	// BUSCA DE USUÁRIO ESPECÍFICO
 
-	public User getUserByLoginName(String loginName);
+	public User getUserByLogin(String loginName, String password);
 	// Retorna o {User} na tabela {this} que tem o nome de login {loginName}, ou {null} se não existir.
 
 	public User getUserByEmail(String email);
