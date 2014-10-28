@@ -204,22 +204,22 @@ public interface Server {
 	
 	public void processSendMessageReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException;
-	//public String processSendMessageReq(String cookie, String text,
-	//		String replyLoginName, long replyTime);
-
-	// Chamado quando o servidor HTTP recebe um pedido da sessão
-	// identificada pelo {cookie} para enviar mais uma mensagem original
-	// do usuário {w} que é dono da sessão (e não um re-envio).
+	// Chamado quando o servidor Quack recebe um pedido para enviar
+	// uma mensagem.
+	// Em {request} devem estar os campos {messageText} que contem
+	// a string do corpo da mensagem e o campo opcional
+	// {replyLoginName} que contem o destinatário da mensagem.
+	// O autor da mensagem é obtido através da sessão de request, que
+	// contem o {cookie} da sessão.
 	//
 	// Este comando atribui uma datahora UTC à nova mensagem, e a armazena nas
-	// tabelas de mensagens. O autor da mensagem é por definição o usuário
-	// {w}. Se {replyLoginName} estiver omitido (""), a
+	// tabelas de mensagens. Se {replyLoginName} estiver omitido (""), a
 	// mensagem será o início de uma nova conversa. Se {replyLoginName}
 	// for especificado, a mensagem será marcada como uma resposta à
 	// mensagem enviada ou re-enviada pelo usuário {replyLoginName} com
 	// datahora de envio ou reenvio {replyTime}.
 	//
-	// Em caso de sucesso, o resultado é uma página dizendo "sua
+	// Em caso de sucesso, a response é redirecionada para uma página dizendo "sua
 	// mensagem foi enviada com sucesso" e mostrando o texto formatado
 	// da mensagem e sua datahora.
 

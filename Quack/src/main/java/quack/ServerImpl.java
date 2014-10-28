@@ -68,9 +68,10 @@ public final class ServerImpl implements Server {
 
 	public String processRegistrationReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
-		 //Verifica se já existe usuário com esse {loginName} ou {email}:
-		
+
+		//Verifica se já existe usuário com esse {loginName} ou {email}:	
 		User user = this.userTable.getUserByLogin(request.getParameter("username"), "");
+
 		if (user != null) {
 			PrintWriter out = response.getWriter();  
 			response.setContentType("text/html");  
@@ -113,6 +114,7 @@ public final class ServerImpl implements Server {
 		
 		// se o usuario acabou de fazer login
 		if (user != null) {
+			response.sendRedirect("/Quack/UserPage.jsp");
 //			request.
 			
 //			} else {
@@ -124,14 +126,12 @@ public final class ServerImpl implements Server {
 //			}
 		} else {
 			// usuario invalido, mostra pagina de erro.
-			response.sendRedirect("/Quack/loginerror.jsp");
-		}
-		if (username != null) {
-			response.sendRedirect("/Quack/UserPage.jsp");
-		} else {
-			// carrega o form de login
+			//response.sendRedirect("/Quack/loginerror.jsp");
 			response.sendRedirect("/Quack/loginrequest.jsp");
 		}
+		
+			
+
 	}
 
 	public String processLogoutReq(String cookie) {
