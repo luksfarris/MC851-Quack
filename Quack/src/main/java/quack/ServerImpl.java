@@ -1,6 +1,7 @@
 package quack;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import service.QuackService;
 
 public final class ServerImpl implements Server {
 
@@ -63,26 +66,36 @@ public final class ServerImpl implements Server {
 		return html.homePage();
 	}
 
-	public String processRegistrationReq(String loginName, String email,
-			String fullName, String password) {
-		// Verifica se já existe usuário com esse {loginName} ou {email}:
-//		User user = this.userTable.getUserByLoginName(loginName);
-//		if (user != null) {
-//			return html.errorPage("login name already taken");
-//		}
-//		user = this.userTable.getUserByEmail(email);
-//		if (user != null) {
-//			return html
-//					.errorPage("there is already a user account with that email");
-//		}
-//
-//		// Cria o usuário e acrescenta à tabela:
-//		user = new UserImpl();
-//		if (!user.initialize(loginName, email, fullName, password)) {
-//			return html.errorPage("user creation failed for unknown reason");
-//		}
-//		this.userTable.add(user);
-//		// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
+	public String processRegistrationReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException {
+		 //Verifica se já existe usuário com esse {loginName} ou {email}:
+		
+		User user = this.userTable.getUserByLogin(request.getParameter("username"), "");
+		if (user != null) {
+			PrintWriter out = response.getWriter();  
+			response.setContentType("text/html");  
+			out.println("<script type=\"text/javascript\">");  
+			out.println("alert('Este nome de usuario ja existe');");  
+			out.println("</script>");		
+			}
+		user = this.userTable.getUserByEmail(request.getParameter("email"));
+		if (user != null) {
+			PrintWriter out = response.getWriter();  
+			response.setContentType("text/html");  
+			out.println("<script type=\"text/javascript\">");  
+			out.println("alert('Ja existe uma conta com este email');");  
+			out.println("</script>");	
+		}
+
+		// Cria o usuário e acrescenta à tabela:
+		user = new UserImpl();
+		if (!user.initialize(request.getParameter("username"), request.getParameter("email"), 
+				request.getParameter("fullname"), request.getParameter("password"))) {
+			return html.errorPage("user creation failed for unknown reason");
+		}
+		this.userTable.add(user);
+		// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
+		response.sendRedirect("/Quack/loginrequest.jsp");
 		return html.loginPage();
 	}
 
@@ -262,30 +275,49 @@ public final class ServerImpl implements Server {
 	}
 
 	@Override
-	public String processSendMessageReq(String cookie, String text,
-			String replyLoginName, long replyTime) {
-
-		Session session = this.sessionTable.getSessionByCookie(cookie);
-		if (session == null)
-			return html.errorPage("no session with this cookie.");
-
+	public void processSendMessageReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException{
+			
+		// pega os dados da sessão
+		HttpSession requestSession = request.getSession();
+		String cookieId = requestSession.getId();
+		Session session = this.sessionTable.getSessionByCookie(cookieId);
+				
+		if (session == null){
+			response.getWriter().println(html.errorPage("no session with this cookie."));
+			return;
+		}
+		
 		User user = session.getUser();
+		String messageBody;
+		
+		if (user == null){
+			response.getWriter().println(html.errorPage("session without user."));
+			return;
+		}
+		
+		if (request.getParameter("messageText") == null) {
+			response.getWriter().println(html.errorPage("no message text;"));
+			return;
+		}
+			
+		// nova mensagem
+		messageBody = request.getParameter("messageText");
+		String replyLoginName = request.getParameter("replyLoginName");
 		Message message = new MessageImpl();
-
-		if (user == null)
-			return html.errorPage("session without user.");
-
+					
 		if (replyLoginName == null || replyLoginName.equals("")) {
-			if (!message.initialize(text, user)) {
-				return html.errorPage("message creation failed.");
+			if (!message.initialize(messageBody, user)) {
+				response.getWriter().println(html.errorPage("message creation failed."));
+				return;
 			}
 			user.addMessage(message);
 			this.numMessages++;
-			return html.homePage();
+			response.getWriter().println(html.homePage());
+			return;
 		}
-
-		// TODO Tratar de mensagens de reply
-		return null;
+		// TODO Tratar de mensagens de reply		
+		return;
 	}
 
 	private long timestampFromString(String time) {
