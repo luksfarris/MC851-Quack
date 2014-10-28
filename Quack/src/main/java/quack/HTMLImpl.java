@@ -3,11 +3,14 @@ package quack;
 import java.util.List;
 
 public class HTMLImpl implements HTML {
-
+	public static final String HTML_START = "<!DOCTYPE html><html><body>";
+	public static final String HTML_END = "</body></html>";
+	
 	@Override
 	public String errorPage(String msg) {
 		// TODO Auto-generated method stub
-		return null;
+		return HTML_START + "<h1>ERROR!!</h1>\n"
+				+ "<h2>"+msg+"</h2>" + HTML_END;
 	}
 
 	@Override

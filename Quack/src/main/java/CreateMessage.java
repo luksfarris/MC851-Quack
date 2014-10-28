@@ -36,28 +36,15 @@ public class CreateMessage extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// pega os dados da sessão
-		HttpSession requestSession = request.getSession();
-		String cookieId = requestSession.getId();
-		
-		String message;
-		
-		if (request.getParameter("messageText") != null) {
-			// nova mensagem
-			message = request.getParameter("messageText");
-			
-			Server server = QuackService.getServer(getServletContext());
-			
-			server.processSendMessageReq(cookieId, message, "", Calendar.getInstance().getTimeInMillis()/1000);
-			
-			PrintWriter out = response.getWriter();
-			//TODO pegar username da sessao
-			out.println(HTML_START + "<p style=\"color: #22F;\">@"+"</p>\n"
-					+ "<h1>"+message+"</h1>" + HTML_END);
-			//response.sendRedirect("/Quack/CreateMessage");
-			return;
-		}
 
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		Server server = QuackService.getServer(getServletContext());
+		server.processSendMessageReq(request, response, getServletContext());
 	}
 
 }

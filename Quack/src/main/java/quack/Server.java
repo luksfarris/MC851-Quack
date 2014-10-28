@@ -201,8 +201,11 @@ public interface Server {
 	// A página terá botões "next {maxN}" "prev {maxN}" para acessar
 	// outras mensagens vizinhas a essas.
 
-	public String processSendMessageReq(String cookie, String text,
-			String replyLoginName, long replyTime);
+	
+	public void processSendMessageReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
+	//public String processSendMessageReq(String cookie, String text,
+	//		String replyLoginName, long replyTime);
 
 	// Chamado quando o servidor HTTP recebe um pedido da sessão
 	// identificada pelo {cookie} para enviar mais uma mensagem original

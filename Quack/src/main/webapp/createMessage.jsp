@@ -70,9 +70,9 @@
 		<div style="width: 700px; margin-left: auto; margin-right: auto;">
 			<div class="box">
 				<div align="center">Message</div>
-				<form name="createMessage" action="CreateMessage" method="get" accept-charset="utf-8">
+				<form name="createMessage" action="CreateMessage" method="post" accept-charset="utf-8">
 				<div align="right">
-					<textarea rows="3" cols="70" name="messageText" required></textarea>
+					<textarea rows="3" cols="70" name="messageText" maxlength="240" required></textarea>
 					<input align="right" type="submit" value="Quack!">
 				</div>
 				
