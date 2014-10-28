@@ -67,7 +67,8 @@
 String msgText = "À noite, vovô Kowalsky vê o ímã cair no pé do pinguim queixoso e vovó põe açúcar no chá de tâmaras do jabuti feliz. ★";
 String loginName = "usra", fullName = "Usuário A";
 int reposts = 23, favorites = 5;
-int maxposts = Integer.parseInt(request.getParameter("notes"));
+String numNotes = request.getParameter("notes");
+int maxposts = (numNotes == null) ? 5 : Integer.parseInt(numNotes);
 List<String[]> notes = new LinkedList<String[]>();
 notes.add(new String[] { "usrq", "Usuário Q", "Usuário K" });
 notes.add(new String[] { "usro", "Usuário O", "Usuário K" });
@@ -122,7 +123,7 @@ notes.add(new String[] { "usrb", "Usuário B", "Usuário A" });
 				
 					<ul style="list-style-type: none;">
 					<%
-					for (int i = 0; i < maxposts; i++)
+					for (int i = 0; i < maxposts && i < notes.size(); i++)
 					{
 					%>
 						<li>
@@ -138,12 +139,12 @@ notes.add(new String[] { "usrb", "Usuário B", "Usuário A" });
 						</li>
 					<%
 					}
-					maxposts += 5;
 					%>
 					
 					</ul>
-					
-					<p style="text-align: center;"><a href="#">↓ Mostrar mais ↓</a></p>
+					<% if (maxposts < notes.size()) { %>
+					<p style="text-align: center;"><a href="MessagePage.jsp?notes=<%= maxposts + 5 %>">↓ Mostrar mais ↓</a></p>
+					<% } %>
 				</div>
 			</div>
 		</div>

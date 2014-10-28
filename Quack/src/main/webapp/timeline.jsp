@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,6 +61,20 @@ background-color: #888;
 	}
 	
 </style>
+<%
+String loginName = "usra", fullName = "Usuário A";
+String numPosts = request.getParameter("posts");
+int maxposts = (numPosts == null) ? 5 : Integer.parseInt(numPosts);
+List<String[]> list = new LinkedList<String[]>();
+list.add(new String[] { "usrb", "Usuário B", "The quick brown fox jumps over the lazy dog.", "há 30 segundos", "34", "3" });
+list.add(new String[] { "usrc", "Usuário C", " Jackdaws love my big sphinx of quartz.", "há 1 minuto", "12", "1" });
+list.add(new String[] { "usrd", "Usuário D", "Luís argüia à Júlia que «brações, fé, chá, óxido, pôr, zângão» eram palavras do português.", "há 1 minuto", "22", "5" });
+list.add(new String[] { "usre", "Usuário E", "('◇')ゞ", "há 5 minutos", "1", "2" });
+list.add(new String[] { "usrc", "Usuário C", "Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo.", "há 19 minutos", "78", "9" });
+list.add(new String[] { "usre", "Usuário E", "The beige hue on the waters of the loch impressed all, including the French queen, before she heard that symphony again, just as young Arthur wanted.", "há 46 minutos", "6", "0" });
+list.add(new String[] { "usrj", "Usuário J", "健全なる魂は健全なる精神と健全なる肉体に宿る。", "há 1 hora", "120", "14" });
+list.add(new String[] { "usrc", "Usuário C", "How u doin’? 😉", "há 2 horas", "134", "54" });
+%>
 </head>
 <body>
 <div style="width: 700px; margin-left: auto; margin-right: auto;">
@@ -77,65 +92,28 @@ background-color: #888;
 <hr />
 
 <table style="width: 650px;">
+<% for (int i = 0; i < maxposts && i < list.size(); i++) { %>
 
 <tr>
 <th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#000" />
-</svg>
+<img src="img/profilepics/<%= list.get(i)[0] %>.png" style="width: 48px;" />
 </th>
-<td><b>Usuário B</b>&ensp;@usrb<br />
-The quick brown fox jumps over the lazy dog.<br/>
-<span class="datetime">Postado em  21 de outubro de 2014, 19:38:00 &ndash; 34 repostagens &ndash; 3 favoritos<br/>
+<td><b><%= list.get(i)[1] %></b>&ensp;<a href="#">@<%= list.get(i)[0] %></a><br />
+<%= list.get(i)[2] %><br/>
+<span class="datetime">Postado <%= list.get(i)[3] %> 
+&ndash; <%= list.get(i)[4] %> repostage<%= list.get(i)[4].equals("1") ? "m" : "ns" %> 
+&ndash; <%= list.get(i)[5] %> favorito<%= list.get(i)[5].equals("1") ? "" : "s" %><br/>
 <a href="#">➡ Repostar</a> &mdash; <a href="#">★ Marcar como favorito</a></span>
 </td>
 
 </tr>
-<tr>
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#F00" />
-</svg>
-</th>
-<td><b>Usuário C</b>&ensp;@usrc<br />
-Jackdaws love my big sphinx of quartz.<br/>
-<span class="datetime">Postado em  21 de outubro de 2014, 19:36:20 &ndash; 12 repostagens &ndash; 1 favorito<br/>
-<a href="#">➡ Repostar</a> &mdash; <a href="#">★ Marcar como favorito</a></span>
-</td>
-</tr>
-
-</tr>
-<tr>
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#0F0" />
-</svg>
-</th>
-<td><b>Usuário D</b>&ensp;@usrd<br />
-Luís argüia à Júlia que «brações, fé, chá, óxido, pôr, zângão» eram palavras do português.<br/>
-<span class="datetime">Postado em  21 de outubro de 2014, 19:36:20 &ndash; 22 repostagens &ndash; 5 favoritos<br/>
-<a href="#">➡ Repostar</a> &mdash; <a href="#">★ Marcar como favorito</a></span>
-</td>
-</tr>
-
-</tr>
-<tr>
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#00F" />
-</svg>
-</th>
-<td><b>Usuário E</b>&ensp;@usre<br />
-('◇')ゞ<br/>
-<span class="datetime">Postado em  21 de outubro de 2014, 19:20:20 &ndash; 1 repostagem &ndash; 2 favoritos<br/>
-<a href="#">➡ Repostar</a> &mdash; <a href="#">★ Marcar como favorito</a></span>
-</td>
-</tr>
+<% } %>
 
 </table>
 
-<p style="text-align: center;"><a href="#">↓ Mostrar mais ↓</a></p>
-
+<% if (maxposts <= list.size()) { %>
+<p style="text-align: center;"><a href="timeline.jsp?posts=<%= maxposts + 5 %>">↓ Mostrar mais ↓</a></p>
+<% } %>
 
 </div>
 
