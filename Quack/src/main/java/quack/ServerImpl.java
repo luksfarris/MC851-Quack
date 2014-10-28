@@ -1,6 +1,7 @@
 package quack;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import service.QuackService;
 
 public final class ServerImpl implements Server {
 
@@ -262,30 +265,49 @@ public final class ServerImpl implements Server {
 	}
 
 	@Override
-	public String processSendMessageReq(String cookie, String text,
-			String replyLoginName, long replyTime) {
-
-		Session session = this.sessionTable.getSessionByCookie(cookie);
-		if (session == null)
-			return html.errorPage("no session with this cookie.");
-
+	public void processSendMessageReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException{
+			
+		// pega os dados da sessão
+		HttpSession requestSession = request.getSession();
+		String cookieId = requestSession.getId();
+		Session session = this.sessionTable.getSessionByCookie(cookieId);
+				
+		if (session == null){
+			response.getWriter().println(html.errorPage("no session with this cookie."));
+			return;
+		}
+		
 		User user = session.getUser();
+		String messageBody;
+		
+		if (user == null){
+			response.getWriter().println(html.errorPage("session without user."));
+			return;
+		}
+		
+		if (request.getParameter("messageText") == null) {
+			response.getWriter().println(html.errorPage("no message text;"));
+			return;
+		}
+			
+		// nova mensagem
+		messageBody = request.getParameter("messageText");
+		String replyLoginName = request.getParameter("replyLoginName");
 		Message message = new MessageImpl();
-
-		if (user == null)
-			return html.errorPage("session without user.");
-
+					
 		if (replyLoginName == null || replyLoginName.equals("")) {
-			if (!message.initialize(text, user)) {
-				return html.errorPage("message creation failed.");
+			if (!message.initialize(messageBody, user)) {
+				response.getWriter().println(html.errorPage("message creation failed."));
+				return;
 			}
 			user.addMessage(message);
 			this.numMessages++;
-			return html.homePage();
+			response.getWriter().println(html.homePage());
+			return;
 		}
-
-		// TODO Tratar de mensagens de reply
-		return null;
+		// TODO Tratar de mensagens de reply		
+		return;
 	}
 
 	private long timestampFromString(String time) {
