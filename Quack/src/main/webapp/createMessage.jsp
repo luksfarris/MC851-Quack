@@ -69,13 +69,14 @@
 	<body>
 		<div style="width: 700px; margin-left: auto; margin-right: auto;">
 			<div class="box">
-				<div align="center">Message</div>
+				<div align="center"><h2>Message</h2></div>
 				<form name="createMessage" action="CreateMessage" method="post" accept-charset="utf-8">
-				<div align="right">
-					<textarea rows="3" cols="70" name="messageText" maxlength="240" required></textarea>
+				<div align="center">
+					<textarea rows="4" cols="70" name="messageText" maxlength="100" required></textarea>
+					<br>
 					<input align="right" type="submit" value="Quack!">
 				</div>
-				
+					
 				</form>
 			</div>
 		</div>

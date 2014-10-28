@@ -113,6 +113,7 @@ public final class ServerImpl implements Server {
 		
 		// se o usuario acabou de fazer login
 		if (user != null) {
+			response.sendRedirect("/Quack/UserPage.jsp");
 //			request.
 			
 //			} else {
@@ -124,14 +125,12 @@ public final class ServerImpl implements Server {
 //			}
 		} else {
 			// usuario invalido, mostra pagina de erro.
-			response.sendRedirect("/Quack/loginerror.jsp");
-		}
-		if (username != null) {
-			response.sendRedirect("/Quack/UserPage.jsp");
-		} else {
-			// carrega o form de login
+			//response.sendRedirect("/Quack/loginerror.jsp");
 			response.sendRedirect("/Quack/loginrequest.jsp");
 		}
+		
+			
+
 	}
 
 	public String processLogoutReq(String cookie) {
