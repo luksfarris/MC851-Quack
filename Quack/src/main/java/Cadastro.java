@@ -33,8 +33,7 @@ public class Cadastro extends HttpServlet {
 		
 		Server server = QuackService.getServer(getServletContext());
 		
-		response.sendRedirect(server.processRegistrationReq(request.getParameter("username"), request.getParameter("email"),
-				request.getParameter("fullname"), request.getParameter("password")));
+		server.processRegistrationReq(request, response, getServletContext());
 	}
 
 	/**

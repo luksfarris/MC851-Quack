@@ -125,8 +125,8 @@ public interface Server {
 	// públicas ou o perfil de qualquer usuário, busca de mensagens
 	// e usuários pelo conteúdo, etc.
 
-	public String processRegistrationReq(String loginName, String email,
-			String fullName, String password);
+	public String processRegistrationReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
 
 	// Chamado quando o servidor HTTP recebe um pedido de cadastramento de novo
 	// usuário no {Quack},

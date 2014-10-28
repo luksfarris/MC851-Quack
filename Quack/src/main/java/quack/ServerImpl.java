@@ -66,26 +66,36 @@ public final class ServerImpl implements Server {
 		return html.homePage();
 	}
 
-	public String processRegistrationReq(String loginName, String email,
-			String fullName, String password) {
-		// Verifica se já existe usuário com esse {loginName} ou {email}:
-//		User user = this.userTable.getUserByLoginName(loginName);
-//		if (user != null) {
-//			return html.errorPage("login name already taken");
-//		}
-//		user = this.userTable.getUserByEmail(email);
-//		if (user != null) {
-//			return html
-//					.errorPage("there is already a user account with that email");
-//		}
-//
-//		// Cria o usuário e acrescenta à tabela:
-//		user = new UserImpl();
-//		if (!user.initialize(loginName, email, fullName, password)) {
-//			return html.errorPage("user creation failed for unknown reason");
-//		}
-//		this.userTable.add(user);
-//		// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
+	public String processRegistrationReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException {
+		 //Verifica se já existe usuário com esse {loginName} ou {email}:
+		
+		User user = this.userTable.getUserByLogin(request.getParameter("username"), "");
+		if (user != null) {
+			PrintWriter out = response.getWriter();  
+			response.setContentType("text/html");  
+			out.println("<script type=\"text/javascript\">");  
+			out.println("alert('Este nome de usuario ja existe');");  
+			out.println("</script>");		
+			}
+		user = this.userTable.getUserByEmail(request.getParameter("email"));
+		if (user != null) {
+			PrintWriter out = response.getWriter();  
+			response.setContentType("text/html");  
+			out.println("<script type=\"text/javascript\">");  
+			out.println("alert('Ja existe uma conta com este email');");  
+			out.println("</script>");	
+		}
+
+		// Cria o usuário e acrescenta à tabela:
+		user = new UserImpl();
+		if (!user.initialize(request.getParameter("username"), request.getParameter("email"), 
+				request.getParameter("fullname"), request.getParameter("password"))) {
+			return html.errorPage("user creation failed for unknown reason");
+		}
+		this.userTable.add(user);
+		// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
+		response.sendRedirect("/Quack/loginrequest.jsp");
 		return html.loginPage();
 	}
 
