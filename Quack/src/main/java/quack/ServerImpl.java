@@ -66,9 +66,10 @@ public final class ServerImpl implements Server {
 
 	public String processRegistrationReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
-		 //Verifica se já existe usuário com esse {loginName} ou {email}:
-		
+
+		//Verifica se já existe usuário com esse {loginName} ou {email}:	
 		User user = this.userTable.getUserByLogin(request.getParameter("username"), "");
+
 		if (user != null) {
 			PrintWriter out = response.getWriter();  
 			response.setContentType("text/html");  

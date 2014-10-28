@@ -30,9 +30,7 @@ public class Cadastro extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		Server server = QuackService.getServer(getServletContext());
-		
 		server.processRegistrationReq(request, response, getServletContext());
 	}
 
