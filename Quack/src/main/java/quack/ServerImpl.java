@@ -71,7 +71,7 @@ public final class ServerImpl implements Server {
 
 		PrintWriter out = null;
 		System.out.println(request.getParameter(("username")));
-		//Verifica se já existe usuário com esse {loginName} ou {email}:
+		//Verifica se já existe usuário com esse username:
 		User user = this.userTable.getUserByLogin(request.getParameter("username"), "");
 		if (user != null) {
 			out = response.getWriter();  
@@ -83,13 +83,14 @@ public final class ServerImpl implements Server {
 			}
 		
 		else{
+			//Verifica se já existe usuário com esse email:
 			user = this.userTable.getUserByEmail(request.getParameter("email"));
 			if (user != null) {
 				out = response.getWriter();  
 				response.setContentType("text/html");  
 				out.println("<script type=\"text/javascript\">");  
 				out.println("alert('Ja existe uma conta com este email');");  
-				out.println("</script>");	
+				out.println("</script>");
 				System.out.println("Ja existe user com esse email");
 			}
 			else{
