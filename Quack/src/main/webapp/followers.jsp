@@ -1,10 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
 <!DOCTYPE html>
 <html>
 <head>
+<%
+String loginName = "usra", fullName = "Usuário A";
+String numUsers = request.getParameter("users");
+int maxusers = (numUsers == null) ? 9 : Integer.parseInt(numUsers);
+List<String[]> list = new LinkedList<String[]>();
+list.add(new String[] { "usrb", "Usuário B" });
+list.add(new String[] { "usrc", "Usuário C" });
+list.add(new String[] { "usrd", "Usuário D" });
+list.add(new String[] { "usre", "Usuário E" });
+list.add(new String[] { "usrf", "Usuário F" });
+list.add(new String[] { "usrg", "Usuário G" });
+list.add(new String[] { "usrh", "Usuário H" });
+list.add(new String[] { "usri", "Usuário I" });
+list.add(new String[] { "usrj", "Usuário J" });
+list.add(new String[] { "usrk", "Usuário K" });
+list.add(new String[] { "usrl", "Usuário L" });
+list.add(new String[] { "usrm", "Usuário M" });
+%>
 <meta charset="UTF-8" />
-<title>Usuários que seguem Usuário A</title>
+<title>Usuários que seguem <%= fullName %></title>
 <style>
 body {
 background-color: #888;
@@ -60,119 +79,43 @@ background-color: #888;
 <div class="box">
 
 <div style="float: left;">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="64" height="64" viewBox="0 0 64 64" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="64" height="64" fill="#0FF" />
-</svg>
+<img src="img/profilepics/<%= loginName %>.png" style="width: 64px;" alt="Imagem de <%= fullName %>" />
 </div>
 
 <div style="float: left; padding-left: 8px; vertical-align: top;">
 <p>
-<span id="fullname">Usuário A</span><br />
-<span id="loginname">@usra</span>
+<span id="fullname"><%= fullName %></span><br />
+<span id="loginname">@<%= loginName %></span>
 </p>
 </div>
 
 <div style="float: left; clear: left;">
 <hr />
-<h1>Usuários que seguem Usuário A</h1>
+<h1>Usuários que seguem <%= fullName %></h1>
 
 <table style="width: 650px;">
+<% int i; for (i = 0; i < maxusers && i < list.size(); i++) { %>
 
-<tr>
+<% if (i % 3 == 0) { %><tr><% } %>
 <th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#000" />
-</svg>
+<img src="img/profilepics/<%= list.get(i)[0] %>.png" style="width: 48px;" />
 </th>
-<td><b>Usuário B</b><br /><small>@usrb</small></td>
+<td><b><%= list.get(i)[1] %></b><br /><small>@<%= list.get(i)[0] %></small></td>
 
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#F00" />
-</svg>
-</th>
-<td><b>Usuário C</b><br /><small>@usrc</small></td>
+<% if (i % 3 == 2) { %></tr><% } %>
 
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#0F0" />
-</svg>
-</th>
-<td><b>Usuário D</b><br /><small>@usrd</small></td>
-</tr>
+<% } %>
 
-<tr>
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#00F" />
-</svg>
-</th>
-<td><b>Usuário E</b><br /><small>@usre</small></td>
 
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#FF0" />
-</svg>
-</th>
-<td><b>Usuário F</b><br /><small>@usrf</small></td>
-
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#F0F" />
-</svg>
-</th>
-<td><b>Usuário G</b><br /><small>@usrg</small></td>
-</tr>
-
-<tr>
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#800" />
-</svg>
-</th>
-<td><b>Usuário H</b><br /><small>@usrh</small></td>
-
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#080" />
-</svg>
-</th>
-<td><b>Usuário I</b><br /><small>@usri</small></td>
-
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#008" />
-</svg>
-</th>
-<td><b>Usuário J</b><br /><small>@usrj</small></td>
-</tr>
-
-<tr>
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#880" />
-</svg>
-</th>
-<td><b>Usuário K</b><br /><small>@usrk</small></td>
-
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#088" />
-</svg>
-</th>
-<td><b>Usuário L</b><br /><small>@usrl</small></td>
-
-<th>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMinYMin">
-	<rect x="0" y="0" width="48" height="48" fill="#808" />
-</svg>
-</th>
-<td><b>Usuário M</b><br /><small>@usrm</small></td>
-</tr>
+<% while (i % 3 != 0) { %>
+<th>&nbsp;</th>
+<td>&nbsp;</td>
+<% if (i % 3 == 2) { %></tr><% } i++; %>
+<% } %>
 
 </table>
 
-<p style="text-align: center;"><a href="#">↓ Mostrar mais ↓</a></p>
+<p style="text-align: center;"><a href="followers.jsp?users=<%= maxusers + 9 %>">↓ Mostrar mais ↓</a></p>
 
 
 </div>
