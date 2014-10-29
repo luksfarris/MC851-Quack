@@ -134,16 +134,22 @@ public final class ServerImpl implements Server {
 
 	}
 
-	public String processLogoutReq(String cookie) {
+	public void processLogoutReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException {
+		
+		String cookie = request.getSession().getId();
+		
 		// Obtém a sessão:
 		Session session = this.sessionTable.getSessionByCookie(cookie);
 		if (session == null) {
-			return html.errorPage("no session with this cookie.");
+			response.getWriter().println(html.errorPage("no session with this cookie."));
+			return;
 		}
 		// Fecha a sessão existente:
 		this.sessionTable.delete(session);
 		session.close();
-		return html.homePage();
+		response.getWriter().println(html.homePage());
+		return;
 	}
 
 	public String processShowUserProfileReq(String cookie, String loginName) {
