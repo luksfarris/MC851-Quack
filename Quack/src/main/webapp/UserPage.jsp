@@ -26,6 +26,7 @@
 <body>
 	<%
 		//DADOS DO USUARIO (pegar do BD)
+		
 		int numPosts = 10, followers = 3, follows = 20; 
 		String UserName = "UserName";
 		String PicAddress = "https://www.wevi.com.br/static/img/placeholder/placeholder_user.png";

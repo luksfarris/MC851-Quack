@@ -1,6 +1,8 @@
 package quack;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 public class UserImpl implements User {
 	private long dbIndex;
@@ -147,6 +149,11 @@ public class UserImpl implements User {
 	public void addMessage(Message message) {
 		assert(message.getUser().getLoginName().equals(loginName));
 		this.messages.add(message);		
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
 	}
 
 }

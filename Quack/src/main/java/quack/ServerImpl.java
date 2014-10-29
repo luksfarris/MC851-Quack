@@ -4,13 +4,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import service.QuackService;
+import service.CookieHelper;
 
 public final class ServerImpl implements Server {
 
@@ -28,9 +30,6 @@ public final class ServerImpl implements Server {
 
 	HTML html; // Cria paginas html.
 
-	private static final String passwordKey = "QUACK_PASSWORD";
-	private static final String usernameKey = "QUACK_USERNAME";
-	
 	// ??{ O s procedimentos a seguir deveriam construir e devolver
 	// a construir página HTML de resultado adequada. }??
 
@@ -112,7 +111,7 @@ public final class ServerImpl implements Server {
 	}
 
 	public void processLoginReq(HttpServletRequest request,
-			HttpServletResponse response, ServletContext context) throws IOException {
+			HttpServletResponse response, ServletContext context) throws IOException, ServletException {
 
 		// pega os dados da sessão
 		HttpSession requestSession = request.getSession();
@@ -120,21 +119,24 @@ public final class ServerImpl implements Server {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		boolean remember = "true".equals(request.getParameter("remember"));
+		
+		
 		User user = this.userTable.getUserByLogin(username, password);
-		
-		
 		// se o usuario acabou de fazer login
 		if (user != null) {
-			response.sendRedirect("/Quack/UserPage.jsp");
-//			request.
+			request.login(username, password);
+			request.setAttribute(CookieHelper.LOGGED_USER, user);
 			
-//			} else {
-//				// usuario valido, salva na sessão do browser e recarrega a pagina
-//				requestSession.setAttribute(usernameKey, username);
-//				requestSession.setAttribute(passwordKey, password);
-//				response.sendRedirect("/Quack/Login");
-//				return;
-//			}
+			if (remember) {
+				String cookie = UUID.randomUUID().toString();
+		        Session session = new SessionImpl();
+		        session.open(user, cookie);
+		        sessionTable.add(session);
+		        CookieHelper.addCookie(response, CookieHelper.COOKIE_NAME, cookie, CookieHelper.COOKIE_AGE);
+			} else {
+				CookieHelper.removeCookie(response, CookieHelper.COOKIE_NAME);
+			}
+			response.sendRedirect("/Quack/UserPage.jsp");
 		} else {
 			// usuario invalido, mostra pagina de erro.
 			//response.sendRedirect("/Quack/loginerror.jsp");
@@ -148,18 +150,8 @@ public final class ServerImpl implements Server {
 	public void processLogoutReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
 		
-		String cookie = request.getSession().getId();
+		// TODO: implementar o logout
 		
-		// Obtém a sessão:
-		Session session = this.sessionTable.getSessionByCookie(cookie);
-		if (session == null) {
-			response.getWriter().println(html.errorPage("no session with this cookie."));
-			return;
-		}
-		// Fecha a sessão existente:
-		this.sessionTable.delete(session);
-		session.close();
-		response.getWriter().println(html.homePage());
 		return;
 	}
 
@@ -350,5 +342,15 @@ public final class ServerImpl implements Server {
 
 		return a.getTimeInMillis() / 1000;
 
+	}
+
+	@Override
+	public User getUserFromCookie(String cookie) {
+		Session session = sessionTable.getSessionByCookie(cookie);
+		User user = null;
+		if (session != null) {
+			user = session.getUser();
+		}
+		return user;
 	}
 }

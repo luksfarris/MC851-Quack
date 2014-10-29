@@ -3,6 +3,7 @@ package quack;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -140,7 +141,7 @@ public interface Server {
 	// sucesso, devolve uma página que mostra o perfil público do usuário.
 
 	public void processLoginReq(HttpServletRequest request,
-			HttpServletResponse response, ServletContext context) throws IOException;
+			HttpServletResponse response, ServletContext context) throws IOException, ServletException;
 
 	// Chamado quando o servidor HTTP recebe um pedido de login de um usuário
 	// existente
@@ -263,4 +264,10 @@ public interface Server {
 	// método retorna uma página HTML que mostra o perfil do usuário {target},
 	// com o novo estado do contato.
 
+	public User getUserFromCookie(String cookie);
+	// Este metodo é chamado quando é necessário recuperar um usuário {User} a partir 
+	// de um cookie {String}. A busca pelo cookie sera feita na tabela de cookies
+	// que fica salva no servidor Apache, e caso exista retorna o usuario correspondente.
+	// Caso contrario retorna {null};
+	
 }

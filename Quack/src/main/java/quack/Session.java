@@ -22,13 +22,4 @@ public interface Session {
 	// Retorna o objeto que descreve o usuário da sessão {this}, que deve estar
 	// aberta.
 	// Retorna {null} se a sessão não está aberta.
-
-	void close();
-	// Este metodo é normalmente chamado quado o usuário faz logout ou o
-	// servidor {Quack} decide encerrar a conta, por exemplo por time-out.
-	// Torna a sessão fechada.
-	//
-	// Uma vez fechado, um objeto {Session} pode ser
-	// descartado, ou reusado para outra sessão, de qualquer usuário,
-	// através de outra chamada de {open}.
 }
