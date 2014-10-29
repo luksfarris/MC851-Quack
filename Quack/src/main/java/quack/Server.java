@@ -116,8 +116,9 @@ public interface Server {
 	// ??{ Descrever a "saída" de cada método, ou seja a
 	// página HTML que é resposta ao GET/POST. }??
 
-	public String processHomePageReq();
-
+	public void processHomePageReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
+	
 	// Chamado quando o servidor HTTP recebe um pedido de vista da home page da
 	// rede {Quack}.
 	// Nessa página haverá botões/campos para fazer login e cadastrar novo

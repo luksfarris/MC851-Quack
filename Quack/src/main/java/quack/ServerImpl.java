@@ -62,8 +62,10 @@ public final class ServerImpl implements Server {
 		// ??{ Implementar }??
 	}
 
-	public String processHomePageReq() {
-		return html.homePage();
+	public void processHomePageReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException {
+		response.getWriter().println(html.homePage());
+		return;
 	}
 
 	public void processRegistrationReq(HttpServletRequest request,
@@ -130,17 +132,17 @@ public final class ServerImpl implements Server {
 		
 		if(user == null){
 			// usuario invalido, mostra pagina de erro.
-			//response.sendRedirect("/Quack/loginerror.jsp");
-			response.sendRedirect("/Quack/loginrequest.jsp");
+			response.sendRedirect("/Quack/loginerror.jsp");
+			//response.sendRedirect("/Quack/loginrequest.jsp");
 			return;
 		}
 	
 		// se o usuario acabou de fazer login
 		if(user.checkPassword(password)) {
 //			// usuario valido, salva na sessão do browser e recarrega a pagina
-			requestSession.setAttribute(usernameKey, user.getLoginName());
-			requestSession.setAttribute(passwordKey, password);			
-			
+			//requestSession.setAttribute(usernameKey, user.getLoginName());
+			//requestSession.setAttribute(passwordKey, password);			
+			requestSession.setAttribute("user", user);
 			response.sendRedirect("/Quack/UserPage.jsp");
 			return;
 		}
