@@ -203,11 +203,12 @@ public interface Server {
 			HttpServletResponse response, ServletContext context) throws IOException;
 	// Chamado quando o servidor Quack recebe um pedido para enviar
 	// uma mensagem.
+	// 
 	// Em {request} devem estar os campos {messageText} que contem
-	// a string do corpo da mensagem e o campo opcional
-	// {replyLoginName} que contem o destinatário da mensagem.
-	// O autor da mensagem é obtido através da sessão de request, que
-	// contem o {cookie} da sessão.
+	// a string do corpo da mensagem e o campo opcional {replyLoginName}
+	// que contem o destinatário da mensagem.  Deve haver também um campo
+	// {cookie} que deve identificar uma sessão aberta. O dono dessa
+	// sessão será considerado o autor da mesnagem.
 	//
 	// Este comando atribui uma datahora UTC à nova mensagem, e a armazena nas
 	// tabelas de mensagens. Se {replyLoginName} estiver omitido (""), a
@@ -216,7 +217,7 @@ public interface Server {
 	// mensagem enviada ou re-enviada pelo usuário {replyLoginName} com
 	// datahora de envio ou reenvio {replyTime}.
 	//
-	// Em caso de sucesso, a response é redirecionada para uma página dizendo "sua
+	// Em caso de sucesso, coloca no parâmetro {response} uma página dizendo "sua
 	// mensagem foi enviada com sucesso" e mostrando o texto formatado
 	// da mensagem e sua datahora.
 
