@@ -22,7 +22,7 @@ public class UserTableImpl implements UserTable {
 	@Override
 	public User getUserByLogin(String loginName, String password) {
 		for(User u : this.table){
-			if(u.getLoginName() == loginName)
+			if(u.getLoginName().equals(loginName))
 				return u;
 		}
 		return null;
@@ -32,7 +32,7 @@ public class UserTableImpl implements UserTable {
 		List<User> l = new LinkedList<User>();
 		
 		for(User u: table){
-			if(u.getFullName() == fullName)
+			if(u.getFullName().equals(fullName))
 				l.add(u);
 		}
 		return null;
@@ -41,7 +41,7 @@ public class UserTableImpl implements UserTable {
 	@Override
 	public User getUserByEmail(String email) {
 		for(User u : this.table){
-			if(u.getEmail() == email)
+			if(u.getEmail().equals(email))
 				return u;
 		}		return null;
 	}

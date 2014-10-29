@@ -66,38 +66,49 @@ public final class ServerImpl implements Server {
 		return html.homePage();
 	}
 
-	public String processRegistrationReq(HttpServletRequest request,
+	public void processRegistrationReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
 
-		//Verifica se já existe usuário com esse {loginName} ou {email}:	
+		PrintWriter out = null;
+		System.out.println(request.getParameter(("username")));
+		//Verifica se já existe usuário com esse {loginName} ou {email}:
 		User user = this.userTable.getUserByLogin(request.getParameter("username"), "");
-
 		if (user != null) {
-			PrintWriter out = response.getWriter();  
+			out = response.getWriter();  
 			response.setContentType("text/html");  
 			out.println("<script type=\"text/javascript\">");  
 			out.println("alert('Este nome de usuario ja existe');");  
 			out.println("</script>");		
+			System.out.println("Ja existe user com esse nome");
 			}
-		user = this.userTable.getUserByEmail(request.getParameter("email"));
-		if (user != null) {
-			PrintWriter out = response.getWriter();  
-			response.setContentType("text/html");  
-			out.println("<script type=\"text/javascript\">");  
-			out.println("alert('Ja existe uma conta com este email');");  
-			out.println("</script>");	
+		
+		else{
+			user = this.userTable.getUserByEmail(request.getParameter("email"));
+			if (user != null) {
+				out = response.getWriter();  
+				response.setContentType("text/html");  
+				out.println("<script type=\"text/javascript\">");  
+				out.println("alert('Ja existe uma conta com este email');");  
+				out.println("</script>");	
+				System.out.println("Ja existe user com esse email");
+			}
+			else{
+				// Cria o usuário e acrescenta à tabela:
+				user = new UserImpl();
+				if (!user.initialize(request.getParameter("username"), request.getParameter("email"), 
+						request.getParameter("fullname"), request.getParameter("password"))) {
+					response.setContentType("text/html");  
+					out.println("<script type=\"text/javascript\">");  
+					out.println("alert('Falha ao criar user');");  
+					out.println("</script>");				}
+				else{
+				this.userTable.add(user);
+				System.out.println("User inserido na tabela");
+				// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
+				response.sendRedirect("/Quack/loginrequest.jsp");
+				}
+			}
 		}
-
-		// Cria o usuário e acrescenta à tabela:
-		user = new UserImpl();
-		if (!user.initialize(request.getParameter("username"), request.getParameter("email"), 
-				request.getParameter("fullname"), request.getParameter("password"))) {
-			return html.errorPage("user creation failed for unknown reason");
-		}
-		this.userTable.add(user);
-		// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
-		response.sendRedirect("/Quack/loginrequest.jsp");
-		return html.loginPage();
 	}
 
 	public void processLoginReq(HttpServletRequest request,
