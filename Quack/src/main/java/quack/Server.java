@@ -125,45 +125,41 @@ public interface Server {
 	// públicas ou o perfil de qualquer usuário, busca de mensagens
 	// e usuários pelo conteúdo, etc.
 
-	public String processRegistrationReq(HttpServletRequest request,
+	public void processRegistrationReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException;
 
 	// Chamado quando o servidor HTTP recebe um pedido de cadastramento de novo
 	// usuário no {Quack},
-	// Cria um novo usuário com dados {loginName}, {email}, {fullName} e
-	// {password}.
+	// Cria um novo usuário com dados loginName, email, fullName e
+	// password, parametros provenientes da variavel {request}.
 	// Acrescenta-o ao cadastro {this.userTable} (e à base de dados
 	// persistente).
 	//
 	// Por enquanto, o cadastramento não faz o login automático. Se o
 	// cadastramento tiver
-	// sucesso, devolve uma página que mostra o perfil público do usuário.
+	// sucesso, devolve uma página em {response} que mostra o perfil público do usuário.
 
 	public void processLoginReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException;
 
 	// Chamado quando o servidor HTTP recebe um pedido de login de um usuário
 	// existente
-	// da rede {Quack}. Os parâmetros {loginName} e {password} são os que o
-	// usuário
-	// preencheu na página de login.
+	// da rede {Quack}. O parâmetros parâmetro {request} contem os
+	// campos login e password que o usuario preencheu na pagina
+	// de login.
 	//
 	// Se o login tiver sucesso, a sessão é criada e acrescentada ao
-	// table de sessões abertas. O resultado é a página que mostra o perfil
-	// do usuário {loginName},
-	//
-	// ??{ Descrever quem escolhe o {cookie} (string que o servidor HTTP
-	// deve enviar ao browser, e que este deve enviar de volta para
-	// identificar comandos subsequentes da mesma sessão). Se quem
-	// escolhe o {cookie} é este procedimento, dizer como ele é
-	// repassado ao servidor HTTP. }??
+	// table de sessões abertas. O resultado é ser redirecionado
+	// à pagina de perfil do usuario atraves de {response}
 
-	public String processLogoutReq(String cookie);
+
+	public void processLogoutReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
 
 	// Chamado quando o servidor HTTP recebe um pedido de logout do usuário.
-	// A sessão a ser fechada é a identificada pelo {cookie}.
+	// A sessão de request é então fechada pelo servidor se ele existir no sistema.
 	//
-	// Em caso de sucesso, o resultado é a homepage do sistema {Quack},
+	// Em caso de sucesso, o respose é a homepage do sistema {Quack},
 	// como vista por usuários não logados.
 
 	public String processShowUserProfileReq(String cookie, String loginName);

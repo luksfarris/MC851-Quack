@@ -17,7 +17,7 @@ function checkPass()
     //Set the colors we will be using ...
     var goodColor = "#FFFFFF";
     var badColor = "#ff6666";
-    var botao = document.getElementById('botao');
+document.getElementById('botao');
     //Compare the values in the password field
     //and the confirmation field
     if(pass1.value == pass2.value){
@@ -26,7 +26,7 @@ function checkPass()
         //the user that they have entered the correct password
         pass2.style.backgroundColor = goodColor;
         message.innerHTML = ""
-        botao.disabled = false;
+        document.getElementById('botao').disabled = false;
         
     }else{
         //The passwords do not match.
@@ -35,6 +35,7 @@ function checkPass()
         pass2.style.backgroundColor = badColor;
         message.style.color = badColor;
         message.innerHTML = "Senhas não batem!"
+        document.getElementById('botao').disabled = true;
     }
 }  
 </script>
