@@ -76,8 +76,8 @@ label {
 		alt="Icon of a rubber duck" />
 	<form name="login" action="Login" method="post" accept-charset="utf-8">
 		<ul>
-			<li><label for="username">Email</label><input type="email"
-				name="username" placeholder="yourname@email.com" required></li>
+			<li><label for="username">Email or Username</label><input type="text"
+				name="login" placeholder="username or yourname@email.com" required></li>
 			<li><label for="password">Password</label><input type="password"
 				name="password" placeholder="password" required></li>
 			<li><label for="remember">Lembrar de mim</label><input type="checkbox" 

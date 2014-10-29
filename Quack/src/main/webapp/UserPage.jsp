@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="quack.User" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -26,9 +27,9 @@
 <body>
 	<%
 		//DADOS DO USUARIO (pegar do BD)
-		
-		int numPosts = 10, followers = 3, follows = 20; 
-		String UserName = "UserName";
+		User user = (User)request.getSession().getAttribute("user");
+		int numPosts = user.getPostedMessages().size(), followers = 20, follows = 20; 
+		String UserName = user.getLoginName();
 		String PicAddress = "https://www.wevi.com.br/static/img/placeholder/placeholder_user.png";
 	%>
 
