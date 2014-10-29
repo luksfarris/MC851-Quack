@@ -158,12 +158,13 @@ public interface Server {
 	// escolhe o {cookie} é este procedimento, dizer como ele é
 	// repassado ao servidor HTTP. }??
 
-	public String processLogoutReq(String cookie);
+	public void processLogoutReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
 
 	// Chamado quando o servidor HTTP recebe um pedido de logout do usuário.
-	// A sessão a ser fechada é a identificada pelo {cookie}.
+	// A sessão de request é então fechada pelo servidor se ele existir no sistema.
 	//
-	// Em caso de sucesso, o resultado é a homepage do sistema {Quack},
+	// Em caso de sucesso, o respose é a homepage do sistema {Quack},
 	// como vista por usuários não logados.
 
 	public String processShowUserProfileReq(String cookie, String loginName);
