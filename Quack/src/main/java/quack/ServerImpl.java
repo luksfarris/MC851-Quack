@@ -159,11 +159,9 @@ public final class ServerImpl implements Server {
 			response.sendRedirect("/Quack/UserPage.jsp");
 		} else {
 			// usuario invalido, mostra pagina de erro.
-			//response.sendRedirect("/Quack/loginerror.jsp");
-			response.sendRedirect("/Quack/loginrequest.jsp");
+			response.sendRedirect("/Quack/loginerror.jsp");
 		}
 
-		response.sendRedirect("/Quack/loginrequest.jsp");
 		return;
 	}
 

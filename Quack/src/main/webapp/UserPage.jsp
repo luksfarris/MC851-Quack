@@ -28,7 +28,9 @@
 	<%
 		//DADOS DO USUARIO (pegar do BD)
 		User user = (User)request.getSession().getAttribute("user");
-		int numPosts = user.getPostedMessages().size(), followers = 20, follows = 20; 
+		int numPosts = user.getPostedMessages().size();
+		int followers = user.followersCount();
+		int follows = user.followsCount(); 
 		String UserName = user.getLoginName();
 		String PicAddress = "https://www.wevi.com.br/static/img/placeholder/placeholder_user.png";
 	%>
