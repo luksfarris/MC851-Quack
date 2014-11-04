@@ -44,7 +44,7 @@ public class LoginFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		String path = request.getRequestURI();
-		if (path.equals("/Quack/loginrequest.jsp")){
+		if (path.contains("login") || path.contains("Login") || path.endsWith(".png")){
 			// senão não faz nada.
 		    chain.doFilter(req, res);
 		    return;
