@@ -45,7 +45,7 @@ public class LoginFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) res;
 		String path = request.getRequestURI();
 		
-		if (path.contains("login") || path.contains("Login") || path.contains("register") || path.endsWith(".png")){
+		if (path.contains("Cadastro") || path.contains("login") || path.contains("Login") || path.contains("register") || path.endsWith(".png")){
 			// senão não faz nada.
 		    chain.doFilter(req, res);
 		    return;

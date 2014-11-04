@@ -3,7 +3,10 @@ package quack;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -99,7 +102,7 @@ public final class ServerImpl implements Server {
 				// Cria o usuário e acrescenta à tabela:
 				user = new UserImpl();
 				if (!user.initialize(request.getParameter("username"), request.getParameter("email"), 
-						request.getParameter("fullname"), request.getParameter("password"))) {
+						request.getParameter("fullName"), request.getParameter("password"))) {
 					response.setContentType("text/html");  
 					out.println("<script type=\"text/javascript\">");  
 					out.println("alert('Falha ao criar user');");  
@@ -108,22 +111,22 @@ public final class ServerImpl implements Server {
 				this.userTable.add(user);
 				
 				try {
+					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					this.database.getConnection();
 					this.database.getStatement("INSERT INTO user (login_name, full_name, email, password, created)"
-							+ "VALUES ("+user.getLoginName()+","+user.getFullName()+","+
-							user.getEmail()+","+request.getParameter("password")+","+
-							user.getCreationTime()+")").execute();
+							+ "VALUES ('"+user.getLoginName()+"','"+user.getFullName()+"','"+
+							user.getEmail()+"','"+request.getParameter("password")+"','"
+									+ dateFormat.format(new Date(user.getCreationTime()*1000))+
+									"');").execute();
 					this.database.commit();
+					
+					System.out.println("User inserido na tabela");
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
-				
-				// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
-				System.out.println("User inserido na tabela");
 				
 				response.sendRedirect("/Quack/loginrequest.jsp");
 				}
