@@ -2,6 +2,7 @@ package quack;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -105,8 +106,25 @@ public final class ServerImpl implements Server {
 					out.println("</script>");				}
 				else{
 				this.userTable.add(user);
-				System.out.println("User inserido na tabela");
+				
+				try {
+					this.database.getStatement("INSERT INTO user (login_name, full_name, email, password, created)"
+							+ "VALUES ("+user.getLoginName()+","+user.getFullName()+","+
+							user.getEmail()+","+request.getParameter("password")+","+
+							user.getCreationTime()+")").execute();
+					this.database.commit();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				
 				// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
+				System.out.println("User inserido na tabela");
+				
 				response.sendRedirect("/Quack/loginrequest.jsp");
 				}
 			}

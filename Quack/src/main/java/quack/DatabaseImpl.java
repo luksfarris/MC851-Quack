@@ -18,7 +18,7 @@ public class DatabaseImpl implements Database {
 			return con;
 
 		Class.forName("com.mysql.jdbc.Driver");
-		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db_name, db_login_name, db_pass);
+		con = DriverManager.getConnection("jdbc:mysql://sql2.lab.ic.unicamp.br:3306/" + db_name, db_login_name, db_pass);
 		con.setAutoCommit(false);
 
 		return con;
