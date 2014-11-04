@@ -156,4 +156,26 @@ public class UserImpl implements User {
 		return password;
 	}
 
+	@Override
+	public int followersCount() {
+		int count = 0;
+		for(Contact c: this.directContacts){
+			if(c.status().equals("Follow"))
+				count++;
+		}
+		
+		return count;
+	}
+
+	@Override
+	public int followedCount() {
+		int count = 0;
+		for(Contact c: this.reverseContacts){
+			if(c.status().equals("Follow"))
+				count++;
+		}
+		
+		return count;
+	}
+
 }

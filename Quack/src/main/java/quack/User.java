@@ -145,4 +145,14 @@ public interface User {
 	public String getPassword();
 	// retorna a senha {String} do usuario.
 
+	// -------------------------------------------------------------------------------
+	// UTEIS
+	// metodos que auxiliam a montagem das paginas html do sistema Quack
+	//
+	
+	public int followersCount();
+	// retorna quantos usuarios {this} segue
+	
+	public int followedCount();
+	// retorna quantos usuarios seguem {this}
 }
