@@ -107,7 +107,7 @@ public final class ServerImpl implements Server {
 				this.userTable.add(user);
 				System.out.println("User inserido na tabela");
 				// ??{ Aqui deve gravar o usuário na base de dados persistente? }??
-				response.sendRedirect("/Quack/loginrequest.jsp");
+				response.sendRedirect("/Quack/pub/loginrequest.jsp");
 				}
 			}
 		}
@@ -126,9 +126,9 @@ public final class ServerImpl implements Server {
 		User user = this.userTable.getUserByLogin(login, password);
 		// se o usuario acabou de fazer login
 		if (user != null) {
-			request.login(login, password);
+			//request.login(login, password);
 			request.setAttribute(CookieHelper.LOGGED_USER, user);
-			
+			request.getSession().setAttribute("user", user);
 			if (remember) {
 				String cookie = UUID.randomUUID().toString();
 		        Session session = new SessionImpl();
@@ -141,7 +141,7 @@ public final class ServerImpl implements Server {
 			response.sendRedirect("/Quack/UserPage.jsp");
 		} else {
 			// usuario invalido, mostra pagina de erro.
-			response.sendRedirect("/Quack/loginerror.jsp");
+			response.sendRedirect("/Quack/pub/loginerror.jsp");
 		}
 
 		return;
