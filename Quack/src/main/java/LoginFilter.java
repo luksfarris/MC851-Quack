@@ -43,6 +43,12 @@ public class LoginFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
+		String path = request.getRequestURI();
+		if (path.equals("/Quack/loginrequest.jsp")){
+			// senão não faz nada.
+		    chain.doFilter(req, res);
+		    return;
+		}
 		// recupera o usuario salvo no browser.
 		User user = (User) request.getSession().getAttribute("user");
 		// se nao havia usuario, vamos tentar recuperar do cookie.
@@ -68,7 +74,7 @@ public class LoginFilter implements Filter {
 		}
 		// se não havia usuário, envia para a págna de login.
 		if (user == null) {
-		    response.sendRedirect("/Quack/");
+		    response.sendRedirect("/Quack/loginrequest.jsp");
 		} else {
 			// senão não faz nada.
 		    chain.doFilter(req, res);
