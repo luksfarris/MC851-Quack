@@ -14,7 +14,7 @@ import service.QuackService;
 /**
  * Servlet implementation class Cadastro
  */
-@WebServlet(description = "Cadastro", urlPatterns = { "/Cadastro" })
+@WebServlet(description = "Cadastro", urlPatterns = { "/pub/Cadastro" })
 public class Cadastro extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	

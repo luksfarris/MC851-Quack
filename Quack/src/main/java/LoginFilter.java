@@ -45,7 +45,7 @@ public class LoginFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) res;
 		String path = request.getRequestURI();
 		
-		if (path.contains("Cadastro") || path.contains("login") || path.contains("Login") || path.contains("register") || path.endsWith(".png")){
+		if (path.contains("/pub/") || path.endsWith(".png")){
 			// senão não faz nada.
 		    chain.doFilter(req, res);
 		    return;
@@ -75,7 +75,7 @@ public class LoginFilter implements Filter {
 		}
 		// se não havia usuário, envia para a págna de login.
 		if (user == null) {
-		    response.sendRedirect("/Quack/loginrequest.jsp");
+		    response.sendRedirect("/Quack/pub/loginrequest.jsp");
 		} else {
 			// senão não faz nada.
 		    chain.doFilter(req, res);
