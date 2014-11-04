@@ -76,14 +76,17 @@ label {
 		alt="Icon of a rubber duck" />
 	<form name="login" action="Login" method="post" accept-charset="utf-8">
 		<ul>
-			<li><label for="username">Email or Username</label><input type="text"
+			<li><label for="username">Email ou Usuário</label><input type="text"
 				name="login" placeholder="username or yourname@email.com" required></li>
-			<li><label for="password">Password</label><input type="password"
+			<li><label for="password">Senha</label><input type="password"
 				name="password" placeholder="password" required></li>
-			<li><label for="remember">Lembrar de mim</label><input type="checkbox" 
+			<li><label for="remember">Lembrar de mim?</label><input type="checkbox" 
 				name="remember" value="false" />
-			<li><input type="submit" value="Quack!"></li>
+			<li><input type="submit" value="Entrar"></li>
 		</ul>
+	</form>
+	<form name="register" action="registerpage.jsp" method="get">
+		<input type="submit" value="Registrar">
 	</form>
 	</section>
 </body>
