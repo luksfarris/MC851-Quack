@@ -157,7 +157,7 @@ public class UserImpl implements User {
 	}
 
 	@Override
-	public int followersCount() {
+	public int followsCount() {
 		int count = 0;
 		for(Contact c: this.directContacts){
 			if(c.status().equals("Follow"))
@@ -168,7 +168,7 @@ public class UserImpl implements User {
 	}
 
 	@Override
-	public int followedCount() {
+	public int followersCount() {
 		int count = 0;
 		for(Contact c: this.reverseContacts){
 			if(c.status().equals("Follow"))

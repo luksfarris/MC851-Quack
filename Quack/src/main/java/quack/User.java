@@ -150,9 +150,9 @@ public interface User {
 	// metodos que auxiliam a montagem das paginas html do sistema Quack
 	//
 	
-	public int followersCount();
+	public int followsCount();
 	// retorna quantos usuarios {this} segue
 	
-	public int followedCount();
+	public int followersCount();
 	// retorna quantos usuarios seguem {this}
 }
