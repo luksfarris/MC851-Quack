@@ -2,6 +2,7 @@ package quack;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ public final class ServerImpl implements Server {
 	// As tabelas abaixo são cópias na memória dos objetos na base de dados.
 	UserTable userTable = null; // Conjuto de usuários cadastrados.
 
+	private long nextUserId;
 	long numUsers = 0; // Número de usuários na rede {Quack}.
 	long numContacts = 0; // Número total de contatos criados (incluindo
 							// inativos).
@@ -48,8 +50,8 @@ public final class ServerImpl implements Server {
 
 		// Cria a tabela de usuários, vazia:
 		this.userTable = new UserTableImpl();
-		this.userTable.initialize(database);
-
+		this.userTable.initialize();
+		
 		this.loadDatabase();
 
 		// Inicializa o criador de paginas html:
@@ -62,7 +64,28 @@ public final class ServerImpl implements Server {
 	// {User,Message,Contact} e ligando-os entre si. Supõe que a conexão com o
 	// servidor da base de dados já foi estabelecida.
 	{
-		// ??{ Implementar }??
+		try {
+			this.database.getConnection();
+			ResultSet rs = this.database.getStatement("SELECT * FROM user;").executeQuery();
+			while(rs.next()){
+				User u = new UserImpl();
+				if(u.initialize(rs.getString("login_name"), 
+						rs.getString("email"),
+						rs.getString("full_name"),
+						rs.getString("password"))){
+					this.userTable.add(u);
+				} else {
+					System.out.println("Problema no carregamento do usuário!");
+				}
+			}
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void processHomePageReq(HttpServletRequest request,
@@ -112,12 +135,14 @@ public final class ServerImpl implements Server {
 					try {
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						this.database.getConnection();
-						this.database.getStatement("INSERT INTO user (login_name, full_name, email, password, created)"
-								+ "VALUES ('"+user.getLoginName()+"','"+user.getFullName()+"','"+
+						this.database.getStatement("INSERT INTO user (id, login_name, full_name, email, password, created)"
+								+ "VALUES ("+user.getDbIndex()+",'"+user.getLoginName()+
+								"','"+user.getFullName()+"','"+
 								user.getEmail()+"','"+request.getParameter("password")+"','"
 								+ dateFormat.format(new Date(user.getCreationTime()*1000))+
 								"');").execute();
 						this.database.commit();
+						
 						this.userTable.add(user);
 					
 						System.out.println("User inserido na tabela");
