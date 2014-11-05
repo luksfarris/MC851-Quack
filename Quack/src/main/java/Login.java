@@ -30,7 +30,7 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("/Quack/pub/loginrequest.jsp");
+		response.sendRedirect("/Quack/pub/loginpage.jsp");
 	}
 	
 	@Override

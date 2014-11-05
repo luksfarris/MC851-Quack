@@ -105,7 +105,7 @@ public final class ServerImpl implements Server {
 			out = response.getWriter();  
 			response.setContentType("text/html");  
 			out.println("<script type=\"text/javascript\">");  
-			out.println("alert('Este nome de usuario ja existe');");  
+			out.println("history.back(alert('Este nome de usuario ja existe'));");  
 			out.println("</script>");		
 			System.out.println("Ja existe user com esse nome");
 			}
@@ -117,7 +117,7 @@ public final class ServerImpl implements Server {
 				out = response.getWriter();  
 				response.setContentType("text/html");  
 				out.println("<script type=\"text/javascript\">");  
-				out.println("alert('Ja existe uma conta com este email');");  
+				out.println("history.back(alert('Ja existe uma conta com este email'));");  
 				out.println("</script>");
 				System.out.println("Ja existe user com esse email");
 			}
@@ -128,7 +128,7 @@ public final class ServerImpl implements Server {
 						request.getParameter("fullName"), request.getParameter("password"))) {
 					response.setContentType("text/html");  
 					out.println("<script type=\"text/javascript\">");  
-					out.println("alert('Falha ao criar user');");  
+					out.println("history.back(alert('Falha ao criar user'));");  
 					out.println("</script>");				}
 				else{
 				
@@ -152,9 +152,7 @@ public final class ServerImpl implements Server {
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-
-				
-					response.sendRedirect("/Quack/loginrequest.jsp");
+					response.sendRedirect("/Quack/loginpage.jsp");
 				}
 			}
 		}
@@ -187,8 +185,11 @@ public final class ServerImpl implements Server {
 			}
 			response.sendRedirect("/Quack/UserPage.jsp");
 		} else {
-			// usuario invalido, mostra pagina de erro.
-			response.sendRedirect("/Quack/pub/loginerror.jsp");
+			// usuario invalido, mostra erro.
+			response.setContentType("text/html");
+			response.getWriter().println("<script type=\"text/javascript\">");  
+			response.getWriter().println("history.back(alert('Falha ao realizar login'));");  
+			response.getWriter().println("</script>");
 		}
 
 		return;
