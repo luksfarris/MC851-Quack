@@ -55,7 +55,7 @@ document.getElementById('botao');
 </head>
 <body>
 	<center>
-		<font size=25>Cadastro Quack</font><br><br>
+		<h1>Cadastro Quack</h1>
 		<div class="container">
 		<form name="Login" action="Cadastro" method="get" accept-charset="utf-8">
 			Nome Completo: <input type="text" name="fullName"  required><br>
@@ -66,6 +66,7 @@ document.getElementById('botao');
 			<span id="confirmMessage" class="confirmMessage"></span>
 			<br>
 			<input type="submit" value="Cadastrar" id="botao" disabled>
+			<INPUT TYPE="button" VALUE="Voltar" onClick="history.back();">
 		</form> 
 		</div>
 	</center>
