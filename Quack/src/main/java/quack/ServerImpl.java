@@ -80,6 +80,8 @@ public final class ServerImpl implements Server {
 						Message m = new MessageImpl();
 						if(m.initialize(rs2.getString("body"), u) == false)
 							System.out.println("Erro ao carregar mensagens");
+						else
+							u.addMessage(m);	
 					}
 					this.userTable.add(u);
 					}
