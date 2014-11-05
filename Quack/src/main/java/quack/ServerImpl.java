@@ -102,7 +102,7 @@ public final class ServerImpl implements Server {
 				// Cria o usuário e acrescenta à tabela:
 				user = new UserImpl();
 				if (!user.initialize(request.getParameter("username"), request.getParameter("email"), 
-						request.getParameter("fullName"), request.getParameter("password"))) {
+						request.getParameter("fullName"), request.getParameter("password"), 1)) { //MUDAR dbIndex!
 					response.setContentType("text/html");  
 					out.println("<script type=\"text/javascript\">");  
 					out.println("alert('Falha ao criar user');");  
