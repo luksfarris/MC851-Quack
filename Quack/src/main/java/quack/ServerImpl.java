@@ -108,27 +108,28 @@ public final class ServerImpl implements Server {
 					out.println("alert('Falha ao criar user');");  
 					out.println("</script>");				}
 				else{
-				this.userTable.add(user);
 				
-				try {
-					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					this.database.getConnection();
-					this.database.getStatement("INSERT INTO user (login_name, full_name, email, password, created)"
-							+ "VALUES ('"+user.getLoginName()+"','"+user.getFullName()+"','"+
-							user.getEmail()+"','"+request.getParameter("password")+"','"
-									+ dateFormat.format(new Date(user.getCreationTime()*1000))+
-									"');").execute();
-					this.database.commit();
+					try {
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						this.database.getConnection();
+						this.database.getStatement("INSERT INTO user (login_name, full_name, email, password, created)"
+								+ "VALUES ('"+user.getLoginName()+"','"+user.getFullName()+"','"+
+								user.getEmail()+"','"+request.getParameter("password")+"','"
+								+ dateFormat.format(new Date(user.getCreationTime()*1000))+
+								"');").execute();
+						this.database.commit();
+						this.userTable.add(user);
 					
-					System.out.println("User inserido na tabela");
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+						System.out.println("User inserido na tabela");
+					} catch (ClassNotFoundException e) {
+						
+						e.printStackTrace();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 
 				
-				response.sendRedirect("/Quack/loginrequest.jsp");
+					response.sendRedirect("/Quack/loginrequest.jsp");
 				}
 			}
 		}
