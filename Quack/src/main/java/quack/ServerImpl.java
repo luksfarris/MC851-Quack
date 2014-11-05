@@ -72,12 +72,23 @@ public final class ServerImpl implements Server {
 				if(u.initialize(rs.getString("login_name"), 
 						rs.getString("email"),
 						rs.getString("full_name"),
-						rs.getString("password"))){
+						rs.getString("password"),
+						rs.getLong("id"))){
+					
+					ResultSet rs2 = this.database.getStatement("SELECT * FROM message WHERE user_id=" + String.valueOf(u.getDbIndex())).executeQuery();
+					while(rs2.next()){
+						Message m = new MessageImpl();
+						if(m.initialize(rs2.getString("body"), u) == false)
+							System.out.println("Erro ao carregar mensagens");
+					}
 					this.userTable.add(u);
-				} else {
+					}
+				
+				else {
 					System.out.println("Problema no carregamento do usuário!");
 				}
-			}
+				
+				}	
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
