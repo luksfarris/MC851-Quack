@@ -53,7 +53,7 @@ public interface Server {
 	//
 	// Alguns dos métodos a seguir (e em outras interfaces) especificam um
 	// trecho de uma lista de mensagens através de parâmetros {startTime},
-	// {endTime} (datahoras), e {maxN} (inteiro positivo).
+	// {endTime} (datahoras), e {maxN} (inteiro, positivo ou negativo).
 	//
 	// Supõe-se que a lista completa de mensagens em questão está ordenada em
 	// ordem *decrescente* de datahora (de envio ou re-envio); isto é,
