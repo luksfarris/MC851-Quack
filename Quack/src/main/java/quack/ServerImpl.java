@@ -370,48 +370,6 @@ public final class ServerImpl implements Server {
 				}	
 			}
 		}
-		
-		
-		/*
-		// Obtém a sessão:
-		Session session = this.sessionTable.getSessionByCookie(cookie);
-		if (session == null) {
-			return html.errorPage("no session with this cookie.");
-		}
-		// Obtém os usuários de origem e alvo:
-		User source = session.getUser();
-		User target = this.userTable.getUserByLogin(loginName, "SENHA_AQUI");
-		if (target == null) {
-			return html.errorPage("no such user.");
-		}
-		if (source == target) {
-			return html.errorPage("you cannot have contact with yourself");
-		}
-		// Obtém o contato entre eles, se já existir:
-		Contact cdir = source.getDirectContact(target);
-		Contact crev = target.getReverseContact(source);
-		assert ((cdir == null) == (crev == null));
-
-		if (cdir != null) {
-			// Já existe contato entre eles, apenas altera seu estado:
-			cdir.setStatus(newStatus);
-			// TODO ??{ Deveria aqui atualizar o estado do contato na base
-			// persistente. }??
-
-		} else {
-			// Não há ainda contato entre eles, acrescenta:
-			Contact c = new ContactImpl();
-			c.initialize(source, target, Calendar.getInstance()
-					.getTimeInMillis() / 1000, newStatus);
-
-			// TODO ??{ Deveria aqui acrescentar o contato na base
-			// persistente. }??
-			source.addDirectContact(c);
-			target.addReverseContact(c);
-			this.numContacts += 1;
-		}
-		return html.userProfilePage(cookie, source, target);
-		*/
 	}
 
 	@Override
