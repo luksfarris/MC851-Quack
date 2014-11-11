@@ -75,7 +75,8 @@ public final class ServerImpl implements Server {
 						rs.getString("password"),
 						rs.getLong("id"))){
 					
-					ResultSet rs2 = this.database.getStatement("SELECT * FROM message WHERE user_id=" + String.valueOf(u.getDbIndex())).executeQuery();
+					ResultSet rs2 = this.database.getStatement("SELECT * FROM message WHERE user_id=" 
+					+ String.valueOf(u.getDbIndex())).executeQuery();
 					while(rs2.next()){
 						Message m = new MessageImpl();
 						if(m.initialize(rs2.getString("body"), u) == false)
@@ -349,22 +350,14 @@ public final class ServerImpl implements Server {
 			HttpServletResponse response, ServletContext context) throws IOException{
 			
 		// pega os dados da sessão
-		HttpSession requestSession = request.getSession();
-		String cookieId = requestSession.getId();
-		Session session = this.sessionTable.getSessionByCookie(cookieId);
-				
-		if (session == null){
-			response.getWriter().println(html.errorPage("no session with this cookie."));
-			return;
-		}
-		
-		User user = session.getUser();
-		String messageBody;
-		
+		User user = (User) request.getSession().getAttribute("user");
+					
 		if (user == null){
-			response.getWriter().println(html.errorPage("session without user."));
+			response.getWriter().println(html.errorPage("no valid user."));
 			return;
 		}
+		
+		String messageBody;
 		
 		if (request.getParameter("messageText") == null) {
 			response.getWriter().println(html.errorPage("no message text;"));
@@ -381,10 +374,29 @@ public final class ServerImpl implements Server {
 				response.getWriter().println(html.errorPage("message creation failed."));
 				return;
 			}
-			user.addMessage(message);
-			this.numMessages++;
-			response.getWriter().println(html.homePage());
-			return;
+			
+			try {
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				this.database.getConnection();
+				this.database.getStatement("INSERT INTO message (id, user_id, body, parent,created)"
+					+ "VALUES ("+message.getId()+","+user.getDbIndex()+
+					",'"+message.getText()+"',NULL,'"
+					+ dateFormat.format(new Date(message.getDate()*1000))+
+					"');").execute();
+				this.database.commit();
+				
+				user.addMessage(message);
+				this.numMessages++;
+			
+				System.out.println("Mensagem inserida na tabela");
+			} catch (ClassNotFoundException e) {
+				
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			response.sendRedirect("/Quack/UserPage.jsp");
 		}
 		// TODO Tratar de mensagens de reply		
 		return;

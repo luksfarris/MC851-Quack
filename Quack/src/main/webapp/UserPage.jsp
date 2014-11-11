@@ -43,7 +43,7 @@
 	pagina de usuario (Implementação Inicial)<br><br>
 	<img src= <%out.println(PicAddress);%> alt="User Picture" style="width:150px;height:150px">
 	<br>
-	<a href="/FollowUser">Seguir</a> | <a href="BlockUser">Bloquear</a>
+	<a href="/FollowUser">Seguir</a> | <a href="BlockUser">Bloquear</a> | <a href="createMessage.jsp">Postar Mensagem</a>
 	<table border='1'style='width:100%'>
 		<tr>
 			<td><center>NomeUsuario</center></td>
