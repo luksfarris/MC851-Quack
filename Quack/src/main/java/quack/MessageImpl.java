@@ -73,4 +73,10 @@ public class MessageImpl implements Message {
 	public Message getParent() {
 		return parent;
 	}
+
+	@Override
+	public void setId(long id) {
+		this.id = id;
+		return;
+	}
 }

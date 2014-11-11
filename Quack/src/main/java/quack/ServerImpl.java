@@ -26,7 +26,8 @@ public final class ServerImpl implements Server {
 	// As tabelas abaixo são cópias na memória dos objetos na base de dados.
 	UserTable userTable = null; // Conjuto de usuários cadastrados.
 
-	private long nextUserId;
+	private long nextUserId = 0;
+	private long nextMessageId = 0;
 	long numUsers = 0; // Número de usuários na rede {Quack}.
 	long numContacts = 0; // Número total de contatos criados (incluindo
 							// inativos).
@@ -75,14 +76,20 @@ public final class ServerImpl implements Server {
 						rs.getString("password"),
 						rs.getLong("id"))){
 					
+					
+					this.nextUserId = Math.max(this.nextUserId, u.getDbIndex());
+					
 					ResultSet rs2 = this.database.getStatement("SELECT * FROM message WHERE user_id=" 
 					+ String.valueOf(u.getDbIndex())).executeQuery();
 					while(rs2.next()){
 						Message m = new MessageImpl();
 						if(m.initialize(rs2.getString("body"), u) == false)
 							System.out.println("Erro ao carregar mensagens");
-						else
-							u.addMessage(m);	
+						else{
+							m.setId(rs2.getLong("id"));
+							u.addMessage(m);
+							this.nextMessageId = Math.max(this.nextMessageId, m.getId());
+						}
 					}
 					this.userTable.add(u);
 					}
@@ -91,7 +98,9 @@ public final class ServerImpl implements Server {
 					System.out.println("Problema no carregamento do usuário!");
 				}
 				
-				}	
+			}
+			this.nextUserId++;
+			this.nextMessageId++;
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -139,13 +148,15 @@ public final class ServerImpl implements Server {
 				// Cria o usuário e acrescenta à tabela:
 				user = new UserImpl();
 				if (!user.initialize(request.getParameter("username"), request.getParameter("email"), 
-						request.getParameter("fullName"), request.getParameter("password"), 1)) { //MUDAR dbIndex!
+						request.getParameter("fullName"), request.getParameter("password"), 
+						this.nextUserId)) {
+					out = response.getWriter();  
 					response.setContentType("text/html");  
 					out.println("<script type=\"text/javascript\">");  
 					out.println("history.back(alert('Falha ao criar user'));");  
 					out.println("</script>");				}
 				else{
-				
+					this.nextUserId++;
 					try {
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						this.database.getConnection();
@@ -166,7 +177,7 @@ public final class ServerImpl implements Server {
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-					response.sendRedirect("/Quack/loginpage.jsp");
+					response.sendRedirect("/Quack/pub/loginpage.jsp");
 				}
 			}
 		}
@@ -176,7 +187,7 @@ public final class ServerImpl implements Server {
 			HttpServletResponse response, ServletContext context) throws IOException, ServletException {
 
 		// pega os dados da sessão
-		HttpSession requestSession = request.getSession();
+		//HttpSession requestSession = request.getSession();
 
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
@@ -459,6 +470,9 @@ public final class ServerImpl implements Server {
 				response.getWriter().println(html.errorPage("message creation failed."));
 				return;
 			}
+			
+			message.setId(this.nextMessageId);
+			this.nextMessageId++;
 			
 			try {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
