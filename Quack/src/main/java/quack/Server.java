@@ -237,20 +237,15 @@ public interface Server {
 	// botões "next {maxN}" "prev {maxN}" para acessar outras mensagens
 	// vizinhas a essas.
 
-	public String processModifyContactReq(String cookie,
-			String targetLoginName, String newStatus);
-	// Chamado quando o servidor HTTP recebe um pedido da sessão
-	// identificada pelo {cookie} para criar um contato entre
-	// usuário {source} que é dono da sessão e o usuário {target} identificado
-	// pelo {loginName}; ou alterar o estado de um contato já existente.
+	public void processModifyContactReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
+	// Chamado quando o servidor HTTP recebe um pedido de alteracao de contato
+	// entre dois usuarios do sistema {Quack}
 	//
-	// Se a operação tiver sucesso, o estado do contato passa a ser o descrito
-	// pela cadeia
-	// {newStatus} (por exemplo, "blocked", "following", ou "inactive"). Nesse
-	// caso a
-	// alteração do contato é registrada na base de dados persistente, e o
-	// método retorna uma página HTML que mostra o perfil do usuário {target},
-	// com o novo estado do contato.
+	// O parâmetro {request} deve conter o campo {id} do user 
+	// no qual o contato é incidente
+	//
+	// Em caso de sucesso, o parâmetro {respose} conterá a pagina do usuario
 
 	public User getUserFromCookie(String cookie);
 	// Este metodo é chamado quando é necessário recuperar um usuário {User} a partir 

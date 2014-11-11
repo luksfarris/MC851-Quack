@@ -279,8 +279,89 @@ public final class ServerImpl implements Server {
 		return html.messageListPage(cookie, "posted", target, messages, maxN);
 	}
 
-	public String processModifyContactReq(String cookie, String loginName,
-			String newStatus) {
+	public void processModifyContactReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException{
+		
+		User sessionUser = (User)request.getSession().getAttribute("user"); //User da sessao
+		User contactUser = userTable.getUserByLogin(request.getParameter("userName"), ""); //Usuario contato
+		String relation = request.getParameter("follow");
+		Contact c;
+		
+		if(contactUser == null){
+			response.setContentType("text/html");
+			response.getWriter().println("<script type=\"text/javascript\">");  
+			response.getWriter().println("history.back(alert('Usuario nao existe!'));");  
+			response.getWriter().println("</script>");
+		}
+		else{
+			if(sessionUser == contactUser){
+				response.setContentType("text/html");
+				response.getWriter().println("<script type=\"text/javascript\">");  
+				response.getWriter().println("history.back(alert('Nao pode haver contato com si mesmo'));");  
+				response.getWriter().println("</script>");
+			}
+			else{
+				if(relation.equals("true")){
+					c = new ContactImpl();
+					c.initialize(sessionUser, contactUser, Calendar.getInstance()
+							.getTimeInMillis() / 1000, "Follow");
+					sessionUser.addDirectContact(c);
+					contactUser.addReverseContact(c);
+					this.numContacts += 1;
+					
+					//Insere no banco de dados
+					try {
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						this.database.getConnection();
+						this.database.getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
+						dateFormat.format(new Date(Calendar.getInstance()
+								.getTimeInMillis()))+"','Follow'"+");").execute();
+						this.database.commit();	
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					response.setContentType("text/html");
+					response.getWriter().println("<script type=\"text/javascript\">");  
+					response.getWriter().println("history.back(alert('acao concluida!'));");  
+					response.getWriter().println("</script>");					}
+				else if(relation.equals("false")){
+					c = new ContactImpl();
+					c.initialize(sessionUser, contactUser, Calendar.getInstance()
+							.getTimeInMillis() / 1000, "Block");
+					sessionUser.addDirectContact(c);
+					contactUser.addReverseContact(c);
+					this.numContacts += 1;
+					//Insere no banco de dados
+					try {
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						this.database.getConnection();
+						this.database.getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
+								dateFormat.format(new Date(Calendar.getInstance()
+										.getTimeInMillis()))+"','Block'"+");").execute();
+						this.database.commit();	
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					response.setContentType("text/html");
+					response.getWriter().println("<script type=\"text/javascript\">");  
+					response.getWriter().println("history.back(alert('acao concluida!'));");  
+					response.getWriter().println("</script>");	
+				}
+				else{
+					response.setContentType("text/html");
+					response.getWriter().println("<script type=\"text/javascript\">");  
+					response.getWriter().println("history.back(alert('Relacao invalida!'));");  
+					response.getWriter().println("</script>");
+				}	
+			}
+		}
+		
+		
+		/*
 		// Obtém a sessão:
 		Session session = this.sessionTable.getSessionByCookie(cookie);
 		if (session == null) {
@@ -319,6 +400,7 @@ public final class ServerImpl implements Server {
 			this.numContacts += 1;
 		}
 		return html.userProfilePage(cookie, source, target);
+		*/
 	}
 
 	@Override
