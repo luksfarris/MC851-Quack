@@ -216,9 +216,11 @@ public final class ServerImpl implements Server {
 		return;
 	}
 
-	public String processShowUserProfileReq(String cookie, String loginName) {
+	public String processShowUserProfileReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException, ServletException{
 		// Obtém a sessão:
-		Session session = null; // Current session or {null}.
+		
+		/*Session session = null; // Current session or {null}.
 		User source = null; // Session owner or {null}.
 		if (!cookie.equals("")) {
 			session = this.sessionTable.getSessionByCookie(cookie);
@@ -231,7 +233,8 @@ public final class ServerImpl implements Server {
 		if (target == null) {
 			return html.errorPage("no such user.");
 		}
-		return html.userProfilePage(cookie, source, target);
+		return html.userProfilePage(cookie, source, target);*/
+		return "";
 	}
 
 	public String processShowPostedMessagesReq(String cookie, String loginName,
