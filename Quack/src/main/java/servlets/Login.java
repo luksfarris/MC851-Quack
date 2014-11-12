@@ -9,22 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import quack.Server;
 import service.QuackService;
+import tests.TestableServlet;
 
 /**
  * Servlet implementation class Login
  */
 @WebServlet(description = "Login", urlPatterns = { "/pub/Login" })
-public class Login extends HttpServlet {
+public class Login extends TestableServlet {
 	private static final long serialVersionUID = 1L;
 
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public Login() {
-		super();
-	}
-
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -37,7 +31,6 @@ public class Login extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
 		Server server = QuackService.getServer(getServletContext());
 		server.processLoginReq(request, response, getServletContext());
 	}

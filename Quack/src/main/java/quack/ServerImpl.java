@@ -136,9 +136,6 @@ public final class ServerImpl implements Server {
 	public void processLoginReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException, ServletException {
 
-		// pega os dados da sessão
-		HttpSession requestSession = request.getSession();
-
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
 		boolean remember = "true".equals(request.getParameter("remember"));
@@ -147,7 +144,6 @@ public final class ServerImpl implements Server {
 		// se o usuario acabou de fazer login
 		if (user != null) {
 			//request.login(login, password);
-			request.setAttribute(CookieHelper.LOGGED_USER, user);
 			request.getSession().setAttribute("user", user);
 			if (remember) {
 				String cookie = UUID.randomUUID().toString();
