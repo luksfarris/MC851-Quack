@@ -5,17 +5,16 @@ public interface Message {
 	// Uma instância de {Message} é uma mensagem enviada dentro do sistema {Quack}.
 	// Pode ser uma /mensagem original/ ou uma /repostagem/ de outra mensagem.
 	// Uma mensagem original possui um texto; uma repostagem, no lugar do texto,
-	// possui um apontador para a mensagem original.
-
-	public long getId();
-	// Retorna o id no banco da mensagem de {this}
+	// possui um apontador para a mensagem repostada (que pode ser outra repostagem,
+	// e assim repetidamente).
 
 	public String getText();
-	// Retorna o conteúdo do atributo de texto da mensagem de {this}, se for mensagem 
-	// original,  Senão, retorna {null}.
+	// Retorna o texto da mensagem original associada {this}. Se {this} for uma repostagem, 
+	// este método é aplicado à mensagem repostada, recursivamente.
 
 	public Message getParent();
-	// Se {this} é uma repostagem, retorna a mensagem original, senão retormna {null}.
+	// Se {this} é uma repostagem, retorna a mensagem repostada (que pode ser outra repostagem),
+	// senão retormna {null}.
 
 	public User getUser();
 	// Retorna o usuário responsável pela publicação da mensagem {this}
@@ -35,6 +34,9 @@ public interface Message {
 	// Inicializa uma nova instância {this} como sendo a
 	// repostagem da mensagem {parent}, repostada por {user}. 
 	// A datahora de repostagem fica sendo a datahora atual.
+
+	public long getId();
+	// Retorna o id no banco da mensagem de {this}
 
 	public void setId(long id);
 	// Define {id} como o identificador da mensagem {this} no banco de dados.
