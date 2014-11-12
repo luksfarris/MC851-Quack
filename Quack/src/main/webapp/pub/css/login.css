@@ -2,8 +2,12 @@ body {
   background-image: url('../img/duck.jpg');
 }
 
-.panel {
+header nav.navbar-fixed-top, div.container.panel {
   background: rgba(255, 255, 255, 0.75);
+}
+
+body {
+  padding-top: 70px;
 }
 
 .welcome-text {
