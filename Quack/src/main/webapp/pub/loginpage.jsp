@@ -1,37 +1,76 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-<title>Faça seu Login</title>
-<style type="text/css">
-    .container {
-        width: 250px;
-        clear: both;
-    }
-    .container input {
-        width: 100%;
-        clear: both;
-    }
-</style>
-</head>
-<body>
-	<center>
-	<div class="container">
-		<h1>Login Quack</h1>
-		<form name="login" action="Login" method="post" accept-charset="utf-8">
-			<label for="username">Email ou Usuário</label><input type="text"
-					name="login" placeholder="username or yourname@email.com" required><br>
-			<label for="password">Senha</label><input type="password"
-					name="password" placeholder="password" required><br>
-			<label for="remember">Lembrar de mim?</label><input type="checkbox" 
-					name="remember" value="false" /><br>
-			<input type="submit" value="Entrar"></li>
-		</form>
-		<form name="register" action="registerpage.jsp" method="get">
-			<input type="submit" value="Registrar">
-		</form>
-	</div>
-</center>	
-</body>
+  <head>
+    <title>Quack - Home page</title>
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+  </head>
+
+  <body>
+    <header>
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+              <img alt="Quack" src="...">
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="page-body">
+      <div class="container col-md-8">
+        <div class="col-md-6 col-md-offset-3 welcome-text">
+          <h1><strong>Bem vindo ao Quack.</strong></h1>
+          <br/>
+          <h3>Aqui você pode expressar-se livremente e enviar mensagens para quem quiser e quando quiser.</h3>
+          <h3>Saiba usar com sabedoria seus 256 caracteres (mais caracteres que a concorrência!) e aproveite!</h3>
+          <h3>Um grande quack a todos!</h3>
+        </div>
+      </div>
+      <div class="container col-md-3 panel panel-default">
+        <div class="panel-header">
+          <h4>Login</h4>
+        </div>
+        <div class="panel-body">
+          <form name="login" action="Login" method="post" role="form" accept-charset="utf-8">
+            <div class="form-group">
+              <input type="text" name="login" class="form-control" placeholder="username or yourname@email.com" required>
+            </div>
+            <div class="form-group">
+              <input type="password" name="password" class="form-control" placeholder="password" required>
+            </div>
+            <div class="form-group">
+              <div class="checkbox">
+                <label for="remember">
+                  <input type="checkbox" name="remember"> Lembrar-me
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="submit" class="btn btn-info" value="Entrar">
+            </div>
+          </form>
+          <hr/>
+          <form name="register" action="registerpage.jsp" role="form" method="get">
+            <div class="form-group">
+              <h4>Ainda não possui uma conta?</h4>
+              <input type="submit" class="btn btn-success"  value="Registrar">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

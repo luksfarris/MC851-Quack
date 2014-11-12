@@ -1,0 +1,11 @@
+body {
+  background-image: url('../img/duck.jpg');
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.welcome-text {
+  color: white;
+}
