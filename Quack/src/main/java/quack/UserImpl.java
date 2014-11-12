@@ -3,6 +3,7 @@ package quack;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class UserImpl implements User {
 	private long dbIndex;
@@ -125,22 +126,35 @@ public class UserImpl implements User {
 			long maxN) {
 		List<Message> trechoMsgs = new LinkedList<Message>();
 		long i = 0;
-		for (Message m : this.messages) {
-			if (m.getDate() < startTime || i > maxN)
-				break;
-			if (m.getDate() > (startTime)
-					&& (endTime != 0.0 && m.getDate() < (endTime))) {
-				trechoMsgs.add(m);
-				i++;
+		
+		if(maxN > 0) { // Pega as {maxN} primeiras mensagens
+			ListIterator<Message> messages = this.messages.listIterator();
+			while(messages.hasNext() && i < maxN){
+				Message m = messages.next();
+				if (m.getDate() < startTime)
+					break;
+				if ((m.getDate() >= startTime || startTime == -1) 
+						&& (endTime == -1 || m.getDate() <= endTime)) {
+					trechoMsgs.add(m);
+					i++;
+				}
+			}
+			
+		} else {
+			maxN = -maxN;
+			ListIterator<Message> messages = this.messages.listIterator(this.messages.size());
+			while(messages.hasPrevious() && i < maxN){
+				Message m = messages.previous();
+				if (m.getDate() < startTime)
+					break;
+				if ((m.getDate() >= startTime || startTime == -1) 
+						&& (endTime == -1 || m.getDate() <= endTime)) {
+					trechoMsgs.add(0, m);
+					i++;
+				}
 			}
 		}
 		return trechoMsgs;
-
-		/*
-		 * // TODO Auto-generated method stub return null;
-		 * //Message.extractMessageListSegment(this.messages, startTime,
-		 * endTime, maxN);;
-		 */
 	}
 
 	@Override
