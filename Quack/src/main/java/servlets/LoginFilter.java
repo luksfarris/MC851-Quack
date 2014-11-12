@@ -64,7 +64,7 @@ public class LoginFilter implements Filter {
 		        if (user != null) {
 		        	// realiza o login internamente
 		            request.login(user.getLoginName(), user.getPassword());
-		            request.getSession().setAttribute(CookieHelper.LOGGED_USER, user);
+		            request.getSession().setAttribute("user", user);
 		            CookieHelper.addCookie(response, CookieHelper.COOKIE_NAME, 
 		            		cookie, CookieHelper.COOKIE_AGE);
 		        } else {

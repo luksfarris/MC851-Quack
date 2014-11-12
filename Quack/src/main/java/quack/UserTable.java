@@ -18,9 +18,8 @@ public interface UserTable {
 	// ---------------------------------------------------------------------
 	// INICIALIZAÇÃO E ADIÇÃO DE USUÁRIOS
 
-	public void initialize(Database db);
-	// Inicia uma instância de {this} e carrega todos os usuários
-	// do banco {db} para uma lista de elementos {User}.
+	public void initialize();
+	// Inicia uma instância de {this}
 
 	public void add(User user);
 	// Adiciona {user} à tabela {this}.  Deve ser chamado sempre que um novo

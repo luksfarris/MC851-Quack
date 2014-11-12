@@ -10,12 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import quack.Server;
 import service.QuackService;
+import tests.TestableServlet;
 
 /**
  * Servlet implementation class Cadastro
  */
 @WebServlet(description = "Cadastro", urlPatterns = { "/pub/Cadastro" })
-public class Cadastro extends HttpServlet {
+public class Cadastro extends TestableServlet {
 	private static final long serialVersionUID = 1L;
 	
     /**

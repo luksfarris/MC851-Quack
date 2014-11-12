@@ -53,7 +53,7 @@ public interface Server {
 	//
 	// Alguns dos métodos a seguir (e em outras interfaces) especificam um
 	// trecho de uma lista de mensagens através de parâmetros {startTime},
-	// {endTime} (datahoras), e {maxN} (inteiro positivo).
+	// {endTime} (datahoras), e {maxN} (inteiro, positivo ou negativo).
 	//
 	// Supõe-se que a lista completa de mensagens em questão está ordenada em
 	// ordem *decrescente* de datahora (de envio ou re-envio); isto é,
@@ -163,24 +163,16 @@ public interface Server {
 	// Em caso de sucesso, o parâmetro {respose} conterá a homepage do sistema {Quack},
 	// como vista por usuários não logados.
 
-	public String processShowUserProfileReq(String cookie, String loginName);
+	public String processShowUserProfileReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException, ServletException;
 
-	// Chamado quando o servidor HTTP recebe um pedido da sessão
-	// identificada pelo {cookie} para exibir o perfil do usuário
-	// {u} identificado pelo {loginName}, que não é necessariamente o
-	// dono da sessão.
+	// Chamado quando o servidor HTTP recebe um pedido de login de um usuário
+	// existente da rede {Quack}. 
 	//
-	// Este método pode ser chamado com o {cookie} omitido ("").
+	// O parâmetro {request} deve conter os campos {id} do user 
+	// que se quer ver a pagina
 	//
-	// Em caso de sucesso, o resultado é uma página com o perfil do usuário {u}
-	// em questão.
-	// Se o {cookie} identificar uma sessão aberta de algum usuário {w}
-	// diferente de {u},
-	// a página mostrará o estado do contato entre {w} e {u} ("following",
-	// "blocked", "inactive", etc.),
-	// com botões para alterar o estado do contato. Se {u} for o próprio dono
-	// {w} da sessão,
-	// mostra botões para alterar dados do perfil de {w}.
+	// Em caso de sucesso, o parâmetro {respose} conterá a pagina do usuario
 
 	public String processShowPostedMessagesReq(String cookie, String loginName,
 			String startTime, String endTime, int maxN);
@@ -245,20 +237,15 @@ public interface Server {
 	// botões "next {maxN}" "prev {maxN}" para acessar outras mensagens
 	// vizinhas a essas.
 
-	public String processModifyContactReq(String cookie,
-			String targetLoginName, String newStatus);
-	// Chamado quando o servidor HTTP recebe um pedido da sessão
-	// identificada pelo {cookie} para criar um contato entre
-	// usuário {source} que é dono da sessão e o usuário {target} identificado
-	// pelo {loginName}; ou alterar o estado de um contato já existente.
+	public void processModifyContactReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
+	// Chamado quando o servidor HTTP recebe um pedido de alteracao de contato
+	// entre dois usuarios do sistema {Quack}
 	//
-	// Se a operação tiver sucesso, o estado do contato passa a ser o descrito
-	// pela cadeia
-	// {newStatus} (por exemplo, "blocked", "following", ou "inactive"). Nesse
-	// caso a
-	// alteração do contato é registrada na base de dados persistente, e o
-	// método retorna uma página HTML que mostra o perfil do usuário {target},
-	// com o novo estado do contato.
+	// O parâmetro {request} deve conter o campo {id} do user 
+	// no qual o contato é incidente
+	//
+	// Em caso de sucesso, o parâmetro {respose} conterá a pagina do usuario
 
 	public User getUserFromCookie(String cookie);
 	// Este metodo é chamado quando é necessário recuperar um usuário {User} a partir 

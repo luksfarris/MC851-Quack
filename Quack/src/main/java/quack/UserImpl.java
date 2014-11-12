@@ -20,14 +20,12 @@ public class UserImpl implements User {
 
 	@Override
 
-	public boolean initialize(String loginName, String email, String fullName, String password) {
+	public boolean initialize(String loginName, String email, String fullName, String password, long dbIndex) {
 		this.loginName = loginName;
 		this.fullName = fullName;
 		this.email = email;
 		this.password = password;
-		
-		// TODO - calcular o dbindex do banco e colocar no objeto
-		this.dbIndex = -1;
+		this.dbIndex = dbIndex;
 		this.creationTime = Calendar.getInstance().getTimeInMillis() / 1000;
 		
 		this.directContacts = new LinkedList<Contact>();
@@ -148,7 +146,7 @@ public class UserImpl implements User {
 	@Override
 	public void addMessage(Message message) {
 		assert(message.getUser().getLoginName().equals(loginName));
-		this.messages.add(message);		
+		this.messages.add(0, message);		
 	}
 
 	@Override

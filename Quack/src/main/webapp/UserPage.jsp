@@ -43,7 +43,7 @@
 	pagina de usuario (Implementação Inicial)<br><br>
 	<img src= <%out.println(PicAddress);%> alt="User Picture" style="width:150px;height:150px">
 	<br>
-	<a href="/FollowUser">Seguir</a> | <a href="BlockUser">Bloquear</a>
+	<a href="Contato?follow=true&userName=<%out.println(user.getLoginName());%>">Seguir</a> | <a href="Contato?follow=false&userName=<%out.println(user.getLoginName());%>">Bloquear</a>
 	<table border='1'style='width:100%'>
 		<tr>
 			<td><center>NomeUsuario</center></td>

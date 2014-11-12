@@ -2,6 +2,7 @@ package quack;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,7 +15,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import service.CookieHelper;
 
@@ -25,6 +25,8 @@ public final class ServerImpl implements Server {
 	// As tabelas abaixo são cópias na memória dos objetos na base de dados.
 	UserTable userTable = null; // Conjuto de usuários cadastrados.
 
+	private long nextUserId = 0;
+	private long nextMessageId = 0;
 	long numUsers = 0; // Número de usuários na rede {Quack}.
 	long numContacts = 0; // Número total de contatos criados (incluindo
 							// inativos).
@@ -48,8 +50,8 @@ public final class ServerImpl implements Server {
 
 		// Cria a tabela de usuários, vazia:
 		this.userTable = new UserTableImpl();
-		this.userTable.initialize(database);
-
+		this.userTable.initialize();
+		
 		this.loadDatabase();
 
 		// Inicializa o criador de paginas html:
@@ -62,7 +64,50 @@ public final class ServerImpl implements Server {
 	// {User,Message,Contact} e ligando-os entre si. Supõe que a conexão com o
 	// servidor da base de dados já foi estabelecida.
 	{
-		// ??{ Implementar }??
+		try {
+			this.database.getConnection();
+			ResultSet rs = this.database.getStatement("SELECT * FROM user;").executeQuery();
+			while(rs.next()){
+				User u = new UserImpl();
+				if(u.initialize(rs.getString("login_name"), 
+						rs.getString("email"),
+						rs.getString("full_name"),
+						rs.getString("password"),
+						rs.getLong("id"))){
+					
+					
+					this.nextUserId = Math.max(this.nextUserId, u.getDbIndex());
+					
+					ResultSet rs2 = this.database.getStatement("SELECT * FROM message WHERE user_id=" 
+					+ String.valueOf(u.getDbIndex())).executeQuery();
+					while(rs2.next()){
+						Message m = new MessageImpl();
+						if(m.initialize(rs2.getString("body"), u) == false)
+							System.out.println("Erro ao carregar mensagens");
+						else{
+							m.setId(rs2.getLong("id"));
+							u.addMessage(m);
+							this.nextMessageId = Math.max(this.nextMessageId, m.getId());
+						}
+					}
+					this.userTable.add(u);
+					}
+				
+				else {
+					System.out.println("Problema no carregamento do usuário!");
+				}
+				
+			}
+			this.nextUserId++;
+			this.nextMessageId++;
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void processHomePageReq(HttpServletRequest request,
@@ -102,22 +147,26 @@ public final class ServerImpl implements Server {
 				// Cria o usuário e acrescenta à tabela:
 				user = new UserImpl();
 				if (!user.initialize(request.getParameter("username"), request.getParameter("email"), 
-						request.getParameter("fullName"), request.getParameter("password"))) {
+						request.getParameter("fullName"), request.getParameter("password"), 
+						this.nextUserId)) {
+					out = response.getWriter();  
 					response.setContentType("text/html");  
 					out.println("<script type=\"text/javascript\">");  
 					out.println("history.back(alert('Falha ao criar user'));");  
 					out.println("</script>");				}
 				else{
-				
+					this.nextUserId++;
 					try {
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						this.database.getConnection();
-						this.database.getStatement("INSERT INTO user (login_name, full_name, email, password, created)"
-								+ "VALUES ('"+user.getLoginName()+"','"+user.getFullName()+"','"+
+						this.database.getStatement("INSERT INTO user (id, login_name, full_name, email, password, created)"
+								+ "VALUES ("+user.getDbIndex()+",'"+user.getLoginName()+
+								"','"+user.getFullName()+"','"+
 								user.getEmail()+"','"+request.getParameter("password")+"','"
 								+ dateFormat.format(new Date(user.getCreationTime()*1000))+
 								"');").execute();
 						this.database.commit();
+						
 						this.userTable.add(user);
 					
 						System.out.println("User inserido na tabela");
@@ -127,7 +176,7 @@ public final class ServerImpl implements Server {
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-					response.sendRedirect("/Quack/loginpage.jsp");
+					response.sendRedirect("/Quack/pub/loginpage.jsp");
 				}
 			}
 		}
@@ -174,9 +223,11 @@ public final class ServerImpl implements Server {
 		return;
 	}
 
-	public String processShowUserProfileReq(String cookie, String loginName) {
+	public String processShowUserProfileReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException, ServletException{
 		// Obtém a sessão:
-		Session session = null; // Current session or {null}.
+		
+		/*Session session = null; // Current session or {null}.
 		User source = null; // Session owner or {null}.
 		if (!cookie.equals("")) {
 			session = this.sessionTable.getSessionByCookie(cookie);
@@ -189,7 +240,8 @@ public final class ServerImpl implements Server {
 		if (target == null) {
 			return html.errorPage("no such user.");
 		}
-		return html.userProfilePage(cookie, source, target);
+		return html.userProfilePage(cookie, source, target);*/
+		return "";
 	}
 
 	public String processShowPostedMessagesReq(String cookie, String loginName,
@@ -233,46 +285,86 @@ public final class ServerImpl implements Server {
 		return html.messageListPage(cookie, "posted", target, messages, maxN);
 	}
 
-	public String processModifyContactReq(String cookie, String loginName,
-			String newStatus) {
-		// Obtém a sessão:
-		Session session = this.sessionTable.getSessionByCookie(cookie);
-		if (session == null) {
-			return html.errorPage("no session with this cookie.");
+	public void processModifyContactReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException{
+		
+		User sessionUser = (User)request.getSession().getAttribute("user"); //User da sessao
+		User contactUser = userTable.getUserByLogin(request.getParameter("userName"), ""); //Usuario contato
+		String relation = request.getParameter("follow");
+		Contact c;
+		
+		if(contactUser == null){
+			response.setContentType("text/html");
+			response.getWriter().println("<script type=\"text/javascript\">");  
+			response.getWriter().println("history.back(alert('Usuario nao existe!'));");  
+			response.getWriter().println("</script>");
 		}
-		// Obtém os usuários de origem e alvo:
-		User source = session.getUser();
-		User target = this.userTable.getUserByLogin(loginName, "SENHA_AQUI");
-		if (target == null) {
-			return html.errorPage("no such user.");
+		else{
+			if(sessionUser == contactUser){
+				response.setContentType("text/html");
+				response.getWriter().println("<script type=\"text/javascript\">");  
+				response.getWriter().println("history.back(alert('Nao pode haver contato com si mesmo'));");  
+				response.getWriter().println("</script>");
+			}
+			else{
+				if(relation.equals("true")){
+					c = new ContactImpl();
+					c.initialize(sessionUser, contactUser, Calendar.getInstance()
+							.getTimeInMillis() / 1000, "Follow");
+					sessionUser.addDirectContact(c);
+					contactUser.addReverseContact(c);
+					this.numContacts += 1;
+					
+					//Insere no banco de dados
+					try {
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						this.database.getConnection();
+						this.database.getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
+						dateFormat.format(new Date(Calendar.getInstance()
+								.getTimeInMillis()))+"','Follow'"+");").execute();
+						this.database.commit();	
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					response.setContentType("text/html");
+					response.getWriter().println("<script type=\"text/javascript\">");  
+					response.getWriter().println("history.back(alert('acao concluida!'));");  
+					response.getWriter().println("</script>");					}
+				else if(relation.equals("false")){
+					c = new ContactImpl();
+					c.initialize(sessionUser, contactUser, Calendar.getInstance()
+							.getTimeInMillis() / 1000, "Block");
+					sessionUser.addDirectContact(c);
+					contactUser.addReverseContact(c);
+					this.numContacts += 1;
+					//Insere no banco de dados
+					try {
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						this.database.getConnection();
+						this.database.getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
+								dateFormat.format(new Date(Calendar.getInstance()
+										.getTimeInMillis()))+"','Block'"+");").execute();
+						this.database.commit();	
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					response.setContentType("text/html");
+					response.getWriter().println("<script type=\"text/javascript\">");  
+					response.getWriter().println("history.back(alert('acao concluida!'));");  
+					response.getWriter().println("</script>");	
+				}
+				else{
+					response.setContentType("text/html");
+					response.getWriter().println("<script type=\"text/javascript\">");  
+					response.getWriter().println("history.back(alert('Relacao invalida!'));");  
+					response.getWriter().println("</script>");
+				}	
+			}
 		}
-		if (source == target) {
-			return html.errorPage("you cannot have contact with yourself");
-		}
-		// Obtém o contato entre eles, se já existir:
-		Contact cdir = source.getDirectContact(target);
-		Contact crev = target.getReverseContact(source);
-		assert ((cdir == null) == (crev == null));
-
-		if (cdir != null) {
-			// Já existe contato entre eles, apenas altera seu estado:
-			cdir.setStatus(newStatus);
-			// TODO ??{ Deveria aqui atualizar o estado do contato na base
-			// persistente. }??
-
-		} else {
-			// Não há ainda contato entre eles, acrescenta:
-			Contact c = new ContactImpl();
-			c.initialize(source, target, Calendar.getInstance()
-					.getTimeInMillis() / 1000, newStatus);
-
-			// TODO ??{ Deveria aqui acrescentar o contato na base
-			// persistente. }??
-			source.addDirectContact(c);
-			target.addReverseContact(c);
-			this.numContacts += 1;
-		}
-		return html.userProfilePage(cookie, source, target);
 	}
 
 	@Override
@@ -307,22 +399,14 @@ public final class ServerImpl implements Server {
 			HttpServletResponse response, ServletContext context) throws IOException{
 			
 		// pega os dados da sessão
-		HttpSession requestSession = request.getSession();
-		String cookieId = requestSession.getId();
-		Session session = this.sessionTable.getSessionByCookie(cookieId);
-				
-		if (session == null){
-			response.getWriter().println(html.errorPage("no session with this cookie."));
-			return;
-		}
-		
-		User user = session.getUser();
-		String messageBody;
-		
+		User user = (User) request.getSession().getAttribute("user");
+					
 		if (user == null){
-			response.getWriter().println(html.errorPage("session without user."));
+			response.getWriter().println(html.errorPage("no valid user."));
 			return;
 		}
+		
+		String messageBody;
 		
 		if (request.getParameter("messageText") == null) {
 			response.getWriter().println(html.errorPage("no message text;"));
@@ -339,10 +423,32 @@ public final class ServerImpl implements Server {
 				response.getWriter().println(html.errorPage("message creation failed."));
 				return;
 			}
-			user.addMessage(message);
-			this.numMessages++;
-			response.getWriter().println(html.homePage());
-			return;
+			
+			message.setId(this.nextMessageId);
+			this.nextMessageId++;
+			
+			try {
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				this.database.getConnection();
+				this.database.getStatement("INSERT INTO message (id, user_id, body, parent,created)"
+					+ "VALUES ("+message.getId()+","+user.getDbIndex()+
+					",'"+message.getText()+"',NULL,'"
+					+ dateFormat.format(new Date(message.getDate()*1000))+
+					"');").execute();
+				this.database.commit();
+				
+				user.addMessage(message);
+				this.numMessages++;
+			
+				System.out.println("Mensagem inserida na tabela");
+			} catch (ClassNotFoundException e) {
+				
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			response.sendRedirect("/Quack/UserPage.jsp");
 		}
 		// TODO Tratar de mensagens de reply		
 		return;

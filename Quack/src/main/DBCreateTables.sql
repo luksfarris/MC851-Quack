@@ -32,8 +32,10 @@ create table contact (
 	primary key (source_id, target_id),
 	foreign key (source_id) references user(id),
 	foreign key (target_id) references user(id)
-)
+);
 
+create index source on contact(source_id);
+create index target on contact(target_id);
 
 
 

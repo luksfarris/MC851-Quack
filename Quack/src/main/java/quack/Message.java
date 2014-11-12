@@ -25,4 +25,7 @@ public interface Message {
 	// inicializa a mensagem {this} com autor {user}, e como um "repostar" da
 	// mensagem {parent}
 
+	public void setId(long id);
+	// coloca o valor de {id} como identificador no banco de {this}
+
 }

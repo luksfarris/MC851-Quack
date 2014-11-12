@@ -11,31 +11,8 @@ public class UserTableImpl implements UserTable {
 	private List<User> table = new ArrayList<User>();
 
 	@Override
-	public void initialize(Database db) {
-		try {
-			db.getConnection();
-			ResultSet rs = db.getStatement("SELECT * FROM user;").executeQuery();
-			while(rs.next()){
-				User u = new UserImpl();
-				if(u.initialize(rs.getString("login_name"), 
-						rs.getString("email"),
-						rs.getString("full_name"),
-						rs.getString("password"))){
-					table.add(u);
-				} else {
-					System.out.println("Problema no carregamento do usuário!");
-				}
-			}
-			
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
+	public void initialize() {
+	
 	}
 
 	@Override
