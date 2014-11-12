@@ -163,7 +163,7 @@ public interface Server {
 	// Em caso de sucesso, o parâmetro {respose} conterá a homepage do sistema {Quack},
 	// como vista por usuários não logados.
 
-	public String processShowUserProfileReq(HttpServletRequest request,
+	public void processShowUserProfileReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException, ServletException;
 
 	// Chamado quando o servidor HTTP recebe um pedido de login de um usuário
