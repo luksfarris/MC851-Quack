@@ -37,20 +37,22 @@ public class ContactImpl implements Contact {
 	@Override
 	public void initialize(User source, User target, long instance,
 			String newStatus) {
+		assert(sourceUser != null && targetUser != null &&
+				(newStatus.equals("Follow") || newStatus.equals("Block") || 
+						newStatus.equals("Inactive")));
 		sourceUser = source;
 		targetUser = target;
 		this.lastModified = instance;
-		if (newStatus.equals("Follow") || newStatus.equals("Block"))
-			this.status = newStatus;
+		this.status = newStatus;
 	}
 
 	@Override
 	public void setStatus(String newStatus) {
-		if (newStatus.equals("Inactive") || newStatus.equals("Follow") 
-				|| newStatus.equals("Block")){
-			this.status = newStatus;
-			this.lastModified = Calendar.getInstance().getTimeInMillis()/1000;
-		}
+		assert(newStatus.equals("Inactive") || newStatus.equals("Follow") 
+				|| newStatus.equals("Block"));
+		this.status = newStatus;
+		this.lastModified = Calendar.getInstance().getTimeInMillis()/1000;
+		
 	}
 
 }
