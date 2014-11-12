@@ -203,6 +203,7 @@ public final class ServerImpl implements Server {
 			} else {
 				CookieHelper.removeCookie(response, CookieHelper.COOKIE_NAME);
 			}
+			request.getSession().setAttribute("userPage", user);
 			response.sendRedirect("/Quack/UserPage.jsp");
 		} else {
 			// usuario invalido, mostra erro.
@@ -223,25 +224,26 @@ public final class ServerImpl implements Server {
 		return;
 	}
 
-	public String processShowUserProfileReq(HttpServletRequest request,
+	public void processShowUserProfileReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException, ServletException{
-		// Obtém a sessão:
 		
-		/*Session session = null; // Current session or {null}.
-		User source = null; // Session owner or {null}.
-		if (!cookie.equals("")) {
-			session = this.sessionTable.getSessionByCookie(cookie);
-			if (session == null) {
-				return html.errorPage("no session with this cookie.");
+			String URL = request.getRequestURI();
+			String parseURL[] = URL.split("/");
+			String params = parseURL[parseURL.length -1];
+			
+			User u =  userTable.getUserByLogin(params,"");
+			
+			if(u == null){
+				response.setContentType("text/html");
+				response.getWriter().println("<script type=\"text/javascript\">");  
+				response.getWriter().println("history.back(alert('Usuario nao existe!'));");  
+				response.getWriter().println("</script>");
 			}
-			source = session.getUser();
-		}
-		User target = this.userTable.getUserByLogin(loginName, "SENHA_AQUI");
-		if (target == null) {
-			return html.errorPage("no such user.");
-		}
-		return html.userProfilePage(cookie, source, target);*/
-		return "";
+			
+			else{
+				request.getSession().setAttribute("userPage", u);
+				response.sendRedirect("/Quack/UserPage.jsp");
+			}	
 	}
 
 	public String processShowPostedMessagesReq(String cookie, String loginName,

@@ -30,7 +30,7 @@
 <body>
 	<%
 		//DADOS DO USUARIO (pegar do BD)
-		User user = (User)request.getSession().getAttribute("user");
+		User user = (User)request.getSession().getAttribute("userPage");
 		int numPosts = user.getPostedMessages().size();
 		int followers = user.followersCount();
 		int follows = user.followsCount(); 
