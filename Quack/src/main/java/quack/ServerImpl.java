@@ -415,7 +415,7 @@ public final class ServerImpl implements Server {
 		}
 			
 		// nova mensagem
-		messageBody = request.getParameter("messageText");
+		messageBody = new String(request.getParameter("messageText").getBytes("iso-8859-1"), "UTF-8");
 		String replyLoginName = request.getParameter("replyLoginName");
 		Message message = new MessageImpl();
 					
