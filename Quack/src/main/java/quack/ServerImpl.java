@@ -82,10 +82,9 @@ public final class ServerImpl implements Server {
 					+ String.valueOf(u.getDbIndex())).executeQuery();
 					while(rs2.next()){
 						Message m = new MessageImpl();
-						if(m.initialize(rs2.getString("body"), u) == false)
+						if(m.initialize(rs2.getString("body"), u, rs2.getLong("id")) == false)
 							System.out.println("Erro ao carregar mensagens");
 						else{
-							m.setId(rs2.getLong("id"));
 							u.addMessage(m);
 							this.nextMessageId = Math.max(this.nextMessageId, m.getId());
 						}
@@ -421,12 +420,11 @@ public final class ServerImpl implements Server {
 		Message message = new MessageImpl();
 					
 		if (replyLoginName == null || replyLoginName.equals("")) {
-			if (!message.initialize(messageBody, user)) {
+			if (!message.initialize(messageBody, user, this.nextMessageId)) {
 				response.getWriter().println(html.errorPage("message creation failed."));
 				return;
 			}
-			
-			message.setId(this.nextMessageId);
+
 			this.nextMessageId++;
 			
 			try {
