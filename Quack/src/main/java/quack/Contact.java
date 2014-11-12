@@ -1,40 +1,39 @@
 package quack;
 
 public interface Contact {
-	// cada instancia dessa classe representa um relacionamento entre dois
-	// usuarios. Se o usuario A segue o usuario B, entao A eh o source, e B eh o
-	// target.
+	// Cada instancia dessa classe representa um relacionamento entre dois
+	// usuarios, {A} (/origem/, {source}) e {B} (/alvo/, {target}).
+	// Pode indicar que {A} segue {B}, bloqueia {B}, etc.
+	// Em princípio, todo contato é criado por iniciativa do
+	// usuário de origem.
 
 	public User source();
-
-	// Usuario que esta seguindo o outro.
+	// Usuario origem do contato.
 
 	public User target();
-
-	// Usuario que esta sendo seguido.
-
-	public long lastModified();
-
-	// Data da ultima modificacao nesse relacionamento
-	
+	// Usuario alvo do contato.
 
 	public String status();
-
-	// Se esse valor for "Block" o relacionamento é de bloqueio,
-	// Se for "Follow" é um relacionamento normal
-	// Se for "Inactive" é um relacionamento inativo (desligado após unfollow ou unblock)
-
+        // Estado (natureza) do contato. Pode ser:
+	// "Follow" se o usuário fonte /segue/ o alvo, isto é, quer ver na sua caixa de entrada
+	//   as mensagens postadas ou repostadas pelo usuário alvo.
+	// "Block" se o usuário fonte /bloqueia/ o alvo, isto é, não quer ver 
+	//   na sua caixa de entrada as mensagens postadas ou repostadas pelo alvo,
+	//   mesmo se elas mencionarem o usuário fonte. 
+	//   ??{ E se forem repostadas por usuários seguidos pelo fonte? }??.
+	// "Inactive" se um relacionamento anterior foi cancelado.
+	
 	public void setStatus(String newStatus);
-
-	// Muda o status do contato para {newStatus}
-	// Se {newStatus}.equals("Inactive") passa a ser inativo
-	// Se {newStatus}.equals("Follow"), passa a ser de seguimento 
-	// Se {newStatus}.equals("Block") passa a ser bloqueado
+	// Muda o status do contato para {newStatus}, que deve ser 
+	// "Inactive", "Follow", ou "Block".
 	// Qualquer outro valor é ignorado
+
+	public long lastModified();
+	// Datahora da criação ou ultima modificacao no estado do relacionamento.
 
 	public void initialize(User source, User target, long instance,
 			String newStatus);
 	// Inicializa um objeto Contact com {source}, {target},
-	// timestamp {instance} e status {newStatus} que pode ser "Follow" ou "Block"
-	// status inicial "Inactive" não é aceito
+	// datahora de modificação {instance} e status {newStatus} que 
+	// pode ser "Follow" ou "Block" status inicial "Inactive" não é aceito. 
 }
