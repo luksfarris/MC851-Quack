@@ -87,7 +87,7 @@ public class UserImpl implements User {
 	@Override
 	public Contact getDirectContact(User target) {
 		for (Contact c : this.directContacts) {
-			if (c.target().equals(target)) {
+			if (c.target().getLoginName().equals(target.getLoginName())) {
 				return c;
 			}
 		}

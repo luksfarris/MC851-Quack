@@ -294,7 +294,7 @@ public final class ServerImpl implements Server {
 		User contactUser = userTable.getUserByLogin(request.getParameter("userName"), ""); //Usuario contato
 		String relation = request.getParameter("follow");
 		Contact c;
-		
+				
 		if(contactUser == null){
 			response.setContentType("text/html");
 			response.getWriter().println("<script type=\"text/javascript\">");  
@@ -309,7 +309,49 @@ public final class ServerImpl implements Server {
 				response.getWriter().println("</script>");
 			}
 			else{
-				if(relation.equals("true")){
+				
+				if(sessionUser.getDirectContact(contactUser) != null){
+					//Contato ja existe
+					
+					Contact c_sessionUser = sessionUser.getDirectContact(contactUser);
+					Contact c_contactUser = contactUser.getReverseContact(sessionUser);
+					if(relation.equals("true")){
+						c_sessionUser.setStatus("Follow");
+						c_contactUser.setStatus("Follow");
+						
+						try {
+							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							this.database.getConnection();
+							this.database.getStatement("UPDATE contact SET status='Follow' where source_id='"+
+							sessionUser.getDbIndex() +"' and target_id='"+ contactUser.getDbIndex() +"';").execute();
+							this.database.commit();	
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						
+					}
+					else if(relation.equals("false")){
+						c_sessionUser.setStatus("Block");
+						c_contactUser.setStatus("Block");
+						
+						try {
+							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							this.database.getConnection();
+							this.database.getStatement("UPDATE contact SET status='Block' where source_id='"+
+							sessionUser.getDbIndex() +"' and target_id='"+ contactUser.getDbIndex() +"';").execute();
+							this.database.commit();	
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}	
+				}
+				
+				else{//Contato ainda nao existe
+				if(relation.equals("true")){ // Relacao de follow
 					c = new ContactImpl();
 					c.initialize(sessionUser, contactUser, Calendar.getInstance()
 							.getTimeInMillis() / 1000, "Follow");
@@ -334,7 +376,8 @@ public final class ServerImpl implements Server {
 					response.getWriter().println("<script type=\"text/javascript\">");  
 					response.getWriter().println("history.back(alert('acao concluida!'));");  
 					response.getWriter().println("</script>");					}
-				else if(relation.equals("false")){
+				
+				else if(relation.equals("false")){ //Relacao de block
 					c = new ContactImpl();
 					c.initialize(sessionUser, contactUser, Calendar.getInstance()
 							.getTimeInMillis() / 1000, "Block");
@@ -365,6 +408,7 @@ public final class ServerImpl implements Server {
 					response.getWriter().println("history.back(alert('Relacao invalida!'));");  
 					response.getWriter().println("</script>");
 				}	
+			}
 			}
 		}
 	}
