@@ -48,35 +48,31 @@ public class MessageImpl implements Message {
 	}
 
 	@Override
-	public boolean initialize(String body, User user) {
+	public boolean initialize(String body, User user, long id) {
 		this.timestamp = Calendar.getInstance().getTimeInMillis() / 1000;
 		this.body = body;
 		this.user = user;
 		this.parent = null;
+		this.id = id;
 		return true;
 	}
 
 	@Override
-	public boolean initialize(User user, Message parent) {
-		if (parent.getParent() == null) {
-			this.timestamp = Calendar.getInstance().getTimeInMillis() / 1000;
-			this.body = parent.getText();
-			this.user = user;
-			this.parent = parent;
-			return true;
-		} else {
-			return this.initialize(user, parent.getParent());
+	public boolean initialize(User user, Message parent, long id) {
+		
+		if (parent.getParent() != null) {
+			parent = parent.getParent();
 		}
+		this.timestamp = Calendar.getInstance().getTimeInMillis() / 1000;
+		this.body = null;
+		this.user = user;
+		this.parent = parent;
+		this.id = id;
+		return true;
 	}
 
 	@Override
 	public Message getParent() {
 		return parent;
-	}
-
-	@Override
-	public void setId(long id) {
-		this.id = id;
-		return;
 	}
 }

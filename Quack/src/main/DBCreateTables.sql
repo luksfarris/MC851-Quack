@@ -37,6 +37,9 @@ create table contact (
 create index source on contact(source_id);
 create index target on contact(target_id);
 
+alter table message modify body VARCHAR(16380) character set utf8;
+alter table user modify full_name VARCHAR(70) character set utf8;
+
 
 
 

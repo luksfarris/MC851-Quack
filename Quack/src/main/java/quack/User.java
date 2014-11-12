@@ -12,20 +12,18 @@ public interface User {
 	public boolean initialize(String loginName, String email, String fullName,
 			String password, long dbIndex);
 	// Inicializa um objeto {User} recém-criado com os parametros passados. 
-	// Retorna <true> se
-	// houve sucesso, ou <false> caso ocorra algum erro.
+	// Retorna <true> se houve sucesso, ou <false> caso ocorra algum erro.
 
 	// A cadeia {loginName} deve começar com letra, terminar letra ou dígito, e
 	// conter apenas letras, dígitos, pontos "." e hífens. Seu comprimento
-	// deve ser no mínimo 3 e no máximo 20 caracteres. ??{ Números arbitrários
-	// }??
+	// deve ser no mínimo 3 e no máximo 20 caracteres. ??{ Números arbitrários}??
 	// A cadeia {email} deve conter apenas caratcteres válidos em e-mails.
+	// 
 	// A cadeia {fullname} pode conter quaisquer caracteres UNICODE na
-	// representação
-	// UTF-8. A cadeia {password} deve ser a senha, por enquanto sem
+	// representação UTF-8. A cadeia {password} deve ser a senha, por enquanto sem
 	// criptografar.
-	// O long {dbIndex} corresponde ao identificador unico do usuario {this}
-		// no sistea.
+	// O parâmetro {dbIndex} é o identificador do usuario {this} na base de dados 
+	// persistente.
 
 	// -------------------------------------------------------------------------------
 	// ATRIBUTOS BÁSICOS
@@ -56,7 +54,7 @@ public interface User {
 
 	public long getCreationTime();
 
-	// Retorna o timestamp da data em que o usuário {this} foi acrescentado à
+	// Retorna a datahora em que o usuário {this} foi acrescentado à
 	// rede {Quack}.
 
 	public long getDbIndex();
@@ -67,24 +65,20 @@ public interface User {
 	// CONTATOS
 	//
 	// Um contato é um par ordenado de usuários com mais alguns atributos,
-	// {(A,B,...)},
-	// isto é, uma aresta do grafo da rede {Quack}. É representado por uma
-	// instância da classe {Contact}. Pode indicar que o /usuário de origem/ {A}
-	// segue (ou bloqueia, ou tem alguma outra relação) com o /usuário alvo/
-	// {B}.
+	// {(A,B,...)}, isto é, uma aresta do grafo da rede {Quack}. É representado
+	// por uma instância da classe {Contact}. Pode indicar que o 
+	// /usuário de origem/ {A} segue (ou bloqueia, ou tem alguma outra relação) 
+	// com o /usuário alvo/ {B}.
 	//
 	// Há no máximo um contato, ativo ou inativo, para cada par de usuários
-	// (origem e alvo).
-	// Por enquanto, contatos nunca são eliminados, apenas podem ter seus
-	// atributos
-	// alterados de modo a se tornarem inativos.
+	// (origem e alvo). Por enquanto, contatos nunca são eliminados, apenas 
+	// podem ter seus atributos alterados de modo a se tornarem inativos.
 	//
 	// Cada instância {this} de {User} tem uma lista de /contatos diretos/, em
 	// que o usuário {this} é origem; isto é, os usuários que ele
-	// segue/bloqueou/etc..
-	// Tem também uma lista de /contatos reversos/, em que ele é destino;
-	// isto é, quem segue/bloqueou o usuário {this}. Sempre que um contato
-	// {(A,B,...)} é acrescentado á lista de contatos diretos de {A},
+	// segue/bloqueou/etc.. Tem também uma lista de /contatos reversos/, em que
+	// ele é alvo;isto é, quem segue/bloqueou o usuário {this}. Sempre que um 
+	// contato {(A,B,...)} é acrescentado á lista de contatos diretos de {A},
 	// deve ser acrescentado também à lista de contatos reversos de {B},
 	// pata manter a consistência da rede.
 
@@ -111,15 +105,13 @@ public interface User {
 	public void addDirectContact(Contact contact);
 
 	// Acrescenta à lista {this.getDirectContacts()} o contato dado, que deve
-	// ter.
-	// o usuário {this} como origem. Aborta, caso já exista nessa lista
+	// ter o usuário {this} como origem. Aborta, caso já exista nessa lista
 	// algum contato com o mesmo alo que o alvo de {contact}.
 
 	public void addReverseContact(Contact contact);
 
 	// Acrescenta à lista {this.getDirectContacts()} o contato dado, que deve
-	// ter.
-	// o usuário {this} como alvo. Aborta, se já houver nessa lista
+	// ter o usuário {this} como alvo. Aborta, se já houver nessa lista
 	// algum contato com o mesmo usuário origem que a origem de {contact}.
 
 	// -------------------------------------------------------------------------------
@@ -135,8 +127,7 @@ public interface User {
 	public List<Message> getPostedMessages();
 
 	// Retorna a lista de mensagens postadas pelo usuário {this}, em ordem
-	// cronológica
-	// inversa (mais recente primeiro).
+	// cronológica inversa (mais recente primeiro).
 
 	public List<Message> getPostedMessages(long startTime, long endTime,
 			long maxN);
@@ -148,13 +139,11 @@ public interface User {
 	// retorna a senha {String} do usuario.
 
 	// -------------------------------------------------------------------------------
-	// UTEIS
-	// metodos que auxiliam a montagem das paginas html do sistema Quack
-	//
+	// ESTATÍSTICAS DO USUÁRIO
 	
 	public int followsCount();
-	// retorna quantos usuarios {this} segue
+	// Retorna quantos usuarios {this} segue.
 	
 	public int followersCount();
-	// retorna quantos usuarios seguem {this}
+	// Retorna quantos usuarios seguem {this}.
 }
