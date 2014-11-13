@@ -1,18 +1,27 @@
 package quack;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 public class HTMLImpl implements HTML {
 	public static final String HTML_START = "<!DOCTYPE html><html><body>";
 	public static final String HTML_END = "</body></html>";
 	
 	@Override
-	public String errorPage(String msg) {
-		// TODO Auto-generated method stub
-		return HTML_START + "<h1>ERROR!!</h1>\n"
-				+ "<h2>"+msg+"</h2>" + HTML_END;
+	public void errorPage(HttpServletResponse response, String msg) {
+		response.setContentType("text/html");
+		System.out.println("Erro: " + msg);
+		try {
+			response.getWriter().println("<script type=\"text/javascript\">history.back(alert('"+msg+"'));</script>");
+		} catch (IOException e) {
+			System.out.println("Erro ao enviar pagina de erro.");
+			e.printStackTrace();
+		}
 	}
-
+	
+	
 	@Override
 	public String loginPage() {
 		// TODO Auto-generated method stub
@@ -50,4 +59,6 @@ public class HTMLImpl implements HTML {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 }

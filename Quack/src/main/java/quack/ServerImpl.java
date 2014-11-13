@@ -1,7 +1,6 @@
 package quack;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -118,29 +117,17 @@ public final class ServerImpl implements Server {
 	public void processRegistrationReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
 
-		PrintWriter out = null;
 		System.out.println(request.getParameter(("username")));
 		//Verifica se já existe usuário com esse username:
 		User user = this.userTable.getUserByLogin(request.getParameter("username"), "");
-		if (user != null) {
-			out = response.getWriter();  
-			response.setContentType("text/html");  
-			out.println("<script type=\"text/javascript\">");  
-			out.println("history.back(alert('Este nome de usuario ja existe'));");  
-			out.println("</script>");		
-			System.out.println("Ja existe user com esse nome");
-			}
-		
-		else{
+		if (user != null) {  
+			
+			html.errorPage(response, "Este nome de usuario ja existe");
+		} else{
 			//Verifica se já existe usuário com esse email:
 			user = this.userTable.getUserByEmail(request.getParameter("email"));
 			if (user != null) {
-				out = response.getWriter();  
-				response.setContentType("text/html");  
-				out.println("<script type=\"text/javascript\">");  
-				out.println("history.back(alert('Ja existe uma conta com este email'));");  
-				out.println("</script>");
-				System.out.println("Ja existe user com esse email");
+				html.errorPage(response, "Ja existe uma conta com este email");
 			}
 			else{
 				// Cria o usuário e acrescenta à tabela:
@@ -148,12 +135,8 @@ public final class ServerImpl implements Server {
 				if (!user.initialize(request.getParameter("username"), request.getParameter("email"), 
 						request.getParameter("fullName"), request.getParameter("password"), 
 						this.nextUserId)) {
-					out = response.getWriter();  
-					response.setContentType("text/html");  
-					out.println("<script type=\"text/javascript\">");  
-					out.println("history.back(alert('Falha ao criar user'));");  
-					out.println("</script>");				}
-				else{
+					html.errorPage(response, "Falha ao criar user");  
+				} else {
 					this.nextUserId++;
 					try {
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -206,10 +189,7 @@ public final class ServerImpl implements Server {
 			response.sendRedirect("/Quack/UserPage.jsp");
 		} else {
 			// usuario invalido, mostra erro.
-			response.setContentType("text/html");
-			response.getWriter().println("<script type=\"text/javascript\">");  
-			response.getWriter().println("history.back(alert('Falha ao realizar login'));");  
-			response.getWriter().println("</script>");
+			html.errorPage(response, "Falha ao realizar login");
 		}
 
 		return;
@@ -233,13 +213,8 @@ public final class ServerImpl implements Server {
 			User u =  userTable.getUserByLogin(params,"");
 			
 			if(u == null){
-				response.setContentType("text/html");
-				response.getWriter().println("<script type=\"text/javascript\">");  
-				response.getWriter().println("history.back(alert('Usuario nao existe!'));");  
-				response.getWriter().println("</script>");
-			}
-			
-			else{
+				html.errorPage(response, "Usuario nao existe!");
+			}else{
 				request.getSession().setAttribute("userPage", u);
 				response.sendRedirect("/Quack/UserPage.jsp");
 			}	
@@ -251,13 +226,13 @@ public final class ServerImpl implements Server {
 		// Obtém a sessão:
 		Session session = this.sessionTable.getSessionByCookie(cookie);
 		if (session == null) {
-			return html.errorPage("no session with this cookie.");
+			//html.errorPage(response, "no session with this cookie.");
 		}
 
 		// Obtem o autor das mensagens procuradas
 		User target = this.userTable.getUserByLogin(loginName, "");
 		if (target == null) {
-			return html.errorPage("no such user.");
+			//html.errorPage(response, "no such user.");
 		}
 
 		// Obtem as mensagens, de acordo com os intervalos estabelecidos
@@ -295,17 +270,11 @@ public final class ServerImpl implements Server {
 		Contact c;
 				
 		if(contactUser == null){
-			response.setContentType("text/html");
-			response.getWriter().println("<script type=\"text/javascript\">");  
-			response.getWriter().println("history.back(alert('Usuario nao existe!'));");  
-			response.getWriter().println("</script>");
+			html.errorPage(response, "Usuario nao existe!");
 		}
 		else{
 			if(sessionUser == contactUser){
-				response.setContentType("text/html");
-				response.getWriter().println("<script type=\"text/javascript\">");  
-				response.getWriter().println("history.back(alert('Nao pode haver contato com si mesmo'));");  
-				response.getWriter().println("</script>");
+				html.errorPage(response, "Nao pode haver contato com si mesmo");
 			}
 			else{
 				
@@ -347,67 +316,55 @@ public final class ServerImpl implements Server {
 							e.printStackTrace();
 						}
 					}	
-				}
-				
-				else{//Contato ainda nao existe
-				if(relation.equals("true")){ // Relacao de follow
-					c = new ContactImpl();
-					c.initialize(sessionUser, contactUser, Calendar.getInstance()
-							.getTimeInMillis() / 1000, "Follow");
-					sessionUser.addDirectContact(c);
-					contactUser.addReverseContact(c);
-					this.numContacts += 1;
+				} else{//Contato ainda nao existe
+					if(relation.equals("true")){ // Relacao de follow
+						c = new ContactImpl();
+						c.initialize(sessionUser, contactUser, Calendar.getInstance()
+								.getTimeInMillis() / 1000, "Follow");
+						sessionUser.addDirectContact(c);
+						contactUser.addReverseContact(c);
+						this.numContacts += 1;
+						
+						//Insere no banco de dados
+						try {
+							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							this.database.getConnection();
+							this.database.getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
+							dateFormat.format(new Date(Calendar.getInstance()
+									.getTimeInMillis()))+"','Follow'"+");").execute();
+							this.database.commit();	
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						html.errorPage(response, "acao concluida!");
+					} else if(relation.equals("false")){ //Relacao de block
 					
-					//Insere no banco de dados
-					try {
-						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						this.database.getConnection();
-						this.database.getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
-						dateFormat.format(new Date(Calendar.getInstance()
-								.getTimeInMillis()))+"','Follow'"+");").execute();
-						this.database.commit();	
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					response.setContentType("text/html");
-					response.getWriter().println("<script type=\"text/javascript\">");  
-					response.getWriter().println("history.back(alert('acao concluida!'));");  
-					response.getWriter().println("</script>");					}
-				
-				else if(relation.equals("false")){ //Relacao de block
-					c = new ContactImpl();
-					c.initialize(sessionUser, contactUser, Calendar.getInstance()
-							.getTimeInMillis() / 1000, "Block");
-					sessionUser.addDirectContact(c);
-					contactUser.addReverseContact(c);
-					this.numContacts += 1;
-					//Insere no banco de dados
-					try {
-						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						this.database.getConnection();
-						this.database.getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
-								dateFormat.format(new Date(Calendar.getInstance()
-										.getTimeInMillis()))+"','Block'"+");").execute();
-						this.database.commit();	
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					response.setContentType("text/html");
-					response.getWriter().println("<script type=\"text/javascript\">");  
-					response.getWriter().println("history.back(alert('acao concluida!'));");  
-					response.getWriter().println("</script>");	
+						c = new ContactImpl();
+						c.initialize(sessionUser, contactUser, Calendar.getInstance()
+								.getTimeInMillis() / 1000, "Block");
+						sessionUser.addDirectContact(c);
+						contactUser.addReverseContact(c);
+						this.numContacts += 1;
+						//Insere no banco de dados
+						try {
+							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							this.database.getConnection();
+							this.database.getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
+									dateFormat.format(new Date(Calendar.getInstance()
+											.getTimeInMillis()))+"','Block'"+");").execute();
+							this.database.commit();	
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						html.errorPage(response, "acao concluida!");
+					} else{
+						html.errorPage(response, "Relacao invalida");
+					}	
 				}
-				else{
-					response.setContentType("text/html");
-					response.getWriter().println("<script type=\"text/javascript\">");  
-					response.getWriter().println("history.back(alert('Relacao invalida!'));");  
-					response.getWriter().println("</script>");
-				}	
-			}
 			}
 		}
 	}
@@ -447,14 +404,14 @@ public final class ServerImpl implements Server {
 		User user = (User) request.getSession().getAttribute("user");
 					
 		if (user == null){
-			response.getWriter().println(html.errorPage("no valid user."));
+			html.errorPage(response, "no valid user.");
 			return;
 		}
 		
 		String messageBody;
 		
 		if (request.getParameter("messageText") == null) {
-			response.getWriter().println(html.errorPage("no message text;"));
+			html.errorPage(response, "no message text;");
 			return;
 		}
 			
@@ -465,7 +422,7 @@ public final class ServerImpl implements Server {
 					
 		if (replyLoginName == null || replyLoginName.equals("")) {
 			if (!message.initialize(messageBody, user, this.nextMessageId)) {
-				response.getWriter().println(html.errorPage("message creation failed."));
+				html.errorPage(response, "message creation failed.");
 				return;
 			}
 

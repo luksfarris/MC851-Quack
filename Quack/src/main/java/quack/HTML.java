@@ -2,6 +2,8 @@ package quack;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface HTML {
 
 	// Esta classe especifica funções para construção de páginas HTML
@@ -28,8 +30,9 @@ public interface HTML {
 	// para login, cadastramento de novos usuários, listagem de dados públicos e 
 	// e mensagens públicas de usuários, busca por conteúdo em mensagens e/ou usuários, etc..
 
-	public String errorPage(String msg);
-	// Compõe uma página HTML com a mensagem de erro {msg}.
+	public void errorPage(HttpServletResponse response, String msg);
+	// Compõe uma página HTML com a mensagem de erro {msg}, e a envia como resposta para o usuario usando {response}.
+	// Alem disso, cria um log na saida padrao sobre a pagina de erro.
 
 	public String loginPage();
 	// Compoe uma pagina HTML com campos {loginName} e {password},
