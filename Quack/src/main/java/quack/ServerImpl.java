@@ -6,7 +6,10 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -186,7 +189,7 @@ public final class ServerImpl implements Server {
 				CookieHelper.removeCookie(response, CookieHelper.COOKIE_NAME);
 			}
 			request.getSession().setAttribute("userPage", user);
-			response.sendRedirect("/Quack/UserPage.jsp");
+			response.sendRedirect("/Quack/Timeline");
 		} else {
 			// usuario invalido, mostra erro.
 			html.errorPage(response, "Falha ao realizar login");
@@ -390,10 +393,65 @@ public final class ServerImpl implements Server {
 	}
 
 	@Override
-	public String processShowReceivedMessagesReq(String cookie,
-			String startTime, String endTime, int maxN) {
-		// TODO Auto-generated method stub
-		return null;
+	public void processShowReceivedMessagesReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException{
+		
+		User user = (User) request.getSession().getAttribute("user");
+		if (user == null){
+			html.errorPage(response, "no valid user.");
+			return;
+		}
+		long startTime;
+		long endTime;
+		long maxN;
+		
+		if(request.getParameter("startTime") == null)
+			startTime = -1;
+		else
+			startTime = timestampFromString((String) request.getAttribute("startTime"));
+		
+		if(request.getParameter("endTime") == null)
+			endTime = -1;
+		else
+			endTime = timestampFromString((String) request.getAttribute("endTime"));
+		
+		if(request.getParameter("maxN") == null)
+			maxN = 15;
+		else
+			maxN = (Long) request.getAttribute("maxN");
+		
+		List<Message> messages = new LinkedList<Message>(); 
+		
+		System.out.println("Contatos: "+user.getDirectContacts().size());
+		for(Contact c : user.getDirectContacts()){
+			if(c.status().equals("Follow")){
+				System.out.println("Messages: "+c.target().getPostedMessages(startTime, endTime, maxN).size());
+				for(Message m : c.target().getPostedMessages(startTime, endTime, maxN)){
+					messages.add(m);
+					System.out.println(m.getText());
+				}
+			}
+		}
+		
+		Collections.sort(messages, new Comparator<Message>() {
+			@Override
+	        public int compare(Message a, Message b)
+	        {
+				if(a.getDate() < b.getDate())
+					return -1;
+				else if(a.getDate() == b.getDate())
+					return 0;
+				else return 1;
+	        }
+		});
+
+		for(Message m : messages){
+			System.out.println(m.getUser().getLoginName()+":  "+ m.getText());
+		}
+		
+		request.getSession().setAttribute("timelineMessages", messages);
+		response.sendRedirect("/Quack/timeline.jsp");
+		return;
 	}
 
 	@Override
