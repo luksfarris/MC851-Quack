@@ -96,7 +96,7 @@ int maxposts = (numPosts == null) ? 10 : Integer.parseInt(numPosts);
 <%= list.get(i).getText() %><br/>
 <span class="datetime">Postado em
 <% 
-DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss");
+DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss", new Locale("pt"));
 long cal = list.get(i).getDate();
 out.println(dateFormat.format(new Date(cal * 1000)).toLowerCase());
 %> 
