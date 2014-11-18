@@ -213,12 +213,20 @@ public interface Server {
 	// mensagem foi enviada com sucesso" e mostrando o texto formatado
 	// da mensagem e sua datahora.
 
-	public String processShowReceivedMessagesReq(String cookie,
-			String startTime, String endTime, int maxN);
+	public void processShowReceivedMessagesReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
 
 	// Chamado quando o servidor HTTP recebe um pedido da sessão
-	// identificada pelo {cookie} para listar as mensagens recebidas pelo
+	// identificada pelo request para listar as mensagens recebidas pelo
 	// usuário {w} que é dono da sessão (a /timeline/ do usuário {w}).
+	//
+	// Em request devem estar definidos {startTime}, {endTime} e {maxN}
+	// que definem o intervalo de tempo das mensagens a serem exibidas
+	// (por padrao desde o começo dos tempos até o final dos tempos) e define
+	// o numero máximo de mensagens a serem exibidas (por padrão 15), respectivamente.
+	//
+	// A lista de mensagens é colocada no parametro {timelineMessages}
+	// da sessão.
 	//
 	// As mensagens em questão podem incluir as mensagem enviadas e re-enviadas
 	// pelos
@@ -252,5 +260,7 @@ public interface Server {
 	// de um cookie {String}. A busca pelo cookie sera feita na tabela de cookies
 	// que fica salva no servidor Apache, e caso exista retorna o usuario correspondente.
 	// Caso contrario retorna {null};
+
+	
 	
 }
