@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
+<%@ page import="java.text.*" %>
 <%@ page import="quack.*" %>
 <!DOCTYPE html>
 <html>
@@ -91,9 +92,14 @@ int maxposts = (numPosts == null) ? 10 : Integer.parseInt(numPosts);
 <th>
 <img src="img/profilepics/<%= list.get(i).getUser().getLoginName() %>.png" style="width: 48px;" />
 </th>
-<td><b><%= list.get(i).getUser().getFullName() %></b>&ensp;<a href="#">@<%= list.get(i).getUser().getLoginName() %></a><br />
+<td><b><%= list.get(i).getUser().getFullName() %></b>&ensp;<a href="user/<%= list.get(i).getUser().getLoginName() %>">@<%= list.get(i).getUser().getLoginName() %></a><br />
 <%= list.get(i).getText() %><br/>
-<span class="datetime">Postado <%= list.get(i).getDate() %> 
+<span class="datetime">Postado em
+<% 
+DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss");
+long cal = list.get(i).getDate();
+out.println(dateFormat.format(new Date(cal)).toLowerCase());
+%> 
 &ndash; <%= 0 %> repostage<%= "ns" %> 
 &ndash; <%= 0 %> favorito<%=  "s" %><br/>
 <a href="#">➡ Repostar</a> &mdash; <a href="#">★ Marcar como favorito</a></span>
