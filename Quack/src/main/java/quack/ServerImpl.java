@@ -422,10 +422,13 @@ public final class ServerImpl implements Server {
 		
 		List<Message> messages = new LinkedList<Message>(); 
 		
+		System.out.println("Contatos: "+user.getDirectContacts().size());
 		for(Contact c : user.getDirectContacts()){
 			if(c.status().equals("Follow")){
+				System.out.println("Messages: "+c.target().getPostedMessages(startTime, endTime, maxN).size());
 				for(Message m : c.target().getPostedMessages(startTime, endTime, maxN)){
 					messages.add(m);
+					System.out.println(m.getText());
 				}
 			}
 		}
@@ -442,6 +445,10 @@ public final class ServerImpl implements Server {
 	        }
 		});
 
+		for(Message m : messages){
+			System.out.println(m.getUser().getLoginName()+":  "+ m.getText());
+		}
+		
 		request.getSession().setAttribute("timelineMessages", messages);
 		response.sendRedirect("/Quack/timeline.jsp");
 		return;
