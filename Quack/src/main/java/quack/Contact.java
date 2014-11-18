@@ -35,5 +35,5 @@ public interface Contact {
 			String newStatus);
 	// Inicializa um objeto Contact com {source}, {target},
 	// datahora de modificação {instance} e status {newStatus} que 
-	// pode ser "Follow" ou "Block" status inicial "Inactive" não é aceito. 
+	// pode ser "Follow", "Block" ou "Inactive". 
 }
