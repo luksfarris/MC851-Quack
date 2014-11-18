@@ -48,8 +48,8 @@ public class MessageImpl implements Message {
 	}
 
 	@Override
-	public boolean initialize(String body, User user, long id) {
-		this.timestamp = Calendar.getInstance().getTimeInMillis() / 1000;
+	public boolean initialize(String body, User user, long id, long timestamp) {
+		this.timestamp = timestamp;
 		this.body = body;
 		this.user = user;
 		this.parent = null;
@@ -58,12 +58,12 @@ public class MessageImpl implements Message {
 	}
 
 	@Override
-	public boolean initialize(User user, Message parent, long id) {
+	public boolean initialize(User user, Message parent, long id, long timestamp) {
 		
 		if (parent.getParent() != null) {
 			parent = parent.getParent();
 		}
-		this.timestamp = Calendar.getInstance().getTimeInMillis() / 1000;
+		this.timestamp = timestamp;
 		this.body = null;
 		this.user = user;
 		this.parent = parent;

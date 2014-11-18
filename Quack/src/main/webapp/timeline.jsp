@@ -98,7 +98,7 @@ int maxposts = (numPosts == null) ? 10 : Integer.parseInt(numPosts);
 <% 
 DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss");
 long cal = list.get(i).getDate();
-out.println(dateFormat.format(new Date(cal)).toLowerCase());
+out.println(dateFormat.format(new Date(cal * 1000)).toLowerCase());
 %> 
 &ndash; <%= 0 %> repostage<%= "ns" %> 
 &ndash; <%= 0 %> favorito<%=  "s" %><br/>

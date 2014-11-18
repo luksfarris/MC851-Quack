@@ -84,7 +84,11 @@ public final class ServerImpl implements Server {
 					+ String.valueOf(u.getDbIndex())).executeQuery();
 					while(rs2.next()){
 						Message m = new MessageImpl();
-						if(m.initialize(rs2.getString("body"), u, rs2.getLong("id")) == false)
+
+						
+
+						if(m.initialize(rs2.getString("body"), u, rs2.getLong("id"), 
+								this.timestampFromString(rs2.getString("created"))) == false)
 							System.out.println("Erro ao carregar mensagens");
 						else{
 							u.addMessage(m);
@@ -472,7 +476,7 @@ public final class ServerImpl implements Server {
 		Message message = new MessageImpl();
 					
 		if (replyLoginName == null || replyLoginName.equals("")) {
-			if (!message.initialize(messageBody, user, this.nextMessageId)) {
+			if (!message.initialize(messageBody, user, this.nextMessageId, Calendar.getInstance().getTimeInMillis()/1000)) {
 				html.errorPage(response, "message creation failed.");
 				return;
 			}
@@ -508,7 +512,7 @@ public final class ServerImpl implements Server {
 
 	private long timestampFromString(String time) {
 		time = time.replaceAll("[()]", "");
-		String date[] = time.split("-: ");
+		String date[] = time.split("[- :\\.]");
 
 		// TODO - consertar timezone (ID de TimeZone eh uma string
 		// do tipo "Brazil/East", e nao (-0300))

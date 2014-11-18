@@ -25,16 +25,16 @@ public interface Message {
 	// Retorna a datahorade publicação da mensagem {this} (a datahora de repostagem,
 	// se for o caso)
 
-	public boolean initialize(String body, User user, long id);
+	public boolean initialize(String body, User user, long id, long timestamp);
 	// Inicializa uma nova instância {this} de {Message} como uma 
 	// mensagem original com os atributos {body} (texto da mensagem) 
-	// e {user} (autor).  A datahora de postagem fica sendo a datahora atual.
+	// e {user} (autor).  A datahora de postagem fica sendo a data representada por {timestamp}.
 	// o campo {id} é o id do banco de dados
 
-	public boolean initialize(User user, Message parent, long id);
+	public boolean initialize(User user, Message parent, long id, long timestamp);
 	// Inicializa uma nova instância {this} como sendo a
 	// repostagem da mensagem {parent}, repostada por {user}. 
-	// A datahora de repostagem fica sendo a datahora atual.
+	// A datahora de repostagem fica sendo a data representada por {timestamp}.
 	// o campo {id} é o id do banco de dados
 	
 	public long getId();
