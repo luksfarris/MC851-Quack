@@ -6,9 +6,8 @@ Projeto de Rede Social.
 
 Tecnologias
 ----
-- Java Web (VRaptor)
+- Java Web (Servlets 3.0)
 - Banco de dados MySQL
-- Hibernate
 
 
 Requisitos para rodar
