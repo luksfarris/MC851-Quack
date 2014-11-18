@@ -121,6 +121,19 @@ public interface Server {
 	// Nessa página haverá botões/campos para fazer login e cadastrar novo
 	// usuário, listar as mensagens públicas ou o perfil de qualquer usuário, 
 	// busca de mensagens e usuários pelo conteúdo, etc.
+	
+	public void processShowAllUsersReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
+	// Chamado quando o servidor Quack recebe um pedido para listar todos os usuários do sistema.
+	//
+	// O parâmetro {request} por enquanto não precisa ter nenhum outro campo. ??{ No futuro
+	// poderá opcionalmente identificar uma sessão ativa, e conter um padrão de busca
+	// mais campos para pedir os próximos {maxN} usuários a partir de certo usuário. }??
+	
+	// Em caso de sucesso, devolve em {response} uma página com a lista de todos os 
+	// usuários do sistema. ??{ No futuro, se o {request} identificar uma sessão aberta,
+	// mostra ao lado de cada usuário {v} o estado do contato entre o dono {u} da sessão
+	// e o usuário {v}. }??
 
 	public void processRegistrationReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException;
@@ -248,12 +261,20 @@ public interface Server {
 	public void processModifyContactReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException;
 	// Chamado quando o servidor HTTP recebe um pedido de alteracao de contato
-	// entre dois usuarios do sistema {Quack}
+	// entre dois usuarios do sistema {Quack}.
 	//
-	// O parâmetro {request} deve conter o campo {id} do user 
-	// no qual o contato é incidente
+	// O parâmetro {request} deve especificar uma sessão aberta; o dono {u} da sessão
+	// é a origem do contato.  O {request} deve conter também 
+	// conter um campo {userName} cujo valor é o login do usuário alvo {v},
+	// e um campo {follow} cujo valor é o novo estado do contato ("Follow","Block" ou "Inactive")
+	// do contato.  
+	// ??{ Mudar nomes dos campos: "userName" --> "target", "follow" --> "newStatus" }??
 	//
-	// Em caso de sucesso, o parâmetro {respose} conterá a pagina do usuario
+	// Em caso de sucesso, o parâmetro {respose} conterá a pagina inicial do usuario.
+	// A alteração é gravada na base de dados persistennte.
+	
+	// -------------------------------------------------------------------------------
+	// UTLITÁRIOS
 
 	public User getUserFromCookie(String cookie);
 	// Este metodo é chamado quando é necessário recuperar um usuário {User} a partir 
