@@ -317,7 +317,7 @@ public final class ServerImpl implements Server {
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}
-						
+						html.errorPage(response, "acao concluida!");
 					}
 					else if(relation.equals("false")){
 						c_sessionUser.setStatus("Block");
@@ -336,6 +336,7 @@ public final class ServerImpl implements Server {
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}
+						html.errorPage(response, "acao concluida!");
 					}	
 				} else{//Contato ainda nao existe
 					if(relation.equals("true")){ // Relacao de follow
