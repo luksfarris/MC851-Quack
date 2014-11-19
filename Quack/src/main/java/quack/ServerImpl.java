@@ -233,8 +233,7 @@ public final class ServerImpl implements Server {
 			if(u == null){
 				html.errorPage(response, "Usuario nao existe!");
 			}else{
-				request.getSession().setAttribute("userPage", u);
-				response.sendRedirect("/Quack/UserPage.jsp");
+				response.sendRedirect("/Quack/UserPage.jsp"+"?u="+u.getLoginName());
 			}	
 	}
 
@@ -548,5 +547,18 @@ public final class ServerImpl implements Server {
 			user = session.getUser();
 		}
 		return user;
+	}
+	
+	public User getUserFromLoginName(String loginName) {
+		return userTable.getUserByLogin(loginName, null);
+	}
+
+	@Override
+	public void processShowAllUsersReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context)
+			throws IOException {
+		
+		request.getSession().setAttribute("users", this.userTable.listUsersByFullName(""));
+		return;
 	}
 }
