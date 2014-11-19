@@ -30,11 +30,11 @@ public class UserTableImpl implements UserTable {
 		return null;
 	}
 			
-	public List<User> listUsersByFullName(String fullName) {
+	public List<User> listUsersByFullName(String name) {
 		List<User> l = new LinkedList<User>();
 		
 		for(User u: table){
-			if(u.getFullName().contains(fullName))
+			if(u.getFullName().contains(name))
 				l.add(u);
 		}
 		return null;
@@ -53,5 +53,12 @@ public class UserTableImpl implements UserTable {
 		return table.size();
 	}
 
+	@Override
+	public User getUserById(long id) {
+		for(User u : this.table){
+			if(u.getDbIndex() == id)
+				return u;
+		}		return null;
+	}
 
 }

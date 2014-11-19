@@ -28,6 +28,9 @@ public interface UserTable {
 	// ------------------------------------------------------------------------------
 	// BUSCA DE USUÁRIO ESPECÍFICO
 
+	public User getUserById(long id);
+	// Retorna o {User} na tabela {this} que tem o identificador {id}, ou {null} se nao existir.
+	
 	public User getUserByLogin(String loginName, String password);
 	// Retorna o {User} na tabela {this} que tem o nome de login {loginName}, ou {null} se não existir.
 

@@ -77,7 +77,6 @@ public final class ServerImpl implements Server {
 						rs.getString("password"),
 						rs.getLong("id"))){
 					
-					
 					this.nextUserId = Math.max(this.nextUserId, u.getDbIndex());
 					
 					ResultSet rs2 = this.database.getStatement("SELECT * FROM message WHERE user_id=" 
@@ -100,9 +99,21 @@ public final class ServerImpl implements Server {
 				
 				else {
 					System.out.println("Problema no carregamento do usuário!");
-				}
-				
+				}	
 			}
+			
+			ResultSet rs3 = this.database.getStatement("SELECT * FROM contact;").executeQuery();
+			while(rs3.next()){
+				Contact c = new ContactImpl();
+				User s = this.userTable.getUserById(rs3.getLong("source_id"));
+				User t = this.userTable.getUserById(rs3.getLong("target_id"));
+				String st = rs3.getString("status");
+				Long lm = rs3.getLong("last_modified");
+				c.initialize(s,t,lm,st);
+				s.addDirectContact(c);
+				t.addReverseContact(c);
+			}
+			
 			this.nextUserId++;
 			this.nextMessageId++;
 			
@@ -296,7 +307,9 @@ public final class ServerImpl implements Server {
 						try {
 							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 							this.database.getConnection();
-							this.database.getStatement("UPDATE contact SET status='Follow' where source_id='"+
+							this.database.getStatement("UPDATE contact SET status='Follow', last_modified='"+
+									dateFormat.format(new Date(Calendar.getInstance()
+											.getTimeInMillis()))+"' where source_id='"+
 							sessionUser.getDbIndex() +"' and target_id='"+ contactUser.getDbIndex() +"';").execute();
 							this.database.commit();	
 						} catch (ClassNotFoundException e) {
@@ -313,7 +326,9 @@ public final class ServerImpl implements Server {
 						try {
 							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 							this.database.getConnection();
-							this.database.getStatement("UPDATE contact SET status='Block' where source_id='"+
+							this.database.getStatement("UPDATE contact SET status='Block', last_modified='"+
+									dateFormat.format(new Date(Calendar.getInstance()
+											.getTimeInMillis()))+"' where source_id='"+
 							sessionUser.getDbIndex() +"' and target_id='"+ contactUser.getDbIndex() +"';").execute();
 							this.database.commit();	
 						} catch (ClassNotFoundException e) {
