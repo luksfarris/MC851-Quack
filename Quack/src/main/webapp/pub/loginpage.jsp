@@ -51,13 +51,6 @@
               <input type="password" name="password" class="form-control" placeholder="senha" required>
             </div>
             <div class="form-group">
-              <div class="checkbox">
-                <label for="remember">
-                  <input type="checkbox" name="remember"> Esqueci minha senha
-                </label>
-              </div>
-            </div>
-            <div class="form-group">
               <input type="submit" class="btn btn-info" value="Entrar">
             </div>
           </form>

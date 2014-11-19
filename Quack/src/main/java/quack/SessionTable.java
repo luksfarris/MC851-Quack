@@ -19,8 +19,9 @@ public interface SessionTable {
 
 	public void add(Session session);
 	// Acrescenta a sessão aberta {session} à tabela {this}.
-	// Aborta se a sessão estiver fechada, ou se já existir uma
-	// sessão na tabela com mesmo usuário ou mesmo {cookie}.
+	// Se houverem outras sessões com o mesmo usuário, remove-as da lista. Deste
+	// modo o usuario so podera se logar em uma maquina por vez. Mas pelo
+	// menos controlamos a quantidade de sessoes.
 
 	public void delete(Session session);
 	// Retira a sessão {session} da tabela {this}.

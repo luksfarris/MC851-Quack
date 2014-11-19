@@ -1,7 +1,5 @@
 package quack;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +20,7 @@ public class UserTableImpl implements UserTable {
 	}
 
 	@Override
-	public User getUserByLogin(String loginName, String password) {
+	public User getUserByLogin(String loginName) {
 		for(User u : this.table){
 			if(u.getLoginName().equals(loginName))
 				return u;
@@ -62,8 +60,12 @@ public class UserTableImpl implements UserTable {
 	}
 
 	@Override
-	public List<User> getAllUsers() {
-		return table;
+	public User getUserByLoginPassword(String loginName, String password) {
+		for(User u : this.table){
+			if(u.getLoginName().equals(loginName) && u.getPassword().equals(password))
+				return u;
+		}
+		return null;
 	}
 
 }

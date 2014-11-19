@@ -31,7 +31,11 @@ public interface UserTable {
 	public User getUserById(long id);
 	// Retorna o {User} na tabela {this} que tem o identificador {id}, ou {null} se nao existir.
 	
-	public User getUserByLogin(String loginName, String password);
+	public User getUserByLoginPassword(String loginName, String password);
+	// Retorna o {User} na tabela {this} que tem o nome de login {loginName} e senha {password}, ou {null} se não existir.
+
+	
+	public User getUserByLogin(String loginName);
 	// Retorna o {User} na tabela {this} que tem o nome de login {loginName}, ou {null} se não existir.
 
 	public User getUserByEmail(String email);

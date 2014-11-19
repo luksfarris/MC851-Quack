@@ -137,7 +137,7 @@ public final class ServerImpl implements Server {
 
 		System.out.println(request.getParameter(("username")));
 		//Verifica se já existe usuário com esse username:
-		User user = this.userTable.getUserByLogin(request.getParameter("username"), "");
+		User user = this.userTable.getUserByLogin(request.getParameter("username"));
 		if (user != null) {  
 			
 			html.errorPage(response, "Este nome de usuario ja existe");
@@ -187,24 +187,18 @@ public final class ServerImpl implements Server {
 
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
-		boolean remember = "true".equals(request.getParameter("remember"));
 		
-		User user = this.userTable.getUserByLogin(login, password);
+		User user = this.userTable.getUserByLoginPassword(login, password);
 		// se o usuario acabou de fazer login
 		if (user != null) {
-			//request.login(login, password);
-			request.getSession().setAttribute("user", user);
-			if (remember) {
-				String cookie = UUID.randomUUID().toString();
-		        Session session = new SessionImpl();
-		        session.open(user, cookie);
-		        sessionTable.add(session);
-		        CookieHelper.addCookie(response, CookieHelper.COOKIE_NAME, cookie, CookieHelper.COOKIE_AGE);
-			} else {
-				CookieHelper.removeCookie(response, CookieHelper.COOKIE_NAME);
-			}
-			request.getSession().setAttribute("userPage", user);
-			response.sendRedirect("/Quack/Timeline");
+			// cria uma sessao para o usuario
+			String cookie = UUID.randomUUID().toString();
+		    Session session = new SessionImpl();
+		    session.open(user, cookie);
+		    sessionTable.add(session);
+		    // adiciona o cookie no browser
+		    CookieHelper.addCookie(response, CookieHelper.COOKIE_NAME, cookie, CookieHelper.COOKIE_AGE);	
+		    response.sendRedirect("/Quack/Timeline");
 		} else {
 			// usuario invalido, mostra erro.
 			html.errorPage(response, "Falha ao realizar login");
@@ -228,7 +222,7 @@ public final class ServerImpl implements Server {
 			String parseURL[] = URL.split("/");
 			String params = parseURL[parseURL.length -1];
 			
-			User u =  userTable.getUserByLogin(params,"");
+			User u =  userTable.getUserByLogin(params);
 			
 			if(u == null){
 				html.errorPage(response, "Usuario nao existe!");
@@ -247,7 +241,7 @@ public final class ServerImpl implements Server {
 		}
 
 		// Obtem o autor das mensagens procuradas
-		User target = this.userTable.getUserByLogin(loginName, "");
+		User target = this.userTable.getUserByLogin(loginName);
 		if (target == null) {
 			//html.errorPage(response, "no such user.");
 		}
@@ -281,8 +275,9 @@ public final class ServerImpl implements Server {
 	public void processModifyContactReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException{
 		
-		User sessionUser = (User)request.getSession().getAttribute("user"); //User da sessao
-		User contactUser = userTable.getUserByLogin(request.getParameter("userName"), ""); //Usuario contato
+		String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+		User sessionUser = (User)getUserFromCookie(cookie);
+		User contactUser = userTable.getUserByLogin(request.getParameter("userName")); //Usuario contato
 		String relation = request.getParameter("follow");
 		Contact c;
 				
@@ -415,7 +410,8 @@ public final class ServerImpl implements Server {
 	public List<Message> processShowReceivedMessagesReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException{
 		
-		User user = (User) request.getSession().getAttribute("user");
+		String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+		User user = (User)getUserFromCookie(cookie);
 		if (user == null){
 			html.errorPage(response, "no valid user.");
 			return null;
@@ -471,7 +467,8 @@ public final class ServerImpl implements Server {
 			HttpServletResponse response, ServletContext context) throws IOException{
 			
 		// pega os dados da sessão
-		User user = (User) request.getSession().getAttribute("user");
+		String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+		User user = (User)getUserFromCookie(cookie);
 					
 		if (user == null){
 			html.errorPage(response, "no valid user.");
@@ -551,7 +548,7 @@ public final class ServerImpl implements Server {
 	}
 	
 	public User getUserFromLoginName(String loginName) {
-		return userTable.getUserByLogin(loginName, null);
+		return userTable.getUserByLogin(loginName);
 	}
 
 	@Override
@@ -559,6 +556,8 @@ public final class ServerImpl implements Server {
 			HttpServletResponse response, ServletContext context)
 			throws IOException {
 		
-		return this.userTable.getAllUsers();
+		return this.userTable.listUsersByFullName("");
 	}
+	
+	
 }

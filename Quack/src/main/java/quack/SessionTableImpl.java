@@ -1,6 +1,7 @@
 package quack;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class SessionTableImpl implements SessionTable {
@@ -13,6 +14,14 @@ public class SessionTableImpl implements SessionTable {
 
 	@Override
 	public void add(Session session) {
+		Iterator<Session> it = sessions.iterator();
+		while (it.hasNext()) {
+			Session currentSession = (Session) it.next();
+			// se nome de usuario ja existir, remove
+			if (currentSession.getUser().getLoginName().equals(session.getUser().getLoginName())){
+				it.remove();
+			}
+		}
 		sessions.add(session);
 	}
 
