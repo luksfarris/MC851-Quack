@@ -53,5 +53,12 @@ public class UserTableImpl implements UserTable {
 		return table.size();
 	}
 
+	@Override
+	public User getUserById(long id) {
+		for(User u : this.table){
+			if(u.getDbIndex() == id)
+				return u;
+		}		return null;
+	}
 
 }
