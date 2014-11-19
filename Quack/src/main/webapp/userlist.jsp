@@ -10,6 +10,10 @@
 <meta charset="UTF-8" />
 <title>Linha do tempo</title>
 <style>
+header nav.navbar-fixed-top, div.container.panel {
+  background: rgba(255, 255, 255, 0.75);
+}
+
 body {
 background-color: #888;
 }
@@ -70,6 +74,25 @@ List<User> users = server.processShowAllUsersReq(request, response, getServletCo
 %>
 </head>
 <body>
+
+<header>
+      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="UserPage.jsp">
+             	Perfil
+            </a> |
+            <a class="navbar-brand" href="Timeline">
+             	Timeline
+            </a> |
+            <a class="navbar-brand" href="#">
+             	Logout
+            </a>
+          </div>
+        </div>
+      </nav>
+</header>
+
 <div style="width: 700px; margin-left: auto; margin-right: auto;">
 
 <div class="box">

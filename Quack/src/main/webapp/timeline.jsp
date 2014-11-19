@@ -85,12 +85,12 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
             <a class="navbar-brand" href="UserPage.jsp">
              	Perfil
             </a> |
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="userlist.jsp">
              	Usuários do Sistema
             </a> |
             <a class="navbar-brand" href="#">
              	Logout
-            </a> |
+            </a>
           </div>
         </div>
       </nav>
@@ -98,9 +98,23 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
 
 <div style="width: 700px; margin-left: auto; margin-right: auto;">
 
+	
+
+	
 <div class="box">
 
+<p>
+<span id="fullname">Postar Mensagem</span><br />
+</p>
+<form name="createMessage" action="CreateMessage" method="post" accept-charset="utf-8">
+<div align="center">
+	<textarea rows="4" cols="70" name="messageText" maxlength="100" required></textarea>
+	<br>
+	<input align="right" type="submit" value="Quack!">
+</div>				
+</form>
 
+<hr /><hr />
 <div style="float: left; padding-left: 8px; vertical-align: top;">
 <p>
 <span id="fullname">Linha do tempo</span><br />
