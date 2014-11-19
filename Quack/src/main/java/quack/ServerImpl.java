@@ -426,17 +426,17 @@ public final class ServerImpl implements Server {
 		if(request.getParameter("startTime") == null)
 			startTime = -1;
 		else
-			startTime = timestampFromString((String) request.getAttribute("startTime"));
+			startTime = timestampFromString((String) request.getParameter("startTime"));
 		
 		if(request.getParameter("endTime") == null)
 			endTime = -1;
 		else
-			endTime = timestampFromString((String) request.getAttribute("endTime"));
+			endTime = timestampFromString((String) request.getParameter("endTime"));
 		
 		if(request.getParameter("maxN") == null)
 			maxN = 15;
 		else
-			maxN = (Long) request.getAttribute("maxN");
+			maxN = Integer.parseInt(((String) request.getParameter("maxN")));
 		
 		List<Message> messages = new LinkedList<Message>(); 
 		
@@ -462,7 +462,7 @@ public final class ServerImpl implements Server {
 		 
 //		request.getSession().setAttribute("timelineMessages", messages);
 //		response.sendRedirect("/Quack/timeline.jsp");
-		return messages.subList(0, (int) maxN);
+		return messages.subList(0, Math.min((int) maxN, messages.size()));
 	}
 
 	@Override
@@ -531,7 +531,7 @@ public final class ServerImpl implements Server {
 		// TODO - consertar timezone (ID de TimeZone eh uma string
 		// do tipo "Brazil/East", e nao (-0300))
 		Calendar a = Calendar.getInstance();
-		a.set(Integer.parseInt(date[0]), Integer.parseInt(date[1]),
+		a.set(Integer.parseInt(date[0]), Integer.parseInt(date[1])-1,
 				Integer.parseInt(date[2]), Integer.parseInt(date[3]),
 				Integer.parseInt(date[4]), Integer.parseInt(date[5]));
 

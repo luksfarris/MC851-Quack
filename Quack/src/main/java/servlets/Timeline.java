@@ -31,7 +31,7 @@ public class Timeline extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		response.sendRedirect("/timeline.jsp?maxN=30");
+		response.sendRedirect("timeline.jsp?maxN=30");
 		
 	}
 
