@@ -3,6 +3,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.text.*" %>
 <%@ page import="quack.*" %>
+<%@ page import="service.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,8 +65,9 @@ background-color: #888;
 	
 </style>
 <%
-List<Message> list = (List<Message>)request.getSession().getAttribute("timelineMessages");
-String numPosts = request.getParameter("posts");
+Server server = QuackService.getServer(getServletContext());
+List<Message> list = server.processShowReceivedMessagesReq(request, response, getServletContext());
+String numPosts = request.getParameter("maxN");
 int maxposts = (numPosts == null) ? 10 : Integer.parseInt(numPosts);
 %>
 </head>

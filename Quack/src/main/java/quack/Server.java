@@ -1,6 +1,7 @@
 package quack;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -226,7 +227,7 @@ public interface Server {
 	// mensagem foi enviada com sucesso" e mostrando o texto formatado
 	// da mensagem e sua datahora.
 
-	public void processShowReceivedMessagesReq(HttpServletRequest request,
+	public List<Message> processShowReceivedMessagesReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException;
 
 	// Chamado quando o servidor HTTP recebe um pedido da sessão

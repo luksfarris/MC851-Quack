@@ -396,13 +396,13 @@ public final class ServerImpl implements Server {
 	}
 
 	@Override
-	public void processShowReceivedMessagesReq(HttpServletRequest request,
+	public List<Message> processShowReceivedMessagesReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException{
 		
 		User user = (User) request.getSession().getAttribute("user");
 		if (user == null){
 			html.errorPage(response, "no valid user.");
-			return;
+			return null;
 		}
 		long startTime;
 		long endTime;
@@ -444,10 +444,10 @@ public final class ServerImpl implements Server {
 				else return 1;
 	        }
 		});
-		
-		request.getSession().setAttribute("timelineMessages", messages);
-		response.sendRedirect("/Quack/timeline.jsp");
-		return;
+		 
+//		request.getSession().setAttribute("timelineMessages", messages);
+//		response.sendRedirect("/Quack/timeline.jsp");
+		return messages.subList(0, (int) maxN);
 	}
 
 	@Override

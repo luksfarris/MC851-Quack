@@ -30,8 +30,9 @@ public class Timeline extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Server server = QuackService.getServer(getServletContext());
-		server.processShowReceivedMessagesReq(request, response, getServletContext());
+		
+		response.sendRedirect("/timeline.jsp?maxN=30");
+		
 	}
 
 	/**
