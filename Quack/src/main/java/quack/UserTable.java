@@ -47,4 +47,7 @@ public interface UserTable {
 	public int getUserCount();
 	// Retorna a quantidade de usuários no banco de dados.
 	
+	public List<User> getAllUsers();
+	// Retorna uma lista de {User} contendo todos os usuarios do sistema.
+	
 }

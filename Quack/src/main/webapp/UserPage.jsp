@@ -12,6 +12,9 @@
 <title>Página de Usuário</title>
 
 <style>
+	header nav.navbar-fixed-top, div.container.panel {
+  		background: rgba(255, 255, 255, 0.75);
+	}
 
 	div.container{
 		width: 75%;
@@ -29,6 +32,25 @@
 </style>
 </head>
 <body>
+
+	<header>
+      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="Timeline">
+             	Timeline
+            </a> |
+            <a class="navbar-brand" href="userlist.jsp">
+             	Usuários do Sistema
+            </a> |
+            <a class="navbar-brand" href="#">
+             	Logout
+            </a>
+          </div>
+        </div>
+      </nav>
+	</header>
+
 	<%
 		//DADOS DO USUARIO (pegar do BD)
 		String loginName = request.getParameter("u");
@@ -50,6 +72,7 @@
 	pagina de usuario (Implementação Inicial)<br><br>
 	<img src= <%out.println(PicAddress);%> alt="User Picture" style="width:150px;height:150px">
 	<br>
+	
 	<a href="Contato?follow=true&userName=<%out.println(user.getLoginName());%>">Seguir</a> | 
 	<a href="Contato?follow=false&userName=<%out.println(user.getLoginName());%>">Bloquear</a> |
 	<a href="createMessage.jsp">Postar Mensagem</a>
