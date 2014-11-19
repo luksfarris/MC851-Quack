@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="java.text.*" %>
+<%@ page import="quack.*" %>
+<%@ page import="service.*" %>
 <!DOCTYPE html>
 <html>
 	<!-- Página em teste -->
@@ -64,44 +66,34 @@
 	}
 	</style>
 <%
-String msgText = "À noite, vovô Kowalsky vê o ímã cair no pé do pinguim queixoso e vovó põe açúcar no chá de tâmaras do jabuti feliz. ★";
-String loginName = "usra", fullName = "Usuário A";
-int reposts = 23, favorites = 5;
-String numNotes = request.getParameter("notes");
-int maxposts = (numNotes == null) ? 5 : Integer.parseInt(numNotes);
-List<String[]> notes = new LinkedList<String[]>();
-notes.add(new String[] { "usrq", "Usuário Q", "Usuário K" });
-notes.add(new String[] { "usro", "Usuário O", "Usuário K" });
-notes.add(new String[] { "usrk", "Usuário K", null });
-notes.add(new String[] { "usrk", "Usuário K", "Usuário D" });
-notes.add(new String[] { "usrh", "Usuário H", "Usuário B" });
-notes.add(new String[] { "usrg", "Usuário G", "Usuário E" });
-notes.add(new String[] { "usre", "Usuário E", null });
-notes.add(new String[] { "usre", "Usuário E", "Usuário D" });
-notes.add(new String[] { "usrd", "Usuário D", "Usuário A" });
-notes.add(new String[] { "usrb", "Usuário B", "Usuário A" });
+String u = request.getParameter("u");
+User user;
+user = QuackService.getServer(getServletContext()).getUserFromLoginName(u);
+String id = request.getParameter("id");
+Message message;
+message = user.getMessageById(Long.parseLong(id));
 %>	
 	</head>
 	<body>
 		<div style="width: 700px; margin-left: auto; margin-right: auto;">
 			<div class="box">
+			<% if (message != null) { %>
 				<div style="float: left;">
-					<img src="img/profilepics/<%= loginName %>.png" style="width: 64px;" alt="Imagem de <%= fullName %>" />
+					<img src="img/profilepics/<%= user.getLoginName() %>.png" style="width: 64px;" alt="Imagem de <%= user.getFullName() %>" />
 				</div>
 				<div style="float: left; padding-left: 8px; vertical-align: top;">
 					<p>
-						<span id="fullname"><%= fullName %></span><br />
-						<span id="loginname">@<%= loginName %></span>
+						<span id="fullname"><%= user.getFullName() %></span><br />
+						<a id="loginname" href="user/<%= user.getLoginName() %>">@<%= user.getLoginName() %></a>
 					</p>
 				</div>
 				<div style="float: left; clear: left;">
 					<hr />
-					<p id="message"><%= msgText %></p>
+					<p id="message"><%= message.getText() %></p>
 					<p class="datetime">Postado em 
 					<%
 						DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss");
-						Calendar cal = Calendar.getInstance();
-						out.println(dateFormat.format(cal.getTime()).toLowerCase());
+						out.println(dateFormat.format(new Date(message.getDate() * 1000)).toLowerCase());
 					%>
 					</p>
 					
@@ -111,41 +103,20 @@ notes.add(new String[] { "usrb", "Usuário B", "Usuário A" });
 					
 					<table style="margin-left: auto; margin-right: auto; color: #888;">
 						<tr>
-							<th><%= reposts %></th>
-							<th><%= favorites %></th>
+							<th><%= 0 %></th>
+							<th><%= 0 %></th>
 						</tr>
 						<tr>
 							<td>REPOSTAGENS</td>
 							<td>FAVORITOS</td>
 						</tr>
 					</table>
-					<hr />
-				
-					<ul style="list-style-type: none;">
-					<%
-					for (int i = 0; i < maxposts && i < notes.size(); i++)
-					{
-					%>
-						<li>
-							<img src="img/profilepics/<%= notes.get(i)[0] %>.png" style="width: 16px;" />
-							<p style="display: inline;">
-								<a href="#"><%= notes.get(i)[1] %></a>
-								<% if (notes.get(i)[2] == null) { %>
-								marcou isto como favorito
-								<% } else { %>
-								repostou isto de <a href="#"><%= notes.get(i)[2] %></a>
-								<% } %>
-							</p>
-						</li>
-					<%
-					}
-					%>
 					
-					</ul>
-					<% if (maxposts < notes.size()) { %>
-					<p style="text-align: center;"><a href="MessagePage.jsp?notes=<%= maxposts + 5 %>">↓ Mostrar mais ↓</a></p>
-					<% } %>
+				
+					
+					
 				</div>
+			<% } %>
 			</div>
 		</div>
 	</body>

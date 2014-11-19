@@ -190,4 +190,12 @@ public class UserImpl implements User {
 		return count;
 	}
 
+	@Override
+	public Message getMessageById(long id) {
+		for (Message m : this.messages)
+			if (m.getId() == id)
+				return m;
+		return null;
+	}
+
 }

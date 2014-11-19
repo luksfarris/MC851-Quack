@@ -134,6 +134,9 @@ public interface User {
 	// Retorna o trecho da lista de mensagens {this.getMessages()},
 	// limitadas ao intervalo definido por {startTime,endTime,maxN}.
 	// Veja a interpretação destes parâmetros na interface {Server}.
+	
+	public Message getMessageById(long id);
+	// Retorna a mensagem que possui o id {id}.
 
 	public String getPassword();
 	// retorna a senha {String} do usuario.
