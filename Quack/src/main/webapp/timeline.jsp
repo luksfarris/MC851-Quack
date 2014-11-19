@@ -10,6 +10,11 @@
 <meta charset="UTF-8" />
 <title>Linha do tempo</title>
 <style>
+
+header nav.navbar-fixed-top, div.container.panel {
+  background: rgba(255, 255, 255, 0.75);
+}
+
 body {
 background-color: #888;
 }
@@ -72,6 +77,25 @@ int maxposts = (numPosts == null) ? 10 : Integer.parseInt(numPosts);
 %>
 </head>
 <body>
+
+<header>
+      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="UserPage.jsp">
+             	Perfil
+            </a> |
+            <a class="navbar-brand" href="#">
+             	Usuários do Sistema
+            </a> |
+            <a class="navbar-brand" href="#">
+             	Logout
+            </a> |
+          </div>
+        </div>
+      </nav>
+</header>
+
 <div style="width: 700px; margin-left: auto; margin-right: auto;">
 
 <div class="box">
