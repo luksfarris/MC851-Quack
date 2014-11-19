@@ -534,4 +534,13 @@ public final class ServerImpl implements Server {
 		}
 		return user;
 	}
+
+	@Override
+	public void processShowAllUsersReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context)
+			throws IOException {
+		
+		request.getSession().setAttribute("users", this.userTable.listUsersByFullName(""));
+		return;
+	}
 }

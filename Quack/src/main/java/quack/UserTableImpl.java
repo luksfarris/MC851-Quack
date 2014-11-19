@@ -34,7 +34,7 @@ public class UserTableImpl implements UserTable {
 		List<User> l = new LinkedList<User>();
 		
 		for(User u: table){
-			if(u.getFullName().equals(fullName))
+			if(u.getFullName().contains(fullName))
 				l.add(u);
 		}
 		return null;
