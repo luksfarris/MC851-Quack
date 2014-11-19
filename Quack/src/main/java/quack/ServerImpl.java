@@ -453,7 +453,7 @@ public final class ServerImpl implements Server {
 			@Override
 	        public int compare(Message a, Message b)
 	        {
-				if(a.getDate() < b.getDate())
+				if(a.getDate() > b.getDate())
 					return -1;
 				else if(a.getDate() == b.getDate())
 					return 0;
@@ -555,11 +555,10 @@ public final class ServerImpl implements Server {
 	}
 
 	@Override
-	public void processShowAllUsersReq(HttpServletRequest request,
+	public List<User> processShowAllUsersReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context)
 			throws IOException {
 		
-		request.getSession().setAttribute("users", this.userTable.listUsersByFullName(""));
-		return;
+		return this.userTable.listUsersByFullName("");
 	}
 }

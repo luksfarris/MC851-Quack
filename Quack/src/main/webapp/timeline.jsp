@@ -113,7 +113,7 @@ out.println(dateFormat.format(new Date(cal * 1000)).toLowerCase());
 </table>
 
 <% if (maxposts <= list.size()) { %>
-<p style="text-align: center;"><a href="timeline.jsp?posts=<%= maxposts + 5 %>">↓ Mostrar mais ↓</a></p>
+<p style="text-align: center;"><a href="timeline.jsp?maxN=<%= maxposts + 30 %>">↓ Mostrar mais ↓</a></p>
 <% } %>
 <% } %>
 </div>
