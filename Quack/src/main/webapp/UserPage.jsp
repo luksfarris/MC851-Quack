@@ -1,3 +1,4 @@
+<%@page import="service.QuackService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="quack.User" %>
@@ -30,7 +31,13 @@
 <body>
 	<%
 		//DADOS DO USUARIO (pegar do BD)
-		User user = (User)request.getSession().getAttribute("userPage");
+		String loginName = request.getParameter("u");
+		User user;	
+		if(loginName == null){
+			user = (User) request.getSession().getAttribute("user");		
+		} else {
+			user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
+		}
 		int numPosts = user.getPostedMessages().size();
 		int followers = user.followersCount();
 		int follows = user.followsCount(); 
