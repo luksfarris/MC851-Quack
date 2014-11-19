@@ -96,12 +96,13 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
 </th>
 <td><b><%= list.get(i).getUser().getFullName() %></b>&ensp;<a href="user/<%= list.get(i).getUser().getLoginName() %>">@<%= list.get(i).getUser().getLoginName() %></a><br />
 <%= list.get(i).getText() %><br/>
-<span class="datetime">Postado em
+<span class="datetime">
+<a href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getId() %>">Postado em
 <% 
 DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss", new Locale("pt"));
 long cal = list.get(i).getDate();
 out.println(dateFormat.format(new Date(cal * 1000)).toLowerCase());
-%> 
+%></a>
 &ndash; <%= 0 %> repostage<%= "ns" %> 
 &ndash; <%= 0 %> favorito<%=  "s" %><br/>
 <a href="#">➡ Repostar</a> &mdash; <a href="#">★ Marcar como favorito</a></span>
