@@ -1,6 +1,7 @@
 package quack;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -226,7 +227,7 @@ public interface Server {
 	// mensagem foi enviada com sucesso" e mostrando o texto formatado
 	// da mensagem e sua datahora.
 
-	public void processShowReceivedMessagesReq(HttpServletRequest request,
+	public List<Message> processShowReceivedMessagesReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException;
 
 	// Chamado quando o servidor HTTP recebe um pedido da sessão
@@ -285,7 +286,7 @@ public interface Server {
 	public User getUserFromLoginName(String loginName);
 	// Este metodo é chamado quando é necessário recuperar um usuário {User} a partir 
 	// de um login {String}. A busca pelo login sera feita na tabela de usuários
-	// que fica salva no servidor Apache, e caso exista retorna o usuario correspondente.
+	// que fica salva na instância de {Server}, e caso exista retorna o usuario correspondente.
 	// Caso contrario retorna {null};
 	
 	

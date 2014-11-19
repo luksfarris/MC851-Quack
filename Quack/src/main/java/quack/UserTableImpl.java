@@ -30,11 +30,11 @@ public class UserTableImpl implements UserTable {
 		return null;
 	}
 			
-	public List<User> listUsersByFullName(String fullName) {
+	public List<User> listUsersByFullName(String name) {
 		List<User> l = new LinkedList<User>();
 		
 		for(User u: table){
-			if(u.getFullName().contains(fullName))
+			if(u.getFullName().contains(name))
 				l.add(u);
 		}
 		return null;
