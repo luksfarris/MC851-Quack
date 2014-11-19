@@ -285,7 +285,7 @@ public interface Server {
 	public User getUserFromLoginName(String loginName);
 	// Este metodo é chamado quando é necessário recuperar um usuário {User} a partir 
 	// de um login {String}. A busca pelo login sera feita na tabela de usuários
-	// que fica salva no servidor Apache, e caso exista retorna o usuario correspondente.
+	// que fica salva na instância de {Server}, e caso exista retorna o usuario correspondente.
 	// Caso contrario retorna {null};
 	
 	
