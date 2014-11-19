@@ -73,7 +73,7 @@ background-color: #888;
 Server server = QuackService.getServer(getServletContext());
 List<Message> list = server.processShowReceivedMessagesReq(request, response, getServletContext());
 String numPosts = request.getParameter("maxN");
-int maxposts = (numPosts == null) ? 10 : Integer.parseInt(numPosts);
+int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
 %>
 </head>
 <body>

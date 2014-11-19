@@ -61,4 +61,9 @@ public class UserTableImpl implements UserTable {
 		}		return null;
 	}
 
+	@Override
+	public List<User> getAllUsers() {
+		return table;
+	}
+
 }

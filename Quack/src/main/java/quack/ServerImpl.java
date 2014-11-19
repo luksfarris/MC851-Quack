@@ -559,6 +559,6 @@ public final class ServerImpl implements Server {
 			HttpServletResponse response, ServletContext context)
 			throws IOException {
 		
-		return this.userTable.listUsersByFullName("");
+		return this.userTable.getAllUsers();
 	}
 }
