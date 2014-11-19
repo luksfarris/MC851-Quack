@@ -94,6 +94,7 @@ List<User> users = server.processShowAllUsersReq(request, response, getServletCo
 </tr>
 <%}}%>
 </table>
+<center><a href="timeline.jsp">Voltar</a></center>
 </div>
 
 </div>
