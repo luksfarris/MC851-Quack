@@ -57,7 +57,8 @@
 		String loginName = request.getParameter("u");
 		User user;	
 		if(loginName == null){
-			user = (User) request.getSession().getAttribute("user");		
+            String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+            user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);        
 		} else {
 			user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
 		}
