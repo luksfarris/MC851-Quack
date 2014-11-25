@@ -220,6 +220,24 @@ public interface Server {
 	// Em caso de sucesso, coloca no parâmetro {response} uma página dizendo "sua
 	// mensagem foi enviada com sucesso" e mostrando o texto formatado
 	// da mensagem e sua datahora.
+	
+	public void processRepostMessageReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
+	// Chamado quando o servidor Quack recebe um pedido para repostar
+	// uma mensagem.
+	// 
+	// Em {request} deve estar o campos {id} que contem
+	// o identificador unico da menasgem a ser reopstada.
+	// Deve haver também um campo {cookie} que deve identificar uma
+	// sessão aberta.
+	// O dono dessa sessão será considerado o autor da nova mesnagem.
+	//
+	// Este comando atribui uma datahora UTC à nova mensagem, e a armazena nas
+	// tabelas de mensagens.
+	//
+	// Em caso de sucesso, coloca no parâmetro {response} uma página dizendo 
+	// "mensagem repostada com sucesso" e mostrando o texto formatado
+	// da mensagem e sua datahora.
 
 	public List<Message> processShowReceivedMessagesReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException;

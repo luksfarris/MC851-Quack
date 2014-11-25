@@ -87,7 +87,7 @@ public final class ServerImpl implements Server {
 						
 
 						if(m.initialize(rs2.getString("body"), u, rs2.getLong("id"), 
-								this.timestampFromString(rs2.getString("created"))) == false)
+								this.timestampFromString(rs2.getString("created")), null) == false)
 							System.out.println("Erro ao carregar mensagens");
 						else{
 							u.addMessage(m);
@@ -488,7 +488,7 @@ public final class ServerImpl implements Server {
 		Message message = new MessageImpl();
 					
 		if (replyLoginName == null || replyLoginName.equals("")) {
-			if (!message.initialize(messageBody, user, this.nextMessageId, Calendar.getInstance().getTimeInMillis()/1000)) {
+			if (!message.initialize(messageBody, user, this.nextMessageId, Calendar.getInstance().getTimeInMillis()/1000, null)) {
 				html.errorPage(response, "message creation failed.");
 				return;
 			}
@@ -555,5 +555,77 @@ public final class ServerImpl implements Server {
 	public List<User> getAllUsers(){
 		
 		return this.userTable.listUsersByFullName("");
+	}
+
+	@Override
+	public void processRepostMessageReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context)
+			throws IOException {
+		
+		// pega os dados da sessão
+				String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+				User user = (User)getUserFromCookie(cookie);
+							
+				if (user == null){
+					html.errorPage(response, "no valid user.");
+					return;
+				}
+				
+				Message message;
+				User messageAuthor;
+				
+				if (request.getParameter("id") == null) {
+					html.errorPage(response, "no message ID especified;");
+					return;
+				}
+				
+				messageAuthor = this.userTable.getUserByLogin(request.getParameter("author"));
+				
+				if(messageAuthor == null){
+					html.errorPage(response, "invalid author");
+				}
+				
+				message = messageAuthor.getMessageById(Long.valueOf(request.getParameter("id")));
+				
+				if(message == null){
+					html.errorPage(response, "message not found");
+				}
+					
+				// nova mensagem
+				Message newMessage = new MessageImpl();
+							
+					if (!newMessage.initialize(message.getText(), user, this.nextMessageId, Calendar.getInstance().getTimeInMillis()/1000, message)) {
+						html.errorPage(response, "message creation failed.");
+						return;
+					}
+
+					this.nextMessageId++;
+					
+					try {
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						this.database.getConnection();
+						this.database.getStatement("INSERT INTO message (id, user_id, body, parent,created)"
+							+ "VALUES ("+newMessage.getId()+","+user.getDbIndex()+
+							",'"+newMessage.getText()+"',"+ message.getId() +",'"
+							+ dateFormat.format(new Date(newMessage.getDate()*1000))+
+							"');").execute();
+						this.database.commit();
+						
+						user.addMessage(message);
+						this.numMessages++;
+					
+						System.out.println("Mensagem inserida na tabela");
+					} catch (ClassNotFoundException e) {
+						
+						e.printStackTrace();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					
+					response.sendRedirect("/Quack/UserPage.jsp");
+				
+				// TODO Tratar de mensagens de reply		
+				return;
+
 	}
 }

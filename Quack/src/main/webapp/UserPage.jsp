@@ -101,7 +101,7 @@
 		for(Message m : messages){
 			out.println("<center> <div id='msg"+ i + "'class='mensagem', align='center'>"+
 		"<a onclick='hideMsg("+ i +")''><font color = blue>Esconder</font></a><br><br>" + m.getText()
-			+ "<br><br><a href='/repost'>RePostar</a> | <a href='/favorite'>Favorita</a></div></center><br>");
+			+ "<br><br><a href='/RepostMessage?id="+ m.getId() +"&author="+ m.getUser().getLoginName() + "'>RePostar</a> | <a href='/favorite'>Favorita</a></div></center><br>");
 			i++;
 		}
 	%>
