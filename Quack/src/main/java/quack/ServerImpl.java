@@ -87,7 +87,7 @@ public final class ServerImpl implements Server {
 						
 
 						if(m.initialize(rs2.getString("body"), u, rs2.getLong("id"), 
-								this.timestampFromString(rs2.getString("created")), null) == false)
+								this.timestampFromString(rs2.getString("created"))) == false)
 							System.out.println("Erro ao carregar mensagens");
 						else{
 							u.addMessage(m);
@@ -488,7 +488,7 @@ public final class ServerImpl implements Server {
 		Message message = new MessageImpl();
 					
 		if (replyLoginName == null || replyLoginName.equals("")) {
-			if (!message.initialize(messageBody, user, this.nextMessageId, Calendar.getInstance().getTimeInMillis()/1000, null)) {
+			if (!message.initialize(messageBody, user, this.nextMessageId, Calendar.getInstance().getTimeInMillis()/1000)) {
 				html.errorPage(response, "message creation failed.");
 				return;
 			}
@@ -594,7 +594,7 @@ public final class ServerImpl implements Server {
 				// nova mensagem
 				Message newMessage = new MessageImpl();
 							
-					if (!newMessage.initialize(message.getText(), user, this.nextMessageId, Calendar.getInstance().getTimeInMillis()/1000, message)) {
+					if (!newMessage.initialize(user, message, this.nextMessageId, Calendar.getInstance().getTimeInMillis()/1000)) {
 						html.errorPage(response, "message creation failed.");
 						return;
 					}

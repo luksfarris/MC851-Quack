@@ -48,11 +48,11 @@ public class MessageImpl implements Message {
 	}
 
 	@Override
-	public boolean initialize(String body, User user, long id, long timestamp, Message parent) {
+	public boolean initialize(String body, User user, long id, long timestamp) {
 		this.timestamp = timestamp;
 		this.body = body;
 		this.user = user;
-		this.parent = parent;
+		this.parent = null;
 		this.id = id;
 		return true;
 	}
