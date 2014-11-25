@@ -32,7 +32,7 @@ public class RepostMessage extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Server server = QuackService.getServer(getServletContext());
-		server.processSendMessageReq(request, response, getServletContext());
+		server.processRepostMessageReq(request, response, getServletContext());
 	}
 
 	/**

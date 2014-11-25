@@ -143,7 +143,7 @@ out.println(dateFormat.format(new Date(cal * 1000)).toLowerCase());
 %></a>
 &ndash; <%= 0 %> repostage<%= "ns" %> 
 &ndash; <%= 0 %> favorito<%=  "s" %><br/>
-<a href="#">➡ Repostar</a> &mdash; <a href="#">★ Marcar como favorito</a></span>
+<a href="RepostMessage?id=<%out.print(list.get(i).getId());%>&author=<%out.print(list.get(i).getUser().getLoginName());%>">➡ Repostar</a> &mdash; <a href="#">★ Marcar como favorito</a></span>
 </td>
 
 </tr>
