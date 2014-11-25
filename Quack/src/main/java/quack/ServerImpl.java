@@ -210,9 +210,8 @@ public final class ServerImpl implements Server {
 	public void processLogoutReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
 		
-		// TODO: implementar o logout
-		
-		return;
+		CookieHelper.removeCookie(response, CookieHelper.COOKIE_NAME);
+		response.sendRedirect("/Quack/pub/loginpage.jsp");
 	}
 
 	public void processShowUserProfileReq(HttpServletRequest request,

@@ -88,7 +88,7 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
             <a class="navbar-brand" href="userlist.jsp">
              	Usuários do Sistema
             </a> |
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="Logout">
              	Logout
             </a>
           </div>
