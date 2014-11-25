@@ -57,7 +57,7 @@ public class SessionTableImpl implements SessionTable {
 		Session session = null;
 		for (int i=0 ; i<sessions.size() ; i++) {
 			Session currentSession = sessions.get(i);
-			if (currentSession.getCookie() == cookie) {
+			if (currentSession.getCookie().equals(cookie)) {
 				session = currentSession;
 				break;
 			}
