@@ -5,9 +5,18 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public interface Database {
+	
+	// Interface com o banco de dados persistente.
+	// Enquanto o servidor Quack estiver rodando, deve existir apenas uma
+	// instância desta classe, que encapsula a implementação do banco de dados
+	// persitente.  Os métodos abaixo permitem acessar o banco de maneira
+	// independente da implementação. 
+	// ??{ Ainda não está nada independente. Todos os detalhes em {ServerImpl} que 
+	// dependem do banco ser implementado em MySQL devem ser movidos para {DatabaseImpl}
+	// e escondidos. }??
 
 	public Connection getConnection() throws ClassNotFoundException, SQLException;
-	// Abre conexao {this} com banco de dados MySQL
+	// Abre conexao {this} com servidor do banco de dados persistente.
 	
 	public void closeConnection() throws ClassNotFoundException, SQLException;
 	// Fecha a conexao {this} com banco de dados MySQL
