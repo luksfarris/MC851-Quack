@@ -123,18 +123,12 @@ public interface Server {
 	// usuário, listar as mensagens públicas ou o perfil de qualquer usuário, 
 	// busca de mensagens e usuários pelo conteúdo, etc.
 	
-	public List<User> processShowAllUsersReq(HttpServletRequest request,
-			HttpServletResponse response, ServletContext context) throws IOException;
-	// Chamado quando o servidor Quack recebe um pedido para listar todos os usuários do sistema.
+	public List<User> getAllUsers();
+	// Chamado para auxiliar o servidor Quack a montar a página
+	// que lista todos os usuários do sistema.
 	//
-	// O parâmetro {request} por enquanto não precisa ter nenhum outro campo. ??{ No futuro
-	// poderá opcionalmente identificar uma sessão ativa, e conter um padrão de busca
-	// mais campos para pedir os próximos {maxN} usuários a partir de certo usuário. }??
-	
-	// Em caso de sucesso, retorna a lista de usuários
-    //	??{ No futuro, se o {request} identificar uma sessão aberta,
-	// mostra ao lado de cada usuário {v} o estado do contato entre o dono {u} da sessão
-	// e o usuário {v}. }??
+	// retorna uma lista {List<User>} contendo todos os usuarios
+	// cadastrados no sistema.
 
 	public void processRegistrationReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException;

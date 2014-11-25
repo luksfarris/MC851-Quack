@@ -552,12 +552,8 @@ public final class ServerImpl implements Server {
 	}
 
 	@Override
-	public List<User> processShowAllUsersReq(HttpServletRequest request,
-			HttpServletResponse response, ServletContext context)
-			throws IOException {
+	public List<User> getAllUsers(){
 		
 		return this.userTable.listUsersByFullName("");
 	}
-	
-	
 }

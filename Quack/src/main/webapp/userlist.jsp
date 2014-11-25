@@ -70,7 +70,7 @@ background-color: #888;
 </style>
 <%
 Server server = QuackService.getServer(getServletContext());
-List<User> users = server.processShowAllUsersReq(request, response, getServletContext());
+List<User> users = server.getAllUsers();
 %>
 </head>
 <body>
