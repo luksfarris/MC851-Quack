@@ -15,7 +15,7 @@ import tests.TestableServlet;
  * Servlet implementation class Login
  */
 @WebServlet(description = "Login", urlPatterns = { "/pub/Login" })
-public class Login extends TestableServlet {
+public class LoginServlet extends TestableServlet {
 	private static final long serialVersionUID = 1L;
 
 	

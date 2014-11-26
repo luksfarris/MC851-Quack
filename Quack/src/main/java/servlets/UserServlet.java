@@ -10,19 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import quack.Server;
 import service.QuackService;
-import tests.TestableServlet;
 
 /**
- * Servlet implementation class Cadastro
+ * Servlet implementation class User
  */
-@WebServlet(description = "Cadastro", urlPatterns = { "/pub/Cadastro" })
-public class Cadastro extends TestableServlet {
+@WebServlet(description = "User", urlPatterns = { "/user/*" })
+public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Cadastro() {
+    public UserServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,8 +30,9 @@ public class Cadastro extends TestableServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		Server server = QuackService.getServer(getServletContext());
-		server.processRegistrationReq(request, response, getServletContext());
+		server.processShowUserProfileReq(request, response, getServletContext());
 	}
 
 	/**

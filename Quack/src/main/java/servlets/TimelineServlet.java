@@ -15,13 +15,13 @@ import service.QuackService;
  * Servlet implementation class Timeline
  */
 @WebServlet(description = "Timeline", urlPatterns = {"/Timeline"})
-public class Timeline extends HttpServlet {
+public class TimelineServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Timeline() {
+    public TimelineServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

@@ -459,5 +459,16 @@ public final class ServerImpl implements Server {
 		String username = this.userTable.getUserById(Long.valueOf(request.getParameter("id"))).getLoginName();
 		
 		html.followersPage(response, username);
+
+	}
+
+	@Override
+	public void processShowFollowsReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context)
+			throws IOException {
+		String username = this.userTable.getUserById(Long.valueOf(request.getParameter("id"))).getLoginName();
+		
+		html.followsPage(response, username);
+			
 	}
 }

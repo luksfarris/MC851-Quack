@@ -1,5 +1,6 @@
 package servlets;
 
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -12,16 +13,16 @@ import quack.Server;
 import service.QuackService;
 
 /**
- * Servlet implementation class RepostMessage
+ * Servlet implementation class Contato
  */
-@WebServlet(description = "RepostMessage", urlPatterns = { "/RepostMessage"})
-public class RepostMessage extends HttpServlet {
+@WebServlet(description = "Contato", urlPatterns = { "/Contato"})
+public class ContatoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RepostMessage() {
+    public ContatoServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,7 +33,7 @@ public class RepostMessage extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Server server = QuackService.getServer(getServletContext());
-		server.processRepostMessageReq(request, response, getServletContext());
+		server.processModifyContactReq(request, response, getServletContext());
 	}
 
 	/**
@@ -40,7 +41,6 @@ public class RepostMessage extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

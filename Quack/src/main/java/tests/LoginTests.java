@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import servlets.Cadastro;
-import servlets.Login;
+import servlets.CadastroServlet;
+import servlets.LoginServlet;
 
 
 public class LoginTests extends Mockito{
@@ -30,7 +30,7 @@ public class LoginTests extends Mockito{
         StringWriter writer = new StringWriter();
         // cria um writer falso para a resposta
         when(response.getWriter()).thenReturn(new PrintWriter(writer));
-        Login loginServlet = new Login();
+        LoginServlet loginServlet = new LoginServlet();
        
         loginServlet.testDoPost(request, response);
         // assegura que o usuario recebeu a mensagem de falha
@@ -49,7 +49,7 @@ public class LoginTests extends Mockito{
         StringWriter writer = new StringWriter();
         // cria um writer falso para a resposta
         when(response.getWriter()).thenReturn(new PrintWriter(writer));
-        Cadastro cadastroServlet = new Cadastro();
+        CadastroServlet cadastroServlet = new CadastroServlet();
         cadastroServlet.testDoGet(request, response);
         
         verify(response, times(1)).sendRedirect("/Quack/loginpage.jsp");

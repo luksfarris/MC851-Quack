@@ -60,5 +60,7 @@ public interface HTML {
 
 	public void followersPage(HttpServletResponse response, String username) throws IOException;
 	// Redireciona para a página que lista os usuários que {username} segue.
+
+	public void followsPage(HttpServletResponse response, String username) throws IOException;
 	
 }
