@@ -84,8 +84,6 @@ public final class ServerImpl implements Server {
 					while(rs2.next()){
 						Message m = new MessageImpl();
 
-						
-
 						if(m.initialize(rs2.getString("body"), u, rs2.getLong("id"), 
 								this.timestampFromString(rs2.getString("created"))) == false)
 							System.out.println("Erro ao carregar mensagens");
@@ -553,7 +551,7 @@ public final class ServerImpl implements Server {
 	@Override
 	public List<User> getAllUsers(){
 		
-		return this.userTable.listUsersByFullName("");
+		return this.userTable.getAllUsers();
 	}
 
 	@Override

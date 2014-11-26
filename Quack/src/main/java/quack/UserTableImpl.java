@@ -68,4 +68,10 @@ public class UserTableImpl implements UserTable {
 		return null;
 	}
 
+	@Override
+	public List<User> getAllUsers() {
+		// TODO Auto-generated method stub
+		return this.table;
+	}
+
 }
