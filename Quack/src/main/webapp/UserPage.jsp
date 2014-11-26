@@ -86,7 +86,7 @@ td { text-align: center; }
 			<td><center><%out.println(UserName);%></center></td>
 			<td><center><%out.println(numPosts);%></center></td>
 			<td><center><a href="Followers?id=<%out.print(id);%>"><%out.print(followers);%></a></center></td>
-			<td><center><%out.println(follows);%></center></td>
+			<td><center><a href="Follows?id=<%out.print(id);%>"><%out.print(follows);%></a></center></td>
 		</tr>
 	</table>
 	<br>

@@ -298,6 +298,19 @@ public interface Server {
 	//
 	// Em caso de sucesso, o parâmetro {respose} conterá uma página
 	// listando todos os seguidores do usuário cuja idenficiação é {id}
+	
+	public void processShowFollowsReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
+	// Chamado quando o servidor Quack recebe um pedido para mostrar
+	// os usuarios seguidos por um determinado usuario.
+	// 
+	// Em {request} deve estar o campos {id} que contem
+	// o identificador unico do usuario que se quer ver os seguidos.
+	// Deve haver também um campo {cookie} que deve identificar uma
+	// sessão aberta.
+	//
+	// Em caso de sucesso, o parâmetro {respose} conterá uma página
+	// listando todos os seguidos pelo usuário cuja idenficiação é {id}
 
 	// -------------------------------------------------------------------------------
 	// UTLITÁRIOS
