@@ -191,9 +191,9 @@ public class UserImpl implements User {
 	}
 
 	@Override
-	public Message getMessageById(long id) {
+	public Message getMessageByDBIndex(long DBIndex) {
 		for (Message m : this.messages)
-			if (m.getId() == id)
+			if (m.getDBIndex() == DBIndex)
 				return m;
 		return null;
 	}

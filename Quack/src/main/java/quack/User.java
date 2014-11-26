@@ -135,8 +135,8 @@ public interface User {
 	// limitadas ao intervalo definido por {startTime,endTime,maxN}.
 	// Veja a interpretação destes parâmetros na interface {Server}.
 	
-	public Message getMessageById(long id);
-	// Retorna a mensagem que possui o id {id}.
+	public Message getMessageByDBIndex(long DBIndex);
+	// Retorna a mensagem que possui o id {DBIndex}.
 
 	public String getPassword();
 	// retorna a senha {String} do usuario.

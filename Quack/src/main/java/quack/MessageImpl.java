@@ -1,7 +1,5 @@
 package quack;
 
-import java.util.Calendar;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,7 +10,7 @@ import javax.persistence.TemporalType;
 public class MessageImpl implements Message {
 	@Id
 	@GeneratedValue
-	private long id;
+	private long DBIndex;
 
 	@Temporal(TemporalType.DATE)
 	private long timestamp;
@@ -43,22 +41,22 @@ public class MessageImpl implements Message {
 	}
 
 	@Override
-	public long getId() {
-		return id;
+	public long getDBIndex() {
+		return DBIndex;
 	}
 
 	@Override
-	public boolean initialize(String body, User user, long id, long timestamp) {
+	public boolean initialize(String body, User user, long DBIndex, long timestamp) {
 		this.timestamp = timestamp;
 		this.body = body;
 		this.user = user;
 		this.parent = null;
-		this.id = id;
+		this.DBIndex = DBIndex;
 		return true;
 	}
 
 	@Override
-	public boolean initialize(User user, Message parent, long id, long timestamp) {
+	public boolean initialize(User user, Message parent, long DBIndex, long timestamp) {
 		
 		if (parent.getParent() != null) {
 			parent = parent.getParent();
@@ -67,7 +65,7 @@ public class MessageImpl implements Message {
 		this.body = null;
 		this.user = user;
 		this.parent = parent;
-		this.id = id;
+		this.DBIndex = DBIndex;
 		return true;
 	}
 

@@ -82,15 +82,9 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
       <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
-            <a class="navbar-brand" href="UserPage.jsp">
-             	Perfil
-            </a> |
-            <a class="navbar-brand" href="UserListPage.jsp">
-             	Usuários do Sistema
-            </a> |
-            <a class="navbar-brand" href="Logout">
-             	Logout
-            </a>
+            <a class="navbar-brand" href="UserPage.jsp">Perfil</a> |
+            <a class="navbar-brand" href="UserListPage.jsp">Usuários do Sistema</a> |
+            <a class="navbar-brand" href="Logout">Logout</a>
           </div>
         </div>
       </nav>
@@ -109,8 +103,7 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
 <form name="createMessage" action="CreateMessage" method="post" accept-charset="utf-8">
 <div align="center">
 	<textarea rows="4" cols="70" name="messageText" maxlength="100" required></textarea>
-	<br>
-	<input align="right" type="submit" value="Quack!">
+	<p style="text-align: right;"><input type="submit" value="Quack!"></p>
 </div>				
 </form>
 
@@ -135,15 +128,15 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
 <td><b><%= list.get(i).getUser().getFullName() %></b>&ensp;<a href="user/<%= list.get(i).getUser().getLoginName() %>">@<%= list.get(i).getUser().getLoginName() %></a><br />
 <%= list.get(i).getText() %><br/>
 <span class="datetime">
-<a href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getId() %>">Postado em
+<a href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getDBIndex() %>">Postado em
 <% 
 DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss", new Locale("pt"));
 long cal = list.get(i).getDate();
 out.println(dateFormat.format(new Date(cal * 1000)).toLowerCase());
 %></a>
-&ndash; <%= 0 %> repostage<%= "ns" %> 
-&ndash; <%= 0 %> favorito<%=  "s" %><br/>
-<a href="RepostMessage?id=<%out.print(list.get(i).getId());%>&author=<%out.print(list.get(i).getUser().getLoginName());%>">➡ Repostar</a> &mdash; <a href="#">★ Marcar como favorito</a></span>
+&ndash; <a href="RepostMessage?id=<%out.print(list.get(i).getDBIndex());%>&author=<%out.print(list.get(i).getUser().getLoginName());%>">➡ Repostar</a>
+&ndash; 0 repostagens </span>
+
 </td>
 
 </tr>

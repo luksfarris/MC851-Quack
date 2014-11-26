@@ -13,9 +13,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-
-    <!-- FontAwesome CDN -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   </head>
 
   <body>
@@ -42,7 +39,7 @@
       </div>
       <div class="container col-md-3 panel panel-default">
         <div class="panel-body">
-          <h4><i class="fa fa-user"></i> Login</h4>
+          <h4>Login</h4>
           <form name="login" action="Login" method="post" role="form" accept-charset="utf-8">
             <div class="form-group">
               <input type="text" name="login" class="form-control" placeholder="usuário or seu-email@email.com" required>
@@ -57,7 +54,7 @@
           <hr/>
           <form name="register" action="RegisterPage.jsp" role="form" method="get">
             <div class="form-group">
-              <h4><i class="fa fa-pencil"></i> Ainda não possui uma conta?</h4>
+              <h4>Ainda não possui uma conta?</h4>
               <input type="submit" class="btn btn-success" value="Registrar">
             </div>
           </form>

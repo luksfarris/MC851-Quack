@@ -71,7 +71,7 @@ User user;
 user = QuackService.getServer(getServletContext()).getUserFromLoginName(u);
 String id = request.getParameter("id");
 Message message;
-message = user.getMessageById(Long.parseLong(id));
+message = user.getMessageByDBIndex(Long.parseLong(id));
 %>	
 	</head>
 	<body>
@@ -98,17 +98,15 @@ message = user.getMessageById(Long.parseLong(id));
 					</p>
 					
 					<p>
-						<a href="#">➡ Repostar</a> &mdash; <a href="#">★ Marcar como favorito</a>
+						<a href="#">➡ Repostar</a>
 					</p>
 					
 					<table style="margin-left: auto; margin-right: auto; color: #888;">
 						<tr>
-							<th><%= 0 %></th>
-							<th><%= 0 %></th>
+							<th>0</th>
 						</tr>
 						<tr>
 							<td>REPOSTAGENS</td>
-							<td>FAVORITOS</td>
 						</tr>
 					</table>
 					

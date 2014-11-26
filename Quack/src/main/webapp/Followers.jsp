@@ -70,7 +70,8 @@ background-color: #888;
 </style>
 <%
 Server server = QuackService.getServer(getServletContext());
-List<User> users = server.getAllUsers();
+String username = request.getParameter("user");
+User user = QuackService.getServer(getServletContext()).getUserFromLoginName(username);
 %>
 </head>
 <body>
@@ -85,7 +86,7 @@ List<User> users = server.getAllUsers();
             <a class="navbar-brand" href="Timeline">
              	Timeline
             </a> |
-            <a class="navbar-brand" href="Logout">
+            <a class="navbar-brand" href="#">
              	Logout
             </a>
           </div>
@@ -100,7 +101,7 @@ List<User> users = server.getAllUsers();
 
 <div style="float: left; padding-left: 8px; vertical-align: top;">
 <p>
-<span id="fullname">Lista de usuarios</span><br />
+<span id="fullname">Seguidores de <%out.print(user.getLoginName());%></span><br />
 </p>
 </div>
 
@@ -108,16 +109,16 @@ List<User> users = server.getAllUsers();
 <hr />
 
 <table style="width: 650px;">
-<% if (users != null) { %>
-<% for(User u: users){%>
+<% if (user.getReverseContacts() != null) { %>
+<% for(Contact c: user.getReverseContacts()){%>
+<% if(c.status().equals("Follow")){ %>
 <tr>
 <td>
-<a href="user/<%out.println(u.getLoginName());%>"><%out.println(u.getLoginName());%></a>
+<a href="user/<%out.println(c.source().getLoginName());%>"><%out.println(c.source().getLoginName());%></a>
 </td>
 </tr>
-<%}}%>
+<%}}}%>
 </table>
-<center><a href="TimelinePage.jsp">Voltar</a></center>
 </div>
 
 </div>
