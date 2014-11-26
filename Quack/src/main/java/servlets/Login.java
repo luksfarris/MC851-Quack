@@ -25,7 +25,7 @@ public class Login extends TestableServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("/Quack/pub/loginpage.jsp");
+		response.sendRedirect("/Quack/pub/LoginPage.jsp");
 	}
 	
 	@Override

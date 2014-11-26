@@ -176,7 +176,7 @@ public final class ServerImpl implements Server {
 //					} catch (SQLException e) {
 //						e.printStackTrace();
 //					}
-					response.sendRedirect("/Quack/pub/loginpage.jsp");
+					response.sendRedirect("/Quack/pub/LoginPage.jsp");
 				}
 			}
 		}
@@ -217,7 +217,7 @@ public final class ServerImpl implements Server {
 		// remove o cookie do navegador
 		CookieHelper.removeCookie(response, CookieHelper.COOKIE_NAME);
 		// envia para o login
-		response.sendRedirect("/Quack/pub/loginpage.jsp");
+		response.sendRedirect("/Quack/pub/LoginPage.jsp");
 	}
 
 	public void processShowUserProfileReq(HttpServletRequest request,
