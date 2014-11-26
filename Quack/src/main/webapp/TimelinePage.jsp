@@ -128,13 +128,13 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
 <td><b><%= list.get(i).getUser().getFullName() %></b>&ensp;<a href="user/<%= list.get(i).getUser().getLoginName() %>">@<%= list.get(i).getUser().getLoginName() %></a><br />
 <%= list.get(i).getText() %><br/>
 <span class="datetime">
-<a href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getId() %>">Postado em
+<a href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getDBIndex() %>">Postado em
 <% 
 DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss", new Locale("pt"));
 long cal = list.get(i).getDate();
 out.println(dateFormat.format(new Date(cal * 1000)).toLowerCase());
 %></a>
-&ndash; <a href="RepostMessage?id=<%out.print(list.get(i).getId());%>&author=<%out.print(list.get(i).getUser().getLoginName());%>">➡ Repostar</a>
+&ndash; <a href="RepostMessage?id=<%out.print(list.get(i).getDBIndex());%>&author=<%out.print(list.get(i).getUser().getLoginName());%>">➡ Repostar</a>
 &ndash; 0 repostagens </span>
 
 </td>

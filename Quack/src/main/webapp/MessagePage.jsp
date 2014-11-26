@@ -71,7 +71,7 @@ User user;
 user = QuackService.getServer(getServletContext()).getUserFromLoginName(u);
 String id = request.getParameter("id");
 Message message;
-message = user.getMessageById(Long.parseLong(id));
+message = user.getMessageByDBIndex(Long.parseLong(id));
 %>	
 	</head>
 	<body>
