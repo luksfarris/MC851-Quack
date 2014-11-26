@@ -20,35 +20,14 @@ public class HTMLImpl implements HTML {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	@Override
-	public String loginPage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	@Override
-
-	public String userProfilePage(String cookie, User source, User target) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-
 	public String messageListPage(String cookie, String title, User user,
 			List<Message> messages, int maxN) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public String homePage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void initialize(Server server) {
@@ -60,5 +39,35 @@ public class HTMLImpl implements HTML {
 		return null;
 	}
 
-	
+	@Override
+	public void homePage(HttpServletResponse response) throws IOException {
+			response.sendRedirect("Quack/pub/LoginPage.jsp");
+	}
+
+	@Override
+	public void loginPage(HttpServletResponse response) throws IOException {
+			response.sendRedirect("Quack/pub/LoginPage.jsp");	
+	}
+
+	@Override
+	public void timelinePage(HttpServletResponse response) throws IOException {
+			response.sendRedirect("/Quack/Timeline");
+
+	}
+
+	@Override
+	public void userProfilePage(HttpServletResponse response, String loginName) throws IOException {
+		response.sendRedirect("/Quack/UserPage.jsp"+"?u="+loginName);
+	}
+
+	@Override
+	public void userProfilePage(HttpServletResponse response) throws IOException {
+		response.sendRedirect("/Quack/UserPage.jsp");
+	}
+
+	@Override
+	public void followersPage(HttpServletResponse response, String username) throws IOException {
+		response.sendRedirect("/Quack/Followers.jsp?user=" + username);
+	}
+
 }

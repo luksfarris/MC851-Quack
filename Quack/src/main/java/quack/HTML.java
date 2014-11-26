@@ -1,5 +1,6 @@
 package quack;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +26,7 @@ public interface HTML {
 	// Em alguns métodos, o {cookie} pode ser "" ou {null}.
 	// Em outros ele deve ser não-nulo.
 	
-	public String homePage();
+	public void homePage(HttpServletResponse response) throws IOException;
 	// Retorna a pagina principal da rede {Quack}, com botões e campos
 	// para login, cadastramento de novos usuários, listagem de dados públicos e 
 	// e mensagens públicas de usuários, busca por conteúdo em mensagens e/ou usuários, etc..
@@ -34,23 +35,30 @@ public interface HTML {
 	// Compõe uma página HTML com a mensagem de erro {msg}, e a envia como resposta para o usuario usando {response}.
 	// Alem disso, cria um log na saida padrao sobre a pagina de erro.
 
-	public String loginPage();
+	public void loginPage(HttpServletResponse response) throws IOException;
 	// Compoe uma pagina HTML com campos {loginName} e {password},
-	// para o usuário fazer login.
+	// para o usuário fazer login e coloca no redirect de response.
 
 	public String loginSuccessfulPage(String cookie, User user);
 	// Pagina de resposta a um login bem sucedido. 
 	
-	public String userProfilePage(String cookie, User source, User target);
-	// Página que mostra o perfil do usuário {target} (que não pode ser {null}).
-	// Se {source} for um usuário não nulo diferente de {target}, supõe que {source}
-	// está logado e é o dono da sessão identificada pelo {cookie}; nesse caso,
-	// a página mostrará o estado do contato entre {source} e {target} 
-	// ("following", "blocked", "inactive", etc.),
-	// com botões para alterar o estado do contato. Se {source} for o mesmo que {target},
-	// mostra botões para alterar dados do perfil de {source}.
+	public void userProfilePage(HttpServletResponse response, String loginName) throws IOException;
+	// Página que mostra o perfil do usuário cujo loginName é {loginName} 
+	// (que não pode ser {null}).
+	// A página deve olhar a sessão salva no cookie para
+	// exibir as relações entre o usuário da sessão e o usuário da página
+	
+	public void userProfilePage(HttpServletResponse response) throws IOException;
+	// Página que exibe o perfil do usuário logado na sessão
 
 	public String messageListPage(String cookie, String title, User user, List<Message> messages, int maxN);
 	// Pagina que exibe uma lista de mensagens de um usuario {user}, com  
 	// botões de navegação, por exemplo "next {maxN}", "prev {maxN}".
+	
+	public void timelinePage(HttpServletResponse response) throws IOException;
+	// Coloca em redirect a página que representa a timeline do usuário.
+
+	public void followersPage(HttpServletResponse response, String username) throws IOException;
+	// Redireciona para a página que lista os usuários que {username} segue.
+	
 }

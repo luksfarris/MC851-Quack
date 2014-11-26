@@ -58,8 +58,7 @@ public final class ServerImpl implements Server {
 
 	public void processHomePageReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
-		response.getWriter().println(html.homePage());
-		return;
+		html.homePage(response);
 	}
 
 	public void processRegistrationReq(HttpServletRequest request,
@@ -89,7 +88,8 @@ public final class ServerImpl implements Server {
 					database.insertUser(user);
 					this.userTable.add(user);
 
-					response.sendRedirect("/Quack/pub/LoginPage.jsp");
+					html.loginPage(response);
+					
 				}
 			}
 		}
@@ -110,8 +110,8 @@ public final class ServerImpl implements Server {
 		    session.open(user, cookie);
 		    sessionTable.add(session);
 		    // adiciona o cookie no browser
-		    CookieHelper.addCookie(response, CookieHelper.COOKIE_NAME, cookie, CookieHelper.COOKIE_AGE);	
-		    response.sendRedirect("/Quack/Timeline");
+		    CookieHelper.addCookie(response, CookieHelper.COOKIE_NAME, cookie, CookieHelper.COOKIE_AGE);
+		    html.timelinePage(response);
 		} else {
 			// usuario invalido, mostra erro.
 			html.errorPage(response, "Falha ao realizar login");
@@ -130,7 +130,7 @@ public final class ServerImpl implements Server {
 		// remove o cookie do navegador
 		CookieHelper.removeCookie(response, CookieHelper.COOKIE_NAME);
 		// envia para o login
-		response.sendRedirect("/Quack/pub/LoginPage.jsp");
+		html.loginPage(response);
 	}
 
 	public void processShowUserProfileReq(HttpServletRequest request,
@@ -145,7 +145,8 @@ public final class ServerImpl implements Server {
 			if(u == null){
 				html.errorPage(response, "Usuario nao existe!");
 			}else{
-				response.sendRedirect("/Quack/UserPage.jsp"+"?u="+u.getLoginName());
+				html.userProfilePage(response, u.getLoginName());
+				
 			}	
 	}
 
@@ -368,7 +369,7 @@ public final class ServerImpl implements Server {
 				this.numMessages++;
 			}
 			
-			response.sendRedirect("/Quack/UserPage.jsp");
+			html.userProfilePage(response);
 		}
 		// TODO Tratar de mensagens de reply		
 		return;
@@ -445,7 +446,7 @@ public final class ServerImpl implements Server {
 						this.numMessages++;
 					}
 					
-					response.sendRedirect("/Quack/UserPage.jsp");
+					html.userProfilePage(response);
 				
 				// TODO Tratar de mensagens de reply		
 				return;
@@ -457,6 +458,6 @@ public final class ServerImpl implements Server {
 			throws IOException {
 		String username = this.userTable.getUserById(Long.valueOf(request.getParameter("id"))).getLoginName();
 		
-		response.sendRedirect("/Quack/Followers.jsp?user=" + username);
+		html.followersPage(response, username);
 	}
 }
