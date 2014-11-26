@@ -61,6 +61,7 @@ td { text-align: center; }
 		int numPosts = user.getPostedMessages().size();
 		int followers = user.followersCount();
 		int follows = user.followsCount(); 
+		long id = user.getDbIndex();
 		String UserName = user.getLoginName();
 		String PicAddress = "https://www.wevi.com.br/static/img/placeholder/placeholder_user.png";
 		List<Message> messages = user.getPostedMessages();
@@ -82,10 +83,10 @@ td { text-align: center; }
 			<td>Numero Seguidos</td>
 		</tr>
 		<tr>
-			<td><%out.println(UserName);%></td>
-			<td><%out.println(numPosts);%></td>
-			<td><%out.println(followers);%></td>
-			<td><%out.println(follows);%></td>
+			<td><center><%out.println(UserName);%></center></td>
+			<td><center><%out.println(numPosts);%></center></td>
+			<td><center><a href="Followers?id=<%out.print(id);%>"><%out.print(followers);%></a></center></td>
+			<td><center><%out.println(follows);%></center></td>
 		</tr>
 	</table>
 	<br>
