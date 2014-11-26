@@ -41,8 +41,8 @@ td { text-align: center; }
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="Timeline">Timeline</a> |
-            <a class="navbar-brand" href="userlist.jsp">Usuários do Sistema</a> |
-            <a class="navbar-brand" href="#">Logout</a>
+            <a class="navbar-brand" href="UserListPage.jsp">Usuários do Sistema</a> |
+            <a class="navbar-brand" href="Logout">Logout</a>
           </div>
         </div>
       </nav>

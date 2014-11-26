@@ -83,7 +83,7 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="UserPage.jsp">Perfil</a> |
-            <a class="navbar-brand" href="userlist.jsp">Usuários do Sistema</a> |
+            <a class="navbar-brand" href="UserListPage.jsp">Usuários do Sistema</a> |
             <a class="navbar-brand" href="Logout">Logout</a>
           </div>
         </div>
