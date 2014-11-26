@@ -1,13 +1,9 @@
 package quack;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -92,6 +88,7 @@ public final class ServerImpl implements Server {
 					this.nextUserId++;
 					database.insertUser(user);
 					this.userTable.add(user);
+
 					response.sendRedirect("/Quack/pub/LoginPage.jsp");
 				}
 			}
@@ -396,7 +393,7 @@ public final class ServerImpl implements Server {
 	@Override
 	public List<User> getAllUsers(){
 		
-		return this.userTable.listUsersByFullName("");
+		return this.userTable.getAllUsers();
 	}
 
 	@Override
@@ -427,7 +424,7 @@ public final class ServerImpl implements Server {
 					html.errorPage(response, "invalid author");
 				}
 				
-				message = messageAuthor.getMessageById(Long.valueOf(request.getParameter("id")));
+				message = messageAuthor.getMessageByDBIndex(Long.valueOf(request.getParameter("id")));
 				
 				if(message == null){
 					html.errorPage(response, "message not found");

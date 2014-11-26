@@ -84,7 +84,7 @@ public class DatabaseImpl implements Database {
 						else {
 							u.addMessage(m);
 							nextMessageId = Math.max(nextMessageId,
-									m.getId());
+									m.getDBIndex());
 						}
 					}
 					userTable.add(u);
@@ -202,7 +202,7 @@ public class DatabaseImpl implements Database {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			getConnection();
 			getStatement("INSERT INTO message (id, user_id, body, parent,created)"
-				+ "VALUES ("+message.getId()+","+user.getDbIndex()+
+				+ "VALUES ("+message.getDBIndex()+","+user.getDbIndex()+
 				",'"+message.getText()+"',NULL,'"
 				+ dateFormat.format(new Date(message.getDate()*1000))+
 				"');").execute();

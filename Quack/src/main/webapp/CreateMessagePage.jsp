@@ -2,11 +2,11 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="java.text.*" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 
 <html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="UTF-8" />
 		<title>Create Message</title>
 	</head>
 	
@@ -74,7 +74,7 @@
 				<div align="center">
 					<textarea rows="4" cols="70" name="messageText" maxlength="100" required></textarea>
 					<br>
-					<input align="right" type="submit" value="Quack!">
+	<p style="text-align: right;"><input type="submit" value="Quack!"></p>
 				</div>
 					
 				</form>

@@ -48,6 +48,9 @@ public interface UserTable {
 	// Retorna uma lista de {User} com todos os usuários cujo nome completo
 	// contém {name}, ou uma lista vazia se não houver.
 
+	public List<User> getAllUsers();
+	// Retorna uma lista de {User} com todos os usuarios do sistema.
+	
 	public int getUserCount();
 	// Retorna a quantidade de usuários no banco de dados.
 		

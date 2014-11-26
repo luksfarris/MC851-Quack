@@ -85,7 +85,7 @@ List<User> users = server.getAllUsers();
             <a class="navbar-brand" href="Timeline">
              	Timeline
             </a> |
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="Logout">
              	Logout
             </a>
           </div>
@@ -117,7 +117,7 @@ List<User> users = server.getAllUsers();
 </tr>
 <%}}%>
 </table>
-<center><a href="timeline.jsp">Voltar</a></center>
+<center><a href="TimelinePage.jsp">Voltar</a></center>
 </div>
 
 </div>
