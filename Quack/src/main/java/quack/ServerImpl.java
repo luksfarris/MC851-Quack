@@ -629,4 +629,13 @@ public final class ServerImpl implements Server {
 				return;
 
 	}
+
+	@Override
+	public void processShowFollowersReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context)
+			throws IOException {
+		String username = this.userTable.getUserById(Long.valueOf(request.getParameter("id"))).getLoginName();
+		
+		response.sendRedirect("/Quack/Followers.jsp?user=" + username);
+	}
 }

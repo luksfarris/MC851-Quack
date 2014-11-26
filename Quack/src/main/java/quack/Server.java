@@ -286,6 +286,19 @@ public interface Server {
 	// Em caso de sucesso, o parâmetro {respose} conterá a pagina inicial do usuario.
 	// A alteração é gravada na base de dados persistennte.
 	
+	public void processShowFollowersReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
+	// Chamado quando o servidor Quack recebe um pedido para mostrar
+	// os seguidores de um usuario do sistema.
+	// 
+	// Em {request} deve estar o campos {id} que contem
+	// o identificador unico do usuario que se quer ver os seguidores.
+	// Deve haver também um campo {cookie} que deve identificar uma
+	// sessão aberta.
+	//
+	// Em caso de sucesso, o parâmetro {respose} conterá uma página
+	// listando todos os seguidores do usuário cuja idenficiação é {id}
+
 	// -------------------------------------------------------------------------------
 	// UTLITÁRIOS
 
