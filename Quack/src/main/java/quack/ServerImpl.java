@@ -154,27 +154,27 @@ public final class ServerImpl implements Server {
 					html.errorPage(response, "Falha ao criar user");  
 				} else {
 					this.nextUserId++;
-					try {
-						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						this.database.getConnection();
-						this.database.getStatement("INSERT INTO user (id, login_name, full_name, email, password, created)"
-								+ "VALUES ("+user.getDbIndex()+",'"+user.getLoginName()+
-								"','"+user.getFullName()+"','"+
-								user.getEmail()+"','"+request.getParameter("password")+"','"
-								+ dateFormat.format(new Date(user.getCreationTime()*1000))+
-								"');").execute();
-						this.database.commit();
+					//try {
+//						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//						this.database.getConnection();
+//						this.database.getStatement("INSERT INTO user (id, login_name, full_name, email, password, created)"
+//								+ "VALUES ("+user.getDbIndex()+",'"+user.getLoginName()+
+//								"','"+user.getFullName()+"','"+
+//								user.getEmail()+"','"+request.getParameter("password")+"','"
+//								+ dateFormat.format(new Date(user.getCreationTime()*1000))+
+//								"');").execute();
+//						this.database.commit();
 						
 						this.userTable.add(user);
 					
 						System.out.println("User inserido na tabela");
-					} catch (ClassNotFoundException e) {
-						
-						e.printStackTrace();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					response.sendRedirect("/Quack/pub/loginpage.jsp");
+//					} catch (ClassNotFoundException e) {
+//						
+//						e.printStackTrace();
+//					} catch (SQLException e) {
+//						e.printStackTrace();
+//					}
+					response.sendRedirect("/Quack/pub/LoginPage.jsp");
 				}
 			}
 		}
@@ -208,8 +208,14 @@ public final class ServerImpl implements Server {
 	public void processLogoutReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
 		
+		String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+		// remove a sessao do servidor.
+		Session session = sessionTable.getSessionByCookie(cookie);
+		sessionTable.delete(session);
+		// remove o cookie do navegador
 		CookieHelper.removeCookie(response, CookieHelper.COOKIE_NAME);
-		response.sendRedirect("/Quack/pub/loginpage.jsp");
+		// envia para o login
+		response.sendRedirect("/Quack/pub/LoginPage.jsp");
 	}
 
 	public void processShowUserProfileReq(HttpServletRequest request,
@@ -454,8 +460,6 @@ public final class ServerImpl implements Server {
 	        }
 		});
 		 
-//		request.getSession().setAttribute("timelineMessages", messages);
-//		response.sendRedirect("/Quack/timeline.jsp");
 		return messages.subList(0, Math.min((int) maxN, messages.size()));
 	}
 

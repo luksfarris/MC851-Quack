@@ -23,7 +23,7 @@ list.add(new String[] { "usrl", "Usuário L" });
 list.add(new String[] { "usrm", "Usuário M" });
 %>
 <meta charset="UTF-8" />
-<title>Usuários que seguem <%= fullName %></title>
+<title>Usuários que <%= fullName %> segue</title>
 <style>
 body {
 background-color: #888;
@@ -91,7 +91,7 @@ background-color: #888;
 
 <div style="float: left; clear: left;">
 <hr />
-<h1>Usuários que seguem <%= fullName %></h1>
+<h1>Usuários que <%= fullName %> segue</h1>
 
 <table style="width: 650px;">
 <% int i; for (i = 0; i < maxusers && i < list.size(); i++) { %>
@@ -115,7 +115,7 @@ background-color: #888;
 
 </table>
 
-<p style="text-align: center;"><a href="followers.jsp?users=<%= maxusers + 9 %>">↓ Mostrar mais ↓</a></p>
+<p style="text-align: center;"><a href="FollowingPage.jsp?users=<%= maxusers + 9 %>">↓ Mostrar mais ↓</a></p>
 
 
 </div>

@@ -55,7 +55,7 @@
             </div>
           </form>
           <hr/>
-          <form name="register" action="registerpage.jsp" role="form" method="get">
+          <form name="register" action="RegisterPage.jsp" role="form" method="get">
             <div class="form-group">
               <h4><i class="fa fa-pencil"></i> Ainda não possui uma conta?</h4>
               <input type="submit" class="btn btn-success" value="Registrar">
