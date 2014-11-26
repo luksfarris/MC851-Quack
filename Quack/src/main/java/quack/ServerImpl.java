@@ -1,14 +1,9 @@
 package quack;
 
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -27,8 +22,8 @@ public final class ServerImpl implements Server {
 	// As tabelas abaixo são cópias na memória dos objetos na base de dados.
 	UserTable userTable = null; // Conjuto de usuários cadastrados.
 
-	private long nextUserId = 0;
-	private long nextMessageId = 0;
+	private Long nextUserId = new Long(0);
+	private Long nextMessageId = new Long(0);
 	long numUsers = 0; // Número de usuários na rede {Quack}.
 	long numContacts = 0; // Número total de contatos criados (incluindo
 							// inativos).
@@ -54,74 +49,11 @@ public final class ServerImpl implements Server {
 		this.userTable = new UserTableImpl();
 		this.userTable.initialize();
 		
-		this.loadDatabase();
+		this.database.loadDatabase(userTable, nextUserId, nextMessageId);
 
 		// Inicializa o criador de paginas html:
 		html = new HTMLImpl();
 		html.initialize(this);
-	}
-
-	private void loadDatabase()
-	// Carrega a base de dados {this.database} na memória, criando os objetos
-	// {User,Message,Contact} e ligando-os entre si. Supõe que a conexão com o
-	// servidor da base de dados já foi estabelecida.
-	{
-		try {
-			this.database.getConnection();
-			ResultSet rs = this.database.getStatement("SELECT * FROM user;").executeQuery();
-			while(rs.next()){
-				User u = new UserImpl();
-				if(u.initialize(rs.getString("login_name"), 
-						rs.getString("email"),
-						rs.getString("full_name"),
-						rs.getString("password"),
-						rs.getLong("id"))){
-					
-					this.nextUserId = Math.max(this.nextUserId, u.getDbIndex());
-					
-					ResultSet rs2 = this.database.getStatement("SELECT * FROM message WHERE user_id=" 
-					+ String.valueOf(u.getDbIndex())).executeQuery();
-					while(rs2.next()){
-						Message m = new MessageImpl();
-
-						if(m.initialize(rs2.getString("body"), u, rs2.getLong("id"), 
-								this.timestampFromString(rs2.getString("created"))) == false)
-							System.out.println("Erro ao carregar mensagens");
-						else{
-							u.addMessage(m);
-							this.nextMessageId = Math.max(this.nextMessageId, m.getDBIndex());
-						}
-					}
-					this.userTable.add(u);
-					}
-				
-				else {
-					System.out.println("Problema no carregamento do usuário!");
-				}	
-			}
-			
-			ResultSet rs3 = this.database.getStatement("SELECT * FROM contact;").executeQuery();
-			while(rs3.next()){
-				Contact c = new ContactImpl();
-				User s = this.userTable.getUserById(rs3.getLong("source_id"));
-				User t = this.userTable.getUserById(rs3.getLong("target_id"));
-				String st = rs3.getString("status");
-				Long lm = rs3.getLong("last_modified");
-				c.initialize(s,t,lm,st);
-				s.addDirectContact(c);
-				t.addReverseContact(c);
-			}
-			
-			this.nextUserId++;
-			this.nextMessageId++;
-			
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void processHomePageReq(HttpServletRequest request,
@@ -154,26 +86,9 @@ public final class ServerImpl implements Server {
 					html.errorPage(response, "Falha ao criar user");  
 				} else {
 					this.nextUserId++;
-					try {
-						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						this.database.getConnection();
-						this.database.getStatement("INSERT INTO user (id, login_name, full_name, email, password, created)"
-								+ "VALUES ("+user.getDbIndex()+",'"+user.getLoginName()+
-								"','"+user.getFullName()+"','"+
-								user.getEmail()+"','"+request.getParameter("password")+"','"
-								+ dateFormat.format(new Date(user.getCreationTime()*1000))+
-								"');").execute();
-						this.database.commit();
-						
-						this.userTable.add(user);
-					
-						System.out.println("User inserido na tabela");
-					} catch (ClassNotFoundException e) {
-						
-						e.printStackTrace();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+					database.insertUser(user);
+					this.userTable.add(user);
+
 					response.sendRedirect("/Quack/pub/LoginPage.jsp");
 				}
 			}
@@ -258,17 +173,17 @@ public final class ServerImpl implements Server {
 						.getTimeInMillis() / 1000, maxN);
 			} else {
 				messages = target.getPostedMessages(0,
-						timestampFromString(endTime), maxN);
+						DatabaseImpl.timestampFromString(endTime), maxN);
 			}
 		} else {
 			if (endTime == null || endTime.equals("")) {
 				messages = target.getPostedMessages(
-						timestampFromString(startTime), Calendar.getInstance()
+						DatabaseImpl.timestampFromString(startTime), Calendar.getInstance()
 								.getTimeInMillis() / 1000, maxN);
 			} else {
 				messages = target.getPostedMessages(
-						timestampFromString(startTime),
-						timestampFromString(endTime), maxN);
+						DatabaseImpl.timestampFromString(startTime),
+						DatabaseImpl.timestampFromString(endTime), maxN);
 			}
 		}
 
@@ -302,38 +217,15 @@ public final class ServerImpl implements Server {
 						c_sessionUser.setStatus("Follow");
 						c_contactUser.setStatus("Follow");
 						
-						try {
-							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							this.database.getConnection();
-							this.database.getStatement("UPDATE contact SET status='Follow', last_modified='"+
-									dateFormat.format(new Date(Calendar.getInstance()
-											.getTimeInMillis()))+"' where source_id='"+
-							sessionUser.getDbIndex() +"' and target_id='"+ contactUser.getDbIndex() +"';").execute();
-							this.database.commit();	
-						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
+						database.modifyContact(sessionUser, contactUser, true);
 						html.errorPage(response, "acao concluida!");
 					}
 					else if(relation.equals("false")){
 						c_sessionUser.setStatus("Block");
 						c_contactUser.setStatus("Block");
 						
-						try {
-							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							this.database.getConnection();
-							this.database.getStatement("UPDATE contact SET status='Block', last_modified='"+
-									dateFormat.format(new Date(Calendar.getInstance()
-											.getTimeInMillis()))+"' where source_id='"+
-							sessionUser.getDbIndex() +"' and target_id='"+ contactUser.getDbIndex() +"';").execute();
-							this.database.commit();	
-						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
+						database.modifyContact(sessionUser, contactUser, false);
+						
 						html.errorPage(response, "acao concluida!");
 					}	
 				} else{//Contato ainda nao existe
@@ -344,20 +236,7 @@ public final class ServerImpl implements Server {
 						sessionUser.addDirectContact(c);
 						contactUser.addReverseContact(c);
 						this.numContacts += 1;
-						
-						//Insere no banco de dados
-						try {
-							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							this.database.getConnection();
-							this.database.getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
-							dateFormat.format(new Date(Calendar.getInstance()
-									.getTimeInMillis()))+"','Follow'"+");").execute();
-							this.database.commit();	
-						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
+						database.insertContact(sessionUser, contactUser, true);
 						html.errorPage(response, "acao concluida!");
 					} else if(relation.equals("false")){ //Relacao de block
 					
@@ -368,18 +247,7 @@ public final class ServerImpl implements Server {
 						contactUser.addReverseContact(c);
 						this.numContacts += 1;
 						//Insere no banco de dados
-						try {
-							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							this.database.getConnection();
-							this.database.getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
-									dateFormat.format(new Date(Calendar.getInstance()
-											.getTimeInMillis()))+"','Block'"+");").execute();
-							this.database.commit();	
-						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
+						database.insertContact(sessionUser, contactUser, false);
 						html.errorPage(response, "acao concluida!");
 					} else{
 						html.errorPage(response, "Relacao invalida");
@@ -426,12 +294,12 @@ public final class ServerImpl implements Server {
 		if(request.getParameter("startTime") == null)
 			startTime = -1;
 		else
-			startTime = timestampFromString((String) request.getParameter("startTime"));
+			startTime = DatabaseImpl.timestampFromString((String) request.getParameter("startTime"));
 		
 		if(request.getParameter("endTime") == null)
 			endTime = -1;
 		else
-			endTime = timestampFromString((String) request.getParameter("endTime"));
+			endTime = DatabaseImpl.timestampFromString((String) request.getParameter("endTime"));
 		
 		if(request.getParameter("maxN") == null)
 			maxN = 15;
@@ -495,26 +363,9 @@ public final class ServerImpl implements Server {
 			}
 
 			this.nextMessageId++;
-			
-			try {
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				this.database.getConnection();
-				this.database.getStatement("INSERT INTO message (id, user_id, body, parent,created)"
-					+ "VALUES ("+message.getDBIndex()+","+user.getDbIndex()+
-					",'"+message.getText()+"',NULL,'"
-					+ dateFormat.format(new Date(message.getDate()*1000))+
-					"');").execute();
-				this.database.commit();
-				
+			if (database.addMessage(message, user)){
 				user.addMessage(message);
 				this.numMessages++;
-			
-				System.out.println("Mensagem inserida na tabela");
-			} catch (ClassNotFoundException e) {
-				
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
 			}
 			
 			response.sendRedirect("/Quack/UserPage.jsp");
@@ -523,20 +374,7 @@ public final class ServerImpl implements Server {
 		return;
 	}
 
-	private long timestampFromString(String time) {
-		time = time.replaceAll("[()]", "");
-		String date[] = time.split("[- :\\.]");
-
-		// TODO - consertar timezone (ID de TimeZone eh uma string
-		// do tipo "Brazil/East", e nao (-0300))
-		Calendar a = Calendar.getInstance();
-		a.set(Integer.parseInt(date[0]), Integer.parseInt(date[1])-1,
-				Integer.parseInt(date[2]), Integer.parseInt(date[3]),
-				Integer.parseInt(date[4]), Integer.parseInt(date[5]));
-
-		return a.getTimeInMillis() / 1000;
-
-	}
+	
 
 	@Override
 	public User getUserFromCookie(String cookie) {
@@ -602,32 +440,15 @@ public final class ServerImpl implements Server {
 
 					this.nextMessageId++;
 					
-					try {
-						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						this.database.getConnection();
-						this.database.getStatement("INSERT INTO message (id, user_id, body, parent,created)"
-							+ "VALUES ("+newMessage.getDBIndex()+","+user.getDbIndex()+
-							",'"+newMessage.getText()+"',"+ message.getDBIndex() +",'"
-							+ dateFormat.format(new Date(newMessage.getDate()*1000))+
-							"');").execute();
-						this.database.commit();
-						
+					if (database.addMessage(newMessage, user)) {
 						user.addMessage(message);
 						this.numMessages++;
-					
-						System.out.println("Mensagem inserida na tabela");
-					} catch (ClassNotFoundException e) {
-						
-						e.printStackTrace();
-					} catch (SQLException e) {
-						e.printStackTrace();
 					}
 					
 					response.sendRedirect("/Quack/UserPage.jsp");
 				
 				// TODO Tratar de mensagens de reply		
 				return;
-
 	}
 
 	@Override
