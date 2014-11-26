@@ -6,10 +6,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="service.CookieHelper" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8" />
 <title>Página de Usuário</title>
 
 <style>
@@ -30,6 +30,8 @@
     align: center;
     border-radius: 15px;
 }
+
+td { text-align: center; }
 </style>
 </head>
 <body>
@@ -38,15 +40,9 @@
       <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
-            <a class="navbar-brand" href="Timeline">
-             	Timeline
-            </a> |
-            <a class="navbar-brand" href="userlist.jsp">
-             	Usuários do Sistema
-            </a> |
-            <a class="navbar-brand" href="#">
-             	Logout
-            </a>
+            <a class="navbar-brand" href="Timeline">Timeline</a> |
+            <a class="navbar-brand" href="userlist.jsp">Usuários do Sistema</a> |
+            <a class="navbar-brand" href="#">Logout</a>
           </div>
         </div>
       </nav>
@@ -80,28 +76,27 @@
 	<a href="createMessage.jsp">Postar Mensagem</a>
 	<table border='1'style='width:100%'>
 		<tr>
-			<td><center>NomeUsuario</center></td>
-			<td><center>Numero Posts</center></td>
-			<td><center>Numero Seguidores</center></td>
-			<td><center>Numero Seguidos</center></td>
+			<td>NomeUsuario</td>
+			<td>Numero Posts</td>
+			<td>Numero Seguidores</td>
+			<td>Numero Seguidos</td>
 		</tr>
 		<tr>
-			<td><center><%out.println(UserName);%></center></td>
-			<td><center><%out.println(numPosts);%></center></td>
-			<td><center><%out.println(followers);%></center></td>
-			<td><center><%out.println(follows);%></center></td>
+			<td><%out.println(UserName);%></td>
+			<td><%out.println(numPosts);%></td>
+			<td><%out.println(followers);%></td>
+			<td><%out.println(follows);%></td>
 		</tr>
 	</table>
 	<br>
 	<hr>
-	<center>Feed de Mensagens</center>
-	<br>
+	<p style="text-align: center;">Feed de Mensagens</p>
 	<% //Printa Mensagens
 		int i = 0;
 		for(Message m : messages){
 			out.println("<center> <div id='msg"+ i + "'class='mensagem', align='center'>"+
 		"<a onclick='hideMsg("+ i +")''><font color = blue>Esconder</font></a><br><br>" + m.getText()
-			+ "<br><br><a href='RepostMessage?id="+ m.getId() +"&author="+ m.getUser().getLoginName() + "'>RePostar</a> | <a href='/favorite'>Favorita</a></div></center><br>");
+			+ "<br><br><a href='RepostMessage?id="+ m.getId() +"&author="+ m.getUser().getLoginName() + "'>Repostar</a></div></center><br>");
 			i++;
 		}
 	%>
