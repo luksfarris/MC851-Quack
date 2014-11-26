@@ -89,7 +89,7 @@ public final class ServerImpl implements Server {
 							System.out.println("Erro ao carregar mensagens");
 						else{
 							u.addMessage(m);
-							this.nextMessageId = Math.max(this.nextMessageId, m.getId());
+							this.nextMessageId = Math.max(this.nextMessageId, m.getDBIndex());
 						}
 					}
 					this.userTable.add(u);
@@ -500,7 +500,7 @@ public final class ServerImpl implements Server {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				this.database.getConnection();
 				this.database.getStatement("INSERT INTO message (id, user_id, body, parent,created)"
-					+ "VALUES ("+message.getId()+","+user.getDbIndex()+
+					+ "VALUES ("+message.getDBIndex()+","+user.getDbIndex()+
 					",'"+message.getText()+"',NULL,'"
 					+ dateFormat.format(new Date(message.getDate()*1000))+
 					"');").execute();
@@ -586,7 +586,7 @@ public final class ServerImpl implements Server {
 					html.errorPage(response, "invalid author");
 				}
 				
-				message = messageAuthor.getMessageById(Long.valueOf(request.getParameter("id")));
+				message = messageAuthor.getMessageByDBIndex(Long.valueOf(request.getParameter("id")));
 				
 				if(message == null){
 					html.errorPage(response, "message not found");
@@ -606,8 +606,8 @@ public final class ServerImpl implements Server {
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						this.database.getConnection();
 						this.database.getStatement("INSERT INTO message (id, user_id, body, parent,created)"
-							+ "VALUES ("+newMessage.getId()+","+user.getDbIndex()+
-							",'"+newMessage.getText()+"',"+ message.getId() +",'"
+							+ "VALUES ("+newMessage.getDBIndex()+","+user.getDbIndex()+
+							",'"+newMessage.getText()+"',"+ message.getDBIndex() +",'"
 							+ dateFormat.format(new Date(newMessage.getDate()*1000))+
 							"');").execute();
 						this.database.commit();
