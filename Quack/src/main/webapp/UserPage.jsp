@@ -22,17 +22,22 @@
 
   </head>
   <body>
-
     <header>
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <a class="navbar-brand" href="Timeline">Timeline</a> |
-              <a class="navbar-brand" href="UserListPage.jsp">Usuários do Sistema</a> |
-              <a class="navbar-brand" href="Logout">Logout</a>
-            </div>
+      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+              <img alt="Quack" src="...">
+            </a>
           </div>
-        </nav>
+          <div class="navbar-collapse collapse">
+            <ul class="navbar navbar-nav">
+              <li><a class="navbar-brand" href="Timeline">Timeline</a></li>
+              <li><a class="navbar-brand" href="UserListPage.jsp">Usuários do Sistema</a></li>
+              <li><a class="navbar-brand" href="Logout">Logout</a></li>
+          </div>
+        </div>
+      </nav>
     </header>
 
     <%
@@ -55,8 +60,8 @@
     %>
 
     <div id='container' class='container'>
-    pagina de usuario (Implementação Inicial)<br><br>
-    <img src= <%out.println(PicAddress);%> alt="User Picture" style="width:150px;height:150px">
+      <h1><strong><%out.println(UserName);%></strong></h1>
+      <img src= <%out.println(PicAddress);%> alt="User Picture" style="width:150px;height:150px" />
     <br>
 	
 	<a href="Contato?follow=true&userName=<%out.println(user.getLoginName());%>">Seguir</a> | 
@@ -92,12 +97,11 @@
 </body>
 
   <script>
-  function hideMsg(i){
-    var msg = document.getElementById('msg' + i);
-    var container = msg.parentElement;
-    container.removeChild(msg);
-  }
-
+    function hideMsg(i){
+      var msg = document.getElementById('msg' + i);
+      var container = msg.parentElement;
+      container.removeChild(msg);
+    }
   </script>
 
 </html>
