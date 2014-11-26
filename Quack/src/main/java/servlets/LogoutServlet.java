@@ -1,4 +1,5 @@
 package servlets;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -10,39 +11,29 @@ import javax.servlet.http.HttpServletResponse;
 import quack.Server;
 import service.QuackService;
 
-
-/**
- * Servlet implementation class Login
- */
-@WebServlet(description = "CreateMessage", urlPatterns = { "/CreateMessage" })
-public class CreateMessage extends HttpServlet {
+@WebServlet(description = "Logout", urlPatterns = {"/Logout"})
+public class LogoutServlet extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
-	public static final String HTML_START = "<!DOCTYPE html><html><body>";
-	public static final String HTML_END = "</body></html>";
-
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public CreateMessage() {
+	
+	public LogoutServlet() {
 		super();
 	}
-
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
+		Server server = QuackService.getServer(getServletContext());
+		server.processLogoutReq(request, response, getServletContext());
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		Server server = QuackService.getServer(getServletContext());
-		server.processSendMessageReq(request, response, getServletContext());
 	}
-
+	
 }

@@ -457,7 +457,7 @@ public final class ServerImpl implements Server {
 			throws IOException {
 		String username = this.userTable.getUserById(Long.valueOf(request.getParameter("id"))).getLoginName();
 		
-		response.sendRedirect("/Quack/Followers.jsp?user=" + username);
+		response.sendRedirect("/Quack/FollowersPage.jsp?user=" + username);
 	}
 
 	@Override
