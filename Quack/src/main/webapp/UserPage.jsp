@@ -73,7 +73,7 @@ td { text-align: center; }
 	
 	<a href="Contato?follow=true&userName=<%out.println(user.getLoginName());%>">Seguir</a> | 
 	<a href="Contato?follow=false&userName=<%out.println(user.getLoginName());%>">Bloquear</a> |
-	<a href="createMessage.jsp">Postar Mensagem</a>
+	<a href="CreateMessagePage.jsp">Postar Mensagem</a>
 	<table border='1'style='width:100%'>
 		<tr>
 			<td>NomeUsuario</td>

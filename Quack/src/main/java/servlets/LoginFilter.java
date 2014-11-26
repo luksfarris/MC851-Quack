@@ -72,7 +72,7 @@ public class LoginFilter implements Filter {
 		}
 		// se não havia usuário, envia para a págna de login.
 		if (user == null) {
-			response.sendRedirect("/Quack/pub/loginpage.jsp");
+			response.sendRedirect("/Quack/pub/LoginPage.jsp");
 		} else {
 			// senão não faz nada.
 			chain.doFilter(req, res);
