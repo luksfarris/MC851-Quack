@@ -33,4 +33,24 @@ public interface Database {
 	public void initialize(String dbLoginName, String dbName, String dbPassword);
 	// Inicializa um banco de dados com parametros de login {dbLoginName}, senha {dbPassword}
 	// e banco de nome {dbName}
+	
+	public void loadDatabase(UserTable userTable, Long nextUserId, Long nextMessageId);
+	// Carrega a base de dados {this.database} na memória, criando os objetos
+	// {User,Message,Contact} e ligando-os entre si. Supõe que a conexão com o
+	// servidor da base de dados já foi estabelecida.
+	
+	public void insertUser(User user);
+	// Insere um usuário {User} no banco de dados.
+	
+	public void modifyContact(User sessionUser, User contactUser, boolean following);
+	// Altera o contato entre dois usuários, {sessionUser} e {contactUser} para. Se {following}
+	// for true, ele segue, senão ele bloqueia.
+	
+	public void insertContact (User sessionUser, User contactUser, boolean following);
+	// Cria um novo contato entre dois usuários, {sessionUser} e {contactUser} para. Se {following}
+	// for true, ele segue, senão ele bloqueia.
+	
+	public boolean addMessage(Message message, User user);
+	// Adiciona uma mensagem {Message} a um usuario {User} no banco de dados. Retorna true se
+	// a operacao teve sucesso, ou false caso contrario.
 }
