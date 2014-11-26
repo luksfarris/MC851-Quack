@@ -41,7 +41,7 @@
             <a class="navbar-brand" href="Timeline">
              	Timeline
             </a> |
-            <a class="navbar-brand" href="userlist.jsp">
+            <a class="navbar-brand" href="UserListPage.jsp">
              	Usuários do Sistema
             </a> |
             <a class="navbar-brand" href="#">
@@ -77,7 +77,7 @@
 	
 	<a href="Contato?follow=true&userName=<%out.println(user.getLoginName());%>">Seguir</a> | 
 	<a href="Contato?follow=false&userName=<%out.println(user.getLoginName());%>">Bloquear</a> |
-	<a href="createMessage.jsp">Postar Mensagem</a>
+	<a href="CreateMessagePage.jsp">Postar Mensagem</a>
 	<table border='1'style='width:100%'>
 		<tr>
 			<td><center>NomeUsuario</center></td>
