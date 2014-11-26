@@ -67,7 +67,7 @@ public class HTMLImpl implements HTML {
 
 	@Override
 	public void followersPage(HttpServletResponse response, String username) throws IOException {
-		response.sendRedirect("/Quack/Followers.jsp?user=" + username);
+		response.sendRedirect("/Quack/FollowersPage.jsp?user=" + username);
 	}
 
 	@Override
