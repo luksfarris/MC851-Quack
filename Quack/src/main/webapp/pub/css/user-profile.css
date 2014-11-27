@@ -1,7 +1,3 @@
-header nav.navbar-fixed-top {
-  background: rgba(255, 255, 255, 0.75);
-}
-
 body {
   padding-top: 70px;
 }
@@ -12,4 +8,12 @@ body {
 
 .user-info .thumbnail {
   margin-bottom: 10px;
+}
+
+.msg-feed .table tr {
+  height: 66px;
+}
+
+.msg-feed .table td {
+  vertical-align: middle;
 }

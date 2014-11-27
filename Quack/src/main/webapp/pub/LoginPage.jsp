@@ -20,9 +20,7 @@
       <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">
-              <img alt="Quack" src="...">
-            </a>
+            <a class="navbar-brand" href="#">Quack</a>
           </div>
         </div>
       </nav>
