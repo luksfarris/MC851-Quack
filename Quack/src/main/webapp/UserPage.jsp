@@ -20,21 +20,24 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
+    <!-- Font Awesome CDN -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   </head>
   <body>
     <header>
       <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
+        <div class="container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">
-              <img alt="Quack" src="...">
-            </a>
+            <a class="navbar-brand" href="#">Quack</a>
           </div>
           <div class="navbar-collapse collapse">
-            <ul class="navbar navbar-nav">
-              <li><a class="navbar-brand" href="Timeline">Timeline</a></li>
-              <li><a class="navbar-brand" href="UserListPage.jsp">Usuários do Sistema</a></li>
-              <li><a class="navbar-brand" href="Logout">Logout</a></li>
+            <ul class="nav navbar-nav">
+              <li><a href="Timeline">Timeline</a></li>
+              <li><a href="UserListPage.jsp">Usuários do Sistema</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="Logout">Logout</a></li>
+            </ul>
           </div>
         </div>
       </nav>
@@ -59,42 +62,46 @@
       List<Message> messages = user.getPostedMessages();
     %>
 
-    <div id='container' class='container'>
-      <h1><strong><%out.println(UserName);%></strong></h1>
-      <img src= <%out.println(PicAddress);%> alt="User Picture" style="width:150px;height:150px" />
-    <br>
-	
-	<a href="Contato?follow=true&userName=<%out.println(user.getLoginName());%>">Seguir</a> | 
-	<a href="Contato?follow=false&userName=<%out.println(user.getLoginName());%>">Bloquear</a> |
-	<a href="CreateMessagePage.jsp">Postar Mensagem</a>
-	<table border='1'style='width:100%'>
-		<tr>
-			<td>NomeUsuario</td>
-			<td>Numero Posts</td>
-			<td>Numero Seguidores</td>
-			<td>Numero Seguidos</td>
-		</tr>
-		<tr>
-			<td><center><%out.println(UserName);%></center></td>
-			<td><center><%out.println(numPosts);%></center></td>
-			<td><center><a href="Followers?id=<%out.print(id);%>"><%out.print(followers);%></a></center></td>
-			<td><center><a href="Follows?id=<%out.print(id);%>"><%out.print(follows);%></a></center></td>
-		</tr>
-	</table>
-	<br>
-	<hr>
-	<p style="text-align: center;">Feed de Mensagens</p>
-	<% //Printa Mensagens
-		int i = 0;
-		for(Message m : messages){
-			out.println("<center> <div id='msg"+ i + "'class='mensagem', align='center'>"+
-		"<a onclick='hideMsg("+ i +")''><font color = blue>Esconder</font></a><br><br>" + m.getText()
-			+ "<br><br><a href='RepostMessage?id="+ m.getDBIndex() +"&author="+ m.getUser().getLoginName() + "'>Repostar</a></div></center><br>");
-			i++;
-		}
-	%>
-	</div>
-</body>
+    <div class="container">
+      <div class="col-md-2 user-info">
+        <h1><strong><%out.println(UserName);%></strong></h1>
+        <div class="thumbnail">
+          <img src="<%out.println(PicAddress);%>" alt="User Picture" />
+        </div>
+        <div class="profile-buttons">
+          <a href="Contato?follow=true&userName=<%out.println(user.getLoginName());%>" class="btn btn-success btn-xs">
+            <i class="fa fa-plus"></i>
+            Seguir
+          </a>
+        </div>
+        <div>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <a href="#">Posts</a> <span class="badge"><%out.println(numPosts);%></span>
+            </li>
+            <li class="list-group-item">
+              <a href="Followers?id=<%out.print(id);%>">Seguidores</a> <span class="badge"><%out.println(followers);%></span>
+            </li>
+            <li class="list-group-item">
+              <a href="Follows?id=<%out.print(id);%>">Seguindo</a> <span class="badge"><%out.println(follows);%></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <p style="text-align: center;">Feed de Mensagens</p>
+        <% //Printa Mensagens
+          int i = 0;
+          for(Message m : messages){
+            out.println("<center> <div id='msg"+ i + "'class='mensagem', align='center'>"+
+          "<a onclick='hideMsg("+ i +")''><font color = blue>Esconder</font></a><br><br>" + m.getText()
+            + "<br><br><a href='RepostMessage?id="+ m.getDBIndex() +"&author="+ m.getUser().getLoginName() + "'>Repostar</a></div></center><br>");
+            i++;
+          }
+        %>
+      </div>
+    </div>
+  </body>
 
   <script>
     function hideMsg(i){
