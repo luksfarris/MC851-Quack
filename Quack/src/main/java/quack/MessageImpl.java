@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import java.util.Date;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 
 @Entity
@@ -45,7 +45,7 @@ public class MessageImpl implements Message {
 
 	public String getFormattedDate(String format) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-		Date date = new Date(this.getDate());
+		Date date = new Date(this.getDate() * 1000);
 		return dateFormat.format(date);
 	}
 
