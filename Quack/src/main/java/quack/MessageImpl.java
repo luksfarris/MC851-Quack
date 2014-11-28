@@ -6,6 +6,9 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 @Entity
 public class MessageImpl implements Message {
 	@Id
@@ -38,6 +41,12 @@ public class MessageImpl implements Message {
 	@Override
 	public long getDate() {
 		return timestamp;
+	}
+
+	public String getFormattedDate(String format) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+		Date date = new Date(this.getDate());
+		return dateFormat.format(date);
 	}
 
 	@Override

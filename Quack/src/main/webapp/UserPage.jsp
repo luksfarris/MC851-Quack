@@ -51,9 +51,11 @@
       if (loginName == null) {
         String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
         user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
+        pageContext.setAttribute("isCurrentUserPage", true);
       }
       else {
         user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
+        pageContext.setAttribute("isCurrentUserPage", false);
       }
 
       pageContext.setAttribute("id", user.getDbIndex());
@@ -65,7 +67,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h1><strong>${userName}</strong></h1>
+          <h2>${user.getFullName()} <small>(${userName})</small></h2>
         </div>
       </div>
       <div class="row">
@@ -74,40 +76,62 @@
             <img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" />
           </div>
           <div class="profile-buttons">
-            <a href="Contato?follow=true&userName=${userName}" class="btn btn-success btn-xs">
-              <i class="fa fa-plus"></i>
-              Seguir
-            </a>
+            <c:choose>
+              <c:when test="${isCurrentUserPage}">
+                <a href="#" class="btn btn-success btn-xs">
+                  <i class="fa fa-edit"></i>
+                  Editar perfil
+                </a>
+              </c:when>
+              <c:otherwise>
+                <a href="Contato?follow=true&userName=${userName}" class="btn btn-success btn-xs">
+                  <i class="fa fa-plus"></i>
+                  Seguir
+                </a>
+              </c:otherwise>
+            </c:choose>
           </div>
           <div>
-            <ul class="list-group">
-              <li class="list-group-item">
-                <a href="#">Mensagens</a> <span class="badge">${messages.size()}</span>
-              </li>
-              <li class="list-group-item">
-                <a href="Followers?id=${id}">Seguidores</a> <span class="badge">${user.followersCount()}</span>
-              </li>
-              <li class="list-group-item">
-                <a href="Follows?id=${id}">Seguindo</a> <span class="badge">${user.followsCount()}</span>
-              </li>
-            </ul>
+          </div>
+          <div>
+            <div class="list-group">
+              <a href="UserPage.jsp" class="list-group-item active">Mensagens <span class="badge">${messages.size()}</span></a>
+              <a href="Followers?id=${id}" class="list-group-item">Seguidores <span class="badge">${user.followersCount()}</span></a>
+              <a href="Follows?id=${id}" class="list-group-item">Seguindo <span class="badge">${user.followsCount()}</span></a>
+            </div>
           </div>
         </div>
         <div class="col-md-9">
           <div class="panel panel-default msg-feed">
-            <div class="panel-heading"><h4>Mensagens</h4></div>
             <table class="table table-striped table-hover">
               <tbody>
-                <c:forEach items="${messages}" var="m" varStatus="loop">
-                  <tr id="msg-${loop.index}" class="msg">
-                    <td><p>${m.getText()}</p></td>
-                    <td>
-                      <a href="RepostMessage?id=${m.getDBIndex()}&author=${m.getUser().getLoginName()}" class="btn btn-info btn-xs">
-                        <i class="fa fa-refresh"></i> Repostar
-                      </a>
-                    </td>
-                  </tr>
-                </c:forEach>
+                <c:choose>
+                  <c:when test="${isCurrentUserPage}">
+                    <c:forEach items="${messages}" var="m" varStatus="loop">
+                      <tr id="msg-${loop.index}" class="msg">
+                        <td><span class="label label-primary">
+                          ${m.getFormattedDate("dd/MM/yyyy HH:mm")}
+                        </td>
+                        <td>${m.getText()}</td>
+                      </tr>
+                    </c:forEach>
+                  </c:when>
+                  <c:otherwise>
+                    <c:forEach items="${messages}" var="m" varStatus="loop">
+                      <tr id="msg-${loop.index}" class="msg">
+                        <td><span class="label label-primary">
+                          ${m.getFormattedDate("dd/MM/yyyy HH:mm")}
+                        </td>
+                        <td>${m.getText()}</td>
+                        <td>
+                          <a href="RepostMessage?id=${m.getDBIndex()}&author=${m.getUser().getLoginName()}" class="btn btn-info btn-xs">
+                            <i class="fa fa-refresh"></i> Repostar
+                          </a>
+                        </td>
+                      </tr>
+                    </c:forEach>
+                  </c:otherwise>
+                </c:choose>
               </tbody>
             </table>
           </div>
