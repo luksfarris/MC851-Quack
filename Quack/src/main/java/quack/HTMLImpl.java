@@ -46,7 +46,7 @@ public class HTMLImpl implements HTML {
 
 	@Override
 	public void loginPage(HttpServletResponse response) throws IOException {
-			response.sendRedirect("Quack/pub/LoginPage.jsp");	
+			response.sendRedirect("LoginPage.jsp");	
 	}
 
 	@Override
