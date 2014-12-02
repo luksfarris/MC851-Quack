@@ -62,5 +62,11 @@ public interface HTML {
 	// Redireciona para a página que lista os usuários que {username} segue.
 
 	public void followsPage(HttpServletResponse response, String username) throws IOException;
+	// Redireciona para a página que lista os usuarios seguidos pelo usuario
+	// que contem o nome {username}
+	
+	public String formatMessage(MessageImpl message);
+	// Retorna uma string formatada contendo o texto do campo {body} da mensagem
+	// {message}.
 	
 }

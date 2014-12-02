@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import servlets.CadastroServlet;
+import servlets.RegistrationServlet;
 import servlets.LoginServlet;
 
 
@@ -49,7 +49,7 @@ public class LoginTests extends Mockito{
         StringWriter writer = new StringWriter();
         // cria um writer falso para a resposta
         when(response.getWriter()).thenReturn(new PrintWriter(writer));
-        CadastroServlet cadastroServlet = new CadastroServlet();
+        RegistrationServlet cadastroServlet = new RegistrationServlet();
         cadastroServlet.testDoGet(request, response);
         
         verify(response, times(1)).sendRedirect("/Quack/loginpage.jsp");

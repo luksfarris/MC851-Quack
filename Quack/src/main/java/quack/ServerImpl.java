@@ -90,7 +90,7 @@ public final class ServerImpl implements Server {
 		}
 		
 		//Verifica se já existe usuário com esse username:
-		User user = this.userTable.getUserByLogin(username);
+		User user = this.userTable.getUserByLoginName(username);
 		if (user != null) {  
 			
 			html.errorPage(response, "Este nome de usuario ja existe");
@@ -164,7 +164,7 @@ public final class ServerImpl implements Server {
 			String parseURL[] = URL.split("/");
 			String params = parseURL[parseURL.length -1];
 			
-			User u =  userTable.getUserByLogin(params);
+			User u =  userTable.getUserByLoginName(params);
 			
 			if(u == null){
 				html.errorPage(response, "Usuario nao existe!");
@@ -184,7 +184,7 @@ public final class ServerImpl implements Server {
 		}
 
 		// Obtem o autor das mensagens procuradas
-		User target = this.userTable.getUserByLogin(loginName);
+		User target = this.userTable.getUserByLoginName(loginName);
 		if (target == null) {
 			//html.errorPage(response, "no such user.");
 		}
@@ -220,7 +220,7 @@ public final class ServerImpl implements Server {
 		
 		String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
 		User sessionUser = (User)getUserFromCookie(cookie);
-		User contactUser = userTable.getUserByLogin(request.getParameter("userName")); //Usuario contato
+		User contactUser = userTable.getUserByLoginName(request.getParameter("userName")); //Usuario contato
 		String relation = request.getParameter("follow");
 		Contact c;
 				
@@ -412,7 +412,7 @@ public final class ServerImpl implements Server {
 	}
 	
 	public User getUserFromLoginName(String loginName) {
-		return userTable.getUserByLogin(loginName);
+		return userTable.getUserByLoginName(loginName);
 	}
 
 	@Override
@@ -443,7 +443,7 @@ public final class ServerImpl implements Server {
 					return;
 				}
 				
-				messageAuthor = this.userTable.getUserByLogin(request.getParameter("author"));
+				messageAuthor = this.userTable.getUserByLoginName(request.getParameter("author"));
 				
 				if(messageAuthor == null){
 					html.errorPage(response, "invalid author");
