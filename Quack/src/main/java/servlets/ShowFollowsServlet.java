@@ -14,14 +14,14 @@ import service.QuackService;
 /**
  * Servlet implementation class Followers
  */
-@WebServlet(description = "Followers", urlPatterns = { "/Followers"})
-public class FollowersServlet extends HttpServlet {
+@WebServlet(description = "Follows", urlPatterns = { "/Follows"})
+public class ShowFollowsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FollowersServlet() {
+    public ShowFollowsServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,7 +32,7 @@ public class FollowersServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Server server = QuackService.getServer(getServletContext());
-		server.processShowFollowersReq(request, response, getServletContext());
+		server.processShowFollowsReq(request, response, getServletContext());
 	}
 
 	/**

@@ -1,6 +1,5 @@
 package servlets;
 
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -13,16 +12,16 @@ import quack.Server;
 import service.QuackService;
 
 /**
- * Servlet implementation class Contato
+ * Servlet implementation class Followers
  */
-@WebServlet(description = "Contato", urlPatterns = { "/Contato"})
-public class ContatoServlet extends HttpServlet {
+@WebServlet(description = "Followers", urlPatterns = { "/Followers"})
+public class ShowFollowersServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ContatoServlet() {
+    public ShowFollowersServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,7 +32,7 @@ public class ContatoServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Server server = QuackService.getServer(getServletContext());
-		server.processModifyContactReq(request, response, getServletContext());
+		server.processShowFollowersReq(request, response, getServletContext());
 	}
 
 	/**

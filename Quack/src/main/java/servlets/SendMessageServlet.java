@@ -15,7 +15,7 @@ import service.QuackService;
  * Servlet implementation class Login
  */
 @WebServlet(description = "CreateMessage", urlPatterns = { "/CreateMessage" })
-public class CreateMessageServlet extends HttpServlet {
+public class SendMessageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String HTML_START = "<!DOCTYPE html><html><body>";
 	public static final String HTML_END = "</body></html>";
@@ -24,7 +24,7 @@ public class CreateMessageServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public CreateMessageServlet() {
+	public SendMessageServlet() {
 		super();
 	}
 

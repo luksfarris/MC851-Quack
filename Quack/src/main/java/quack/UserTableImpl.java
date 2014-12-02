@@ -20,7 +20,7 @@ public class UserTableImpl implements UserTable {
 	}
 
 	@Override
-	public User getUserByLogin(String loginName) {
+	public User getUserByLoginName(String loginName) {
 		for(User u : this.table){
 			if(u.getLoginName().equals(loginName))
 				return u;
