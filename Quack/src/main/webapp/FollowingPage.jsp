@@ -67,7 +67,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h2>Seguidores de @${user.getLoginName()}</h2>
+          <h2>Seguidos por @${user.getLoginName()}</h2>
         </div>
       </div>
       <div class="row">
