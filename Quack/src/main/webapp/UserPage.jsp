@@ -9,9 +9,28 @@
 
 <!DOCTYPE html>
 <html>
+  <%
+      String loginName = request.getParameter("u");
+      User user;
+      String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+      user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
+
+      if (loginName == null || (user != null && user.getLoginName().equals(loginName))) {
+          pageContext.setAttribute("isCurrentUserPage", true);
+      }
+      else {
+        user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
+        pageContext.setAttribute("isCurrentUserPage", false);
+      }
+
+      pageContext.setAttribute("id", user.getDbIndex());
+      pageContext.setAttribute("user", user);
+      pageContext.setAttribute("userName", user.getLoginName());
+      pageContext.setAttribute("messages", user.getPostedMessages());
+  %>
   <head>
     <meta charset="UTF-8" />
-    <title>Página de Usuário</title>
+    <title>Perfil de @${user.getLoginName()}</title>
 
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -43,26 +62,6 @@
         </div>
       </nav>
     </header>
-
-    <%
-      String loginName = request.getParameter("u");
-      User user;
-
-      if (loginName == null) {
-        String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
-        user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
-        pageContext.setAttribute("isCurrentUserPage", true);
-      }
-      else {
-        user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
-        pageContext.setAttribute("isCurrentUserPage", false);
-      }
-
-      pageContext.setAttribute("id", user.getDbIndex());
-      pageContext.setAttribute("user", user);
-      pageContext.setAttribute("userName", user.getLoginName());
-      pageContext.setAttribute("messages", user.getPostedMessages());
-    %>
 
     <div class="container">
       <div class="row">
