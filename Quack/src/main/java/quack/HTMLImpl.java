@@ -75,4 +75,9 @@ public class HTMLImpl implements HTML {
 		response.sendRedirect("/Quack/FollowingPage.jsp?user=" + username);	
 	}
 
+	@Override
+	public String formatMessage(MessageImpl message) {
+		//Fazer formatações adicionais aqui
+		return message.getText();
+	}
 }
