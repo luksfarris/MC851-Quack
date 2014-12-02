@@ -8,6 +8,7 @@ import javax.persistence.TemporalType;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 @Entity
 public class MessageImpl implements Message {
@@ -45,6 +46,7 @@ public class MessageImpl implements Message {
 
 	public String getFormattedDate(String format) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		Date date = new Date(this.getDate() * 1000);
 		return dateFormat.format(date);
 	}
