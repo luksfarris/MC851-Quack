@@ -83,7 +83,7 @@
                 </a>
               </c:when>
               <c:otherwise>
-                <a href="Contato?follow=true&userName=${userName}" class="btn btn-success btn-xs">
+                <a href="Contato?state=follow&userName=${userName}" class="btn btn-success btn-xs">
                   <i class="fa fa-plus"></i>
                   Seguir
                 </a>
