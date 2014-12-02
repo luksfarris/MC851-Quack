@@ -3,18 +3,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<!-- Custom style -->
-    <link rel="stylesheet" type="text/css" href="css/registerpage.css">
+<!-- Custom style -->
+<link rel="stylesheet" type="text/css" href="css/registerpage.css">
 
-	<!-- Bootstrap CDN -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<!-- Bootstrap CDN -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Quack - Cadastro</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Quack - Cadastro</title>
 
-	<script>
+<script>
 		function checkPass() {
 			//Store the password field objects into variables ...
 			var pass1 = document.getElementById('pass1');
@@ -47,55 +50,45 @@
 		}
 	</script>
 
-	<style type="text/css">
-	.container {
-		width: 250px;
-		clear: both;
-	}
+<style type="text/css">
+.container {
+	width: 250px;
+	clear: both;
+}
 
-	.container input {
-		width: 100%;
-		clear: both;
-	}
-	</style>
+.container input {
+	width: 100%;
+	clear: both;
+}
+</style>
 </head>
 <body>
-	<header>
-      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="#">
-              <img alt="Cadastro" src="...">
-            </a>
-          </div>
-        </div>
-      </nav>
-    </header>
-	<center>
-		<h1>Cadastro Quack</h1>
+	<header> <nav class="navbar navbar-default navbar-fixed-top"
+		role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#"> <img alt="Cadastro" src="...">
+			</a>
+		</div>
+	</div>
+	</nav> </header>
+	<h1>Cadastro Quack</h1>
+	<div class="wrapper text-center">
 		<div class="container col-md-3 panel panel-default">
 			<div class="page-body">
-		        <div class="panel-body">
-					<div class="container">
-						<form name="Login" action="Cadastro" method="get" accept-charset="utf-8">
-							Nome Completo:
-							<input type="text" name="fullName" required><br>
-							Email:
-							<input type="email" name="email" required><br>
-							Nome de Usuario:
-							<input type="text" name="username" required><br>
-							Senha:
-							<input type="password" name="password" id="pass1" required><br>
-							Confirme a senha:
-							<input type="password" name="passwordcheck" id="pass2" onKeyUp='checkPass(); return false;' required> 
-							<span id="confirmMessage" class="confirmMessage"></span><br> 
-							<input type="submit" class="btn btn-success" value="Cadastrar" id="botao" disabled> 
-							<input type="button" class="btn btn-info" value="Voltar" onClick="history.back();">
-						</form>
-					</div>
-				</div>
+				<form name="Login" action="Cadastro" method="get"
+					accept-charset="utf-8">
+					Nome Completo:<input type="text" name="fullName" required><br>
+					Email:<input type="email" name="email" required><br>
+					Nome de Usuario:<input type="text" name="username" required><br>
+					Senha:<input type="password" name="password" id="pass1" required><br>
+					Confirme a senha:<input type="password" name="passwordcheck" id="pass2" onKeyUp='checkPass(); return false;' required>
+					<span id="confirmMessage" class="confirmMessage"></span><br>
+					<input type="submit" class="btn btn-success" value="Cadastrar" id="botao" disabled>
+					<input type="button" class="btn btn-info" value="Voltar" onClick="history.back();">
+				</form>
 			</div>
 		</div>
-	</center>
+	</div>
 </body>
 </html>
