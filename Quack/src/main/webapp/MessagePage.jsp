@@ -93,6 +93,7 @@ message = user.getMessageByDBIndex(Long.parseLong(id));
 					<p class="datetime">Postado em 
 					<%
 						DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss");
+						dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 						out.println(dateFormat.format(new Date(message.getDate() * 1000)).toLowerCase());
 					%>
 					</p>

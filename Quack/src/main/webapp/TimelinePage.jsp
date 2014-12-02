@@ -131,6 +131,7 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
 <a href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getDBIndex() %>">Postado em
 <% 
 DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss", new Locale("pt"));
+dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 long cal = list.get(i).getDate();
 out.println(dateFormat.format(new Date(cal * 1000)).toLowerCase());
 %></a>
