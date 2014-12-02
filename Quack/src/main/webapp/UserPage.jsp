@@ -103,37 +103,54 @@
         </div>
         <div class="col-md-9">
           <div class="panel panel-default msg-feed">
-            <table class="table table-striped table-hover">
-              <tbody>
-                <c:choose>
-                  <c:when test="${isCurrentUserPage}">
-                    <c:forEach items="${messages}" var="m" varStatus="loop">
-                      <tr id="msg-${loop.index}" class="msg">
-                        <td><span class="label label-primary">
-                          ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
-                        </td>
-                        <td>${m.getText()}</td>
-                      </tr>
-                    </c:forEach>
-                  </c:when>
-                  <c:otherwise>
-                    <c:forEach items="${messages}" var="m" varStatus="loop">
-                      <tr id="msg-${loop.index}" class="msg">
-                        <td><span class="label label-primary">
-                          ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
-                        </td>
-                        <td>${m.getText()}</td>
-                        <td>
-                          <a href="RepostMessage?id=${m.getDBIndex()}&author=${m.getUser().getLoginName()}" class="btn btn-info btn-xs">
-                            <i class="fa fa-refresh"></i> Repostar
-                          </a>
-                        </td>
-                      </tr>
-                    </c:forEach>
-                  </c:otherwise>
-                </c:choose>
-              </tbody>
-            </table>
+            <c:choose>
+              <c:when test="${messages.size() > 0}">
+                <table class="table table-striped table-hover">
+                  <tbody>
+                    <c:choose>
+                      <c:when test="${isCurrentUserPage}">
+                        <c:forEach items="${messages}" var="m" varStatus="loop">
+                          <tr id="msg-${loop.index}" class="msg">
+                            <td><span class="label label-primary">
+                              ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
+                            </td>
+                            <td>${m.getText()}</td>
+                          </tr>
+                        </c:forEach>
+                      </c:when>
+                      <c:otherwise>
+                        <c:forEach items="${messages}" var="m" varStatus="loop">
+                          <tr id="msg-${loop.index}" class="msg">
+                            <td><span class="label label-primary">
+                              ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
+                            </td>
+                            <td>${m.getText()}</td>
+                            <td>
+                              <a href="RepostMessage?id=${m.getDBIndex()}&author=${m.getUser().getLoginName()}" class="btn btn-info btn-xs">
+                                <i class="fa fa-refresh"></i> Repostar
+                              </a>
+                            </td>
+                          </tr>
+                        </c:forEach>
+                      </c:otherwise>
+                    </c:choose>
+                  </tbody>
+                </table>
+              </c:when>
+              <c:otherwise>
+                <div class="text-center empty-result">
+                  <i class="fa fa-pencil"></i>
+                  <c:choose>
+                    <c:when test="${isCurrentUserPage}">
+                      <h4>Você ainda não possui nenhuma mensagem.</h4>
+                    </c:when>
+                    <c:otherwise>
+                      <h4>Este usuário ainda não possui nenhuma mensagem.</h4>
+                    </c:otherwise>
+                  </c:choose>
+                </div>
+              </c:otherwise>
+            </c:choose>
           </div>
         </div>
       </div>
