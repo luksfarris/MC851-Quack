@@ -44,14 +44,9 @@ public interface Server {
 	//
 	// Alguns eventos, como o envio ou re-envio de mensagens, são
 	// rotulados com uma /datahora/ (data + hora). Externamente, uma
-	// datahora é uma {String} no formato "%Y-%m-%d %H:%M:%S (%Z)" onde
-	// "%Z" é o fuso horário, por exemplo "(+0300)" para UTC + 3 horas.
-	// As datahoras neste formato externo serão convertidas
-	// internamente para um {long int}: um número inteiro
-	// de segundos na zona padrão UTC.
-	//
-	// ??{ Por enquanto, vamos usa apenas a zona "UTC", e o formato externo fica então
-	// "%Y-%m-%d %H:%M:%S UTC". }??
+	// datahora é uma {String} no formato "%Y-%m-%d %H:%M:%S %Z" onde
+	// "%Z" é o fuso horário, p.ex. "UTC".  Internamente, uma datahora é um {long int}.
+	// um número inteiro desde uma data padrão.  Veja a interface {quack.Timestamp}.
 	//
 	// INTERVALOS DE MENSAGENS
 	//

@@ -9,9 +9,28 @@
 
 <!DOCTYPE html>
 <html>
+  <%
+      String loginName = request.getParameter("u");
+      User user;
+      String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+      user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
+
+      if (loginName == null || (user != null && user.getLoginName().equals(loginName))) {
+          pageContext.setAttribute("isCurrentUserPage", true);
+      }
+      else {
+        user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
+        pageContext.setAttribute("isCurrentUserPage", false);
+      }
+
+      pageContext.setAttribute("id", user.getDbIndex());
+      pageContext.setAttribute("user", user);
+      pageContext.setAttribute("userName", user.getLoginName());
+      pageContext.setAttribute("messages", user.getPostedMessages());
+  %>
   <head>
     <meta charset="UTF-8" />
-    <title>Página de Usuário</title>
+    <title>Perfil de @${user.getLoginName()}</title>
 
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -44,26 +63,6 @@
       </nav>
     </header>
 
-    <%
-      String loginName = request.getParameter("u");
-      User user;
-
-      if (loginName == null) {
-        String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
-        user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
-        pageContext.setAttribute("isCurrentUserPage", true);
-      }
-      else {
-        user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
-        pageContext.setAttribute("isCurrentUserPage", false);
-      }
-
-      pageContext.setAttribute("id", user.getDbIndex());
-      pageContext.setAttribute("user", user);
-      pageContext.setAttribute("userName", user.getLoginName());
-      pageContext.setAttribute("messages", user.getPostedMessages());
-    %>
-
     <div class="container">
       <div class="row">
         <div class="col-md-12">
@@ -84,7 +83,7 @@
                 </a>
               </c:when>
               <c:otherwise>
-                <a href="Contato?follow=true&userName=${userName}" class="btn btn-success btn-xs">
+                <a href="Contato?state=follow&userName=${userName}" class="btn btn-success btn-xs">
                   <i class="fa fa-plus"></i>
                   Seguir
                 </a>
@@ -103,37 +102,54 @@
         </div>
         <div class="col-md-9">
           <div class="panel panel-default msg-feed">
-            <table class="table table-striped table-hover">
-              <tbody>
-                <c:choose>
-                  <c:when test="${isCurrentUserPage}">
-                    <c:forEach items="${messages}" var="m" varStatus="loop">
-                      <tr id="msg-${loop.index}" class="msg">
-                        <td><span class="label label-primary">
-                          ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
-                        </td>
-                        <td>${m.getText()}</td>
-                      </tr>
-                    </c:forEach>
-                  </c:when>
-                  <c:otherwise>
-                    <c:forEach items="${messages}" var="m" varStatus="loop">
-                      <tr id="msg-${loop.index}" class="msg">
-                        <td><span class="label label-primary">
-                          ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
-                        </td>
-                        <td>${m.getText()}</td>
-                        <td>
-                          <a href="RepostMessage?id=${m.getDBIndex()}&author=${m.getUser().getLoginName()}" class="btn btn-info btn-xs">
-                            <i class="fa fa-refresh"></i> Repostar
-                          </a>
-                        </td>
-                      </tr>
-                    </c:forEach>
-                  </c:otherwise>
-                </c:choose>
-              </tbody>
-            </table>
+            <c:choose>
+              <c:when test="${messages.size() > 0}">
+                <table class="table table-striped table-hover">
+                  <tbody>
+                    <c:choose>
+                      <c:when test="${isCurrentUserPage}">
+                        <c:forEach items="${messages}" var="m" varStatus="loop">
+                          <tr id="msg-${loop.index}" class="msg">
+                            <td><span class="label label-primary">
+                              ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
+                            </td>
+                            <td>${m.getText()}</td>
+                          </tr>
+                        </c:forEach>
+                      </c:when>
+                      <c:otherwise>
+                        <c:forEach items="${messages}" var="m" varStatus="loop">
+                          <tr id="msg-${loop.index}" class="msg">
+                            <td><span class="label label-primary">
+                              ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
+                            </td>
+                            <td>${m.getText()}</td>
+                            <td>
+                              <a href="RepostMessage?id=${m.getDBIndex()}&author=${m.getUser().getLoginName()}" class="btn btn-info btn-xs">
+                                <i class="fa fa-refresh"></i> Repostar
+                              </a>
+                            </td>
+                          </tr>
+                        </c:forEach>
+                      </c:otherwise>
+                    </c:choose>
+                  </tbody>
+                </table>
+              </c:when>
+              <c:otherwise>
+                <div class="text-center empty-result">
+                  <i class="fa fa-pencil"></i>
+                  <c:choose>
+                    <c:when test="${isCurrentUserPage}">
+                      <h4>Você ainda não possui nenhuma mensagem.</h4>
+                    </c:when>
+                    <c:otherwise>
+                      <h4>Este usuário ainda não possui nenhuma mensagem.</h4>
+                    </c:otherwise>
+                  </c:choose>
+                </div>
+              </c:otherwise>
+            </c:choose>
           </div>
         </div>
       </div>
