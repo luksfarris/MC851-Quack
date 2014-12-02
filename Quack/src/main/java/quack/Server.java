@@ -50,6 +50,9 @@ public interface Server {
 	// internamente para um {long int}: um número inteiro
 	// de segundos na zona padrão UTC.
 	//
+	// ??{ Por enquanto, vamos usa apenas a zona "UTC", e o formato externo fica então
+	// "%Y-%m-%d %H:%M:%S UTC". }??
+	//
 	// INTERVALOS DE MENSAGENS
 	//
 	// Alguns dos métodos a seguir (e em outras interfaces) especificam um

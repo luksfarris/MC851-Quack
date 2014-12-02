@@ -110,7 +110,7 @@
                     <c:forEach items="${messages}" var="m" varStatus="loop">
                       <tr id="msg-${loop.index}" class="msg">
                         <td><span class="label label-primary">
-                          ${m.getFormattedDate("dd/MM/yyyy HH:mm")}
+                          ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
                         </td>
                         <td>${m.getText()}</td>
                       </tr>
@@ -120,7 +120,7 @@
                     <c:forEach items="${messages}" var="m" varStatus="loop">
                       <tr id="msg-${loop.index}" class="msg">
                         <td><span class="label label-primary">
-                          ${m.getFormattedDate("dd/MM/yyyy HH:mm")}
+                          ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
                         </td>
                         <td>${m.getText()}</td>
                         <td>
