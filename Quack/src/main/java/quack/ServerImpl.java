@@ -64,9 +64,33 @@ public final class ServerImpl implements Server {
 	public void processRegistrationReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
 
-		System.out.println(request.getParameter(("username")));
+		System.out.println(request.getParameter("username"));
+		// Restringe os caracteres válidos de {loginName} para 
+		// dígitos de 0 a 9, letras de A a Z (maiúsculas ou
+		// minúsculas) e o caractere '_'.
+		String username = request.getParameter("username");
+		for (int i = 0; i < username.length(); i++)	{
+			char c = username.charAt(i);
+			if ((c < '0' || c > '9') && (c < 'A' || c > 'Z') 
+					&& (c < 'a' || c > 'z') && c != '_') {
+				html.errorPage(response, "Caractere inválido no nome do usuário.");
+				return;
+			}
+		}
+		// Restringe os caracteres válidos de {password} para
+		// qualquer caractere da tabela ASCII, exceto
+		// caracteres de controle.
+		String password = request.getParameter("password");
+		for (int i = 0; i < password.length(); i++)	{
+			char c = password.charAt(i);
+			if (c < ' ' || c > '~')	{
+				html.errorPage(response, "Caractere inválido na senha.");
+				return;
+			}
+		}
+		
 		//Verifica se já existe usuário com esse username:
-		User user = this.userTable.getUserByLogin(request.getParameter("username"));
+		User user = this.userTable.getUserByLoginName(username);
 		if (user != null) {  
 			
 			html.errorPage(response, "Este nome de usuario ja existe");
@@ -140,7 +164,7 @@ public final class ServerImpl implements Server {
 			String parseURL[] = URL.split("/");
 			String params = parseURL[parseURL.length -1];
 			
-			User u =  userTable.getUserByLogin(params);
+			User u =  userTable.getUserByLoginName(params);
 			
 			if(u == null){
 				html.errorPage(response, "Usuario nao existe!");
@@ -160,7 +184,7 @@ public final class ServerImpl implements Server {
 		}
 
 		// Obtem o autor das mensagens procuradas
-		User target = this.userTable.getUserByLogin(loginName);
+		User target = this.userTable.getUserByLoginName(loginName);
 		if (target == null) {
 			//html.errorPage(response, "no such user.");
 		}
@@ -196,7 +220,7 @@ public final class ServerImpl implements Server {
 		
 		String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
 		User sessionUser = (User)getUserFromCookie(cookie);
-		User contactUser = userTable.getUserByLogin(request.getParameter("userName")); //Usuario contato
+		User contactUser = userTable.getUserByLoginName(request.getParameter("userName")); //Usuario contato
 		String relation = request.getParameter("follow");
 		Contact c;
 				
@@ -388,7 +412,7 @@ public final class ServerImpl implements Server {
 	}
 	
 	public User getUserFromLoginName(String loginName) {
-		return userTable.getUserByLogin(loginName);
+		return userTable.getUserByLoginName(loginName);
 	}
 
 	@Override
@@ -419,7 +443,7 @@ public final class ServerImpl implements Server {
 					return;
 				}
 				
-				messageAuthor = this.userTable.getUserByLogin(request.getParameter("author"));
+				messageAuthor = this.userTable.getUserByLoginName(request.getParameter("author"));
 				
 				if(messageAuthor == null){
 					html.errorPage(response, "invalid author");
