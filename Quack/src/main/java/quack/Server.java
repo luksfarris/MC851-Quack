@@ -151,7 +151,7 @@ public interface Server {
 	// Chamado quando o servidor HTTP recebe um pedido de login de um usuário
 	// existente da rede {Quack}. 
 	//
-	// O parâmetro {request} deve conter os campos {login} e {password} 
+	// O parâmetro {request} deve conter os campos {loginName} e {password} 
 	// que o usuario preencheu na pagina de login.
 	//
 	// Se o login tiver sucesso, a sessão é criada e acrescentada ao
@@ -278,7 +278,7 @@ public interface Server {
 	//
 	// O parâmetro {request} deve especificar uma sessão aberta; o dono {u} da sessão
 	// é a origem do contato.  O {request} deve conter também 
-	// conter um campo {userName} cujo valor é o login do usuário alvo {v},
+	// conter um campo {userName} cujo valor é o loginName do usuário alvo {v},
 	// e um campo {follow} cujo valor é o novo estado do contato ("Follow","Block" ou "Inactive")
 	// do contato.  
 	// ??{ Mudar nomes dos campos: "userName" --> "target", "follow" --> "newStatus" }??
@@ -323,7 +323,7 @@ public interface Server {
 
 	public User getUserFromLoginName(String loginName);
 	// Este metodo é chamado quando é necessário recuperar um usuário {User} a partir 
-	// de um login {String}. A busca pelo login sera feita na tabela de usuários
+	// de um loginName {String}. A busca pelo loginName sera feita na tabela de usuários
 	// que fica salva na instância de {Server}, e caso exista retorna o usuario correspondente.
 	// Caso contrario retorna {null};
 	
