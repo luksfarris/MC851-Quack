@@ -7,30 +7,31 @@
 <%@ page import="java.util.List" %>
 <%@ page import="service.CookieHelper" %>
 
+<%
+  String loginName = request.getParameter("u");
+  User user;
+  String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+  user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
+
+  if (loginName == null || (user != null && user.getLoginName().equals(loginName))) {
+    pageContext.setAttribute("isCurrentUserPage", true);
+  }
+  else {
+    user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
+    pageContext.setAttribute("isCurrentUserPage", false);
+  }
+
+  pageContext.setAttribute("id", user.getDbIndex());
+  pageContext.setAttribute("user", user);
+  pageContext.setAttribute("userName", user.getLoginName());
+  pageContext.setAttribute("messages", user.getPostedMessages());
+%>
+
 <!DOCTYPE html>
 <html>
-  <%
-      String loginName = request.getParameter("u");
-      User user;
-      String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
-      user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
-
-      if (loginName == null || (user != null && user.getLoginName().equals(loginName))) {
-          pageContext.setAttribute("isCurrentUserPage", true);
-      }
-      else {
-        user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
-        pageContext.setAttribute("isCurrentUserPage", false);
-      }
-
-      pageContext.setAttribute("id", user.getDbIndex());
-      pageContext.setAttribute("user", user);
-      pageContext.setAttribute("userName", user.getLoginName());
-      pageContext.setAttribute("messages", user.getPostedMessages());
-  %>
   <head>
     <meta charset="UTF-8" />
-    <title>Perfil de @${user.getLoginName()}</title>
+    <title>Quack - Perfil de @${user.getLoginName()}</title>
 
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -65,8 +66,9 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
-          <h2>${user.getFullName()} <small>(${userName})</small></h2>
+        <div class="col-md-12 profile-title">
+          <h2 class="fullname">${user.getFullName()}</h2>
+          <h2 class="username"><small>@${userName}</small></h2>
         </div>
       </div>
       <div class="row">
@@ -91,17 +93,15 @@
             </c:choose>
           </div>
           <div>
-          </div>
-          <div>
             <div class="list-group">
-              <a href="UserPage.jsp" class="list-group-item active">Mensagens <span class="badge">${messages.size()}</span></a>
+              <a href="user/${userName}" class="list-group-item active">Mensagens <span class="badge">${messages.size()}</span></a>
               <a href="Followers?id=${id}" class="list-group-item">Seguidores <span class="badge">${user.followersCount()}</span></a>
               <a href="Follows?id=${id}" class="list-group-item">Seguindo <span class="badge">${user.followsCount()}</span></a>
             </div>
           </div>
         </div>
         <div class="col-md-9">
-          <div class="panel panel-default msg-feed">
+          <div class="panel panel-default list">
             <c:choose>
               <c:when test="${messages.size() > 0}">
                 <table class="table table-striped table-hover">
@@ -109,7 +109,7 @@
                     <c:choose>
                       <c:when test="${isCurrentUserPage}">
                         <c:forEach items="${messages}" var="m" varStatus="loop">
-                          <tr id="msg-${loop.index}" class="msg">
+                          <tr id="row-${loop.index}" class="row">
                             <td><span class="label label-primary">
                               ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
                             </td>
@@ -119,7 +119,7 @@
                       </c:when>
                       <c:otherwise>
                         <c:forEach items="${messages}" var="m" varStatus="loop">
-                          <tr id="msg-${loop.index}" class="msg">
+                          <tr id="row-${loop.index}" class="row">
                             <td><span class="label label-primary">
                               ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
                             </td>

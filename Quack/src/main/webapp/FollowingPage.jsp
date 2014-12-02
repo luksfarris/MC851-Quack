@@ -9,11 +9,40 @@
 <%@ page import="java.util.LinkedList" %>
 <%@ page import="service.CookieHelper" %>
 
+<%
+  String loginName = request.getParameter("user");
+  User user;
+  String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+  user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
+
+  if (loginName == null || (user != null && user.getLoginName().equals(loginName))) {
+    pageContext.setAttribute("isCurrentUserPage", true);
+  }
+  else {
+    user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
+    pageContext.setAttribute("isCurrentUserPage", false);
+  }
+
+  List<User> following = new LinkedList<User>();
+
+  for (Contact c: user.getDirectContacts()) {
+    if (c.status().equals("Follow")) {
+      following.add(c.target());
+    }
+  }
+
+  pageContext.setAttribute("user", user);
+  pageContext.setAttribute("id", user.getDbIndex());
+  pageContext.setAttribute("userName", user.getLoginName());
+  pageContext.setAttribute("following", following);
+  pageContext.setAttribute("messages", user.getPostedMessages());
+%>
+
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Usuários do Sistema</title>
+    <title>Quack - Seguindo @${user.getLoginName()}</title>
 
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -46,51 +75,57 @@
       </nav>
     </header>
 
-    <%
-      Server server = QuackService.getServer(getServletContext());
-      String username = request.getParameter("user");
-      User user = QuackService.getServer(getServletContext()).getUserFromLoginName(username);
-      List<User> users = new LinkedList<User>();
-      
-      if (user.getDirectContacts() != null) {
-      	for(Contact c: user.getDirectContacts()){
-      	  if(c.status().equals("Follow")){ 
-      		  users.add(c.target());
-      	  }
-      	}
-      }
-      
-      pageContext.setAttribute("user", user);
-      pageContext.setAttribute("users", users);
-    %>
-
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
-          <h2>Seguidos por @${user.getLoginName()}</h2>
+        <div class="col-md-12 profile-title">
+          <h2 class="fullname">${user.getFullName()}</h2>
+          <h2 class="username"><small>@${userName}</small></h2>
         </div>
       </div>
       <div class="row">
+        <div class="col-md-3 user-info">
+          <div class="thumbnail">
+            <img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" />
+          </div>
+          <div class="profile-buttons">
+            <c:choose>
+              <c:when test="${isCurrentUserPage}">
+                <a href="#" class="btn btn-success btn-xs">
+                  <i class="fa fa-edit"></i>
+                  Editar perfil
+                </a>
+              </c:when>
+              <c:otherwise>
+                <a href="Contato?state=follow&userName=${userName}" class="btn btn-success btn-xs">
+                  <i class="fa fa-plus"></i>
+                  Seguir
+                </a>
+              </c:otherwise>
+            </c:choose>
+          </div>
+          <div>
+            <div class="list-group">
+              <a href="user/${userName}" class="list-group-item">Mensagens <span class="badge">${messages.size()}</span></a>
+              <a href="Followers?id=${id}" class="list-group-item">Seguidores <span class="badge">${user.followersCount()}</span></a>
+              <a href="Follows?id=${id}" class="list-group-item active">Seguindo <span class="badge">${user.followsCount()}</span></a>
+            </div>
+          </div>
+        </div>
         <div class="col-md-9">
-          <div class="panel panel-default msg-feed">
+          <div class="panel panel-default list">
             <table class="table table-striped table-hover">
               <tbody>
-                 <c:forEach items="${users}" var="u" varStatus="loop">
-                    <tr id="msg-${loop.index}" class="msg">
-                      
-                      <td>
-                    	<img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" height="42" width="42"/>
-                      	
-                        <a href="user/${u.getLoginName()}">@${u.getLoginName()}</a>
-                        &nbsp;&nbsp;&nbsp;<a href="user/${u.getLoginName()}">${u.getFullName()}</a>
-                      </td>
+                 <c:forEach items="${following}" var="u" varStatus="loop">
+                    <tr id="row-${loop.index}" class="row">
+                      <td><img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" height="42" width="42"/></td>
+                      <td><a href="user/${u.getLoginName()}">@${u.getLoginName()}</a></td>
+                      <td><a href="user/${u.getLoginName()}">${u.getFullName()}</a></td>
                     </tr>
-                   
                 </c:forEach>
               </tbody>
             </table>
           </div>
-		</div>
+        </div>
       </div>
     </div>
   </body>

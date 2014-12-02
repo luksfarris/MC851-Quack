@@ -10,14 +10,27 @@ body {
   margin-bottom: 10px;
 }
 
-.msg-feed .table tr {
+.list table tr.row {
   height: 66px;
 }
 
-.msg-feed .table td {
+.list table .row td {
   vertical-align: middle;
 }
 
 .empty-result i {
   font-size: 7em;
+}
+
+.profile-title h2 {
+  line-height: 1.0;
+}
+
+.profile-title h2.fullname {
+  margin-bottom: 0;
+}
+
+.profile-title h2.username {
+  margin-top: 0;
+  margin-bottom: 20px;
 }
