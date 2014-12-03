@@ -310,6 +310,17 @@ public interface Server {
 	// Em caso de sucesso, o parâmetro {respose} conterá uma página
 	// listando todos os seguidos pelo usuário cuja idenficiação é {id}
 
+	public void processFileUploadRequest(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException;
+	// Chamado quando o servidor Quack recebe um pedido para
+	// upload de arquivos.
+	// 
+	// Em {request} deve estar o conteudo do arquivo {file}
+	// que será replicado no sistema de arquivos do sistema
+	// 
+	// Em caso de sucesso, o parâmetro {response} conterá uma página
+	// notificando que o arquivo foi enviado com sucesso.
+	
 	// -------------------------------------------------------------------------------
 	// UTLITÁRIOS
 
