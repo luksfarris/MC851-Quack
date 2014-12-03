@@ -17,3 +17,7 @@ body {
 .msg-feed .table td {
   vertical-align: middle;
 }
+
+.empty-result i {
+  font-size: 7em;
+}

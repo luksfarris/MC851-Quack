@@ -61,9 +61,33 @@ public final class ServerImpl implements Server {
 	public void processRegistrationReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
 
-		System.out.println(request.getParameter(("username")));
+		System.out.println(request.getParameter("username"));
+		// Restringe os caracteres válidos de {loginName} para 
+		// dígitos de 0 a 9, letras de A a Z (maiúsculas ou
+		// minúsculas) e o caractere '_'.
+		String username = request.getParameter("username");
+		for (int i = 0; i < username.length(); i++)	{
+			char c = username.charAt(i);
+			if ((c < '0' || c > '9') && (c < 'A' || c > 'Z') 
+					&& (c < 'a' || c > 'z') && c != '_') {
+				html.errorPage(response, "Caractere inválido no nome do usuário.");
+				return;
+			}
+		}
+		// Restringe os caracteres válidos de {password} para
+		// qualquer caractere da tabela ASCII, exceto
+		// caracteres de controle.
+		String password = request.getParameter("password");
+		for (int i = 0; i < password.length(); i++)	{
+			char c = password.charAt(i);
+			if (c < ' ' || c > '~')	{
+				html.errorPage(response, "Caractere inválido na senha.");
+				return;
+			}
+		}
+		
 		//Verifica se já existe usuário com esse username:
-		User user = this.userTable.getUserByLoginName(request.getParameter("username"));
+		User user = this.userTable.getUserByLoginName(username);
 		if (user != null) {  
 			
 			html.errorPage(response, "Este nome de usuario ja existe");
