@@ -34,7 +34,7 @@
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="Timeline">Timeline</a></li>
-              <li><a href="UserListPage.jsp">Usuários do Sistema</a></li>
+              <li><a href="UserPage.jsp">Perfil</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="Logout">Logout</a></li>
