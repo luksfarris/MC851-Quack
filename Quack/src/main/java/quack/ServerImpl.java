@@ -24,11 +24,8 @@ public final class ServerImpl implements Server {
 
 	private Long nextUserId = new Long(0);
 	private Long nextMessageId = new Long(0);
-	long numUsers = 0; // Número de usuários na rede {Quack}.
+
 	long numContacts = 0; // Número total de contatos criados (incluindo
-							// inativos).
-	long numMessages = 0; // Número total de mensagens postadas (incuindo
-							// re-postagens).
 	long numSessions = 0; // Número total de sessões abertas no momento.
 
 	HTML html; // Cria paginas html.
@@ -197,7 +194,7 @@ public final class ServerImpl implements Server {
 		String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
 		User sessionUser = (User)getUserFromCookie(cookie);
 		User contactUser = userTable.getUserByLoginName(request.getParameter("userName")); //Usuario contato
-		String relation = request.getParameter("follow");
+		String relation = request.getParameter("state");
 		Contact c;
 				
 		if(contactUser == null){
@@ -214,45 +211,21 @@ public final class ServerImpl implements Server {
 					
 					Contact c_sessionUser = sessionUser.getDirectContact(contactUser);
 					Contact c_contactUser = contactUser.getReverseContact(sessionUser);
-					if(relation.equals("true")){
-						c_sessionUser.setStatus("Follow");
-						c_contactUser.setStatus("Follow");
-						
-						database.modifyContact(sessionUser, contactUser, true);
-						html.errorPage(response, "acao concluida!");
-					}
-					else if(relation.equals("false")){
-						c_sessionUser.setStatus("Block");
-						c_contactUser.setStatus("Block");
-						
-						database.modifyContact(sessionUser, contactUser, false);
-						
-						html.errorPage(response, "acao concluida!");
-					}	
+					c_sessionUser.setStatus(relation);
+					c_contactUser.setStatus(relation);						
+					database.modifyContact(sessionUser, contactUser, relation);
+					html.errorPage(response, "acao concluida!");
+
 				} else{//Contato ainda nao existe
-					if(relation.equals("true")){ // Relacao de follow
-						c = new ContactImpl();
-						c.initialize(sessionUser, contactUser, Calendar.getInstance()
-								.getTimeInMillis() / 1000, "Follow");
-						sessionUser.addDirectContact(c);
-						contactUser.addReverseContact(c);
-						this.numContacts += 1;
-						database.insertContact(sessionUser, contactUser, true);
-						html.errorPage(response, "acao concluida!");
-					} else if(relation.equals("false")){ //Relacao de block
-					
-						c = new ContactImpl();
-						c.initialize(sessionUser, contactUser, Calendar.getInstance()
-								.getTimeInMillis() / 1000, "Block");
-						sessionUser.addDirectContact(c);
-						contactUser.addReverseContact(c);
-						this.numContacts += 1;
-						//Insere no banco de dados
-						database.insertContact(sessionUser, contactUser, false);
-						html.errorPage(response, "acao concluida!");
-					} else{
-						html.errorPage(response, "Relacao invalida");
-					}	
+
+					c = new ContactImpl();
+					c.initialize(sessionUser, contactUser, Calendar.getInstance()
+								.getTimeInMillis() / 1000, relation);
+					sessionUser.addDirectContact(c);
+					contactUser.addReverseContact(c);
+					this.numContacts += 1;
+					database.insertContact(sessionUser, contactUser, relation);
+					html.errorPage(response, "acao concluida!");
 				}
 			}
 		}
@@ -270,7 +243,7 @@ public final class ServerImpl implements Server {
 
 	@Override
 	public long getNumMessages() {
-		return this.numMessages;
+		return this.nextMessageId;
 	}
 
 	@Override
@@ -366,7 +339,6 @@ public final class ServerImpl implements Server {
 			this.nextMessageId++;
 			if (database.addMessage(message, user)){
 				user.addMessage(message);
-				this.numMessages++;
 			}
 			
 			html.userProfilePage(response);
@@ -443,7 +415,6 @@ public final class ServerImpl implements Server {
 					
 					if (database.addMessage(newMessage, user)) {
 						user.addMessage(message);
-						this.numMessages++;
 					}
 					
 					html.userProfilePage(response);

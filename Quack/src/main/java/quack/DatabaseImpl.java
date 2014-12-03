@@ -129,7 +129,6 @@ public class DatabaseImpl implements Database {
 				Integer.parseInt(date[4]), Integer.parseInt(date[5]));
 
 		return a.getTimeInMillis() / 1000;
-
 	}
 
 	@Override
@@ -156,14 +155,12 @@ public class DatabaseImpl implements Database {
 	}
 	
 	@Override
-	public void modifyContact(User sessionUser, User contactUser, boolean following) {
+	public void modifyContact(User sessionUser, User contactUser, String status) {
 		try {
-			
-			String action = following? "'Follow'":"'Block'";
 			
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			getConnection();
-			getStatement("UPDATE contact SET status="+action+", last_modified='"+
+			getStatement("UPDATE contact SET status="+status+", last_modified='"+
 					dateFormat.format(new Date(Calendar.getInstance()
 							.getTimeInMillis()))+"' where source_id='"+
 			sessionUser.getDbIndex() +"' and target_id='"+ contactUser.getDbIndex() +"';").execute();
@@ -176,16 +173,14 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
-	public void insertContact (User sessionUser, User contactUser, boolean following) {
+	public void insertContact (User sessionUser, User contactUser, String status) {
 
-		String action = following? "'Follow'":"'Block'";
-		
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			getConnection();
 			getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
 			dateFormat.format(new Date(Calendar.getInstance()
-					.getTimeInMillis()))+"',"+action+");").execute();
+					.getTimeInMillis()))+"',"+status+");").execute();
 			commit();	
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
