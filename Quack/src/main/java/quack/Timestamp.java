@@ -17,7 +17,7 @@ public interface Timestamp {
   // hora de Londres).  ??{ Mais tarde podemos implementar códigos de fusos locais,
   // como "BRST", ou a notação geral "(+0300)" para UTC + 3 horas. }??
   
-  public long now(void);
+  public long now();
   // Retorna a datahora atual no formato interno.
   
   public String toString(long timestamp, String timezone);

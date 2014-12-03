@@ -1,7 +1,5 @@
 package quack;
 
-import java.util.Calendar;
-
 public class ContactImpl implements Contact {
 
 	private User sourceUser;
@@ -51,7 +49,8 @@ public class ContactImpl implements Contact {
 		assert(newStatus.equals("Inactive") || newStatus.equals("Follow") 
 				|| newStatus.equals("Block"));
 		this.status = newStatus;
-		this.lastModified = Calendar.getInstance().getTimeInMillis()/1000;
+		Timestamp t = new TimestampImpl();
+		this.lastModified = t.now();
 		
 	}
 
