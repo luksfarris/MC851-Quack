@@ -1,7 +1,6 @@
 package quack;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -189,23 +188,22 @@ public final class ServerImpl implements Server {
 		// Obtem as mensagens, de acordo com os intervalos estabelecidos
 		// (se nao em {startTime}, vem desde o epoch e se nao tem
 		// {endTime} vem até agora
+		Timestamp t = new TimestampImpl();
 		if (startTime == null || startTime.equals("")) {
 			if (endTime == null || endTime.equals("")) {
-				messages = target.getPostedMessages(0, Calendar.getInstance()
-						.getTimeInMillis() / 1000, maxN);
+				messages = target.getPostedMessages(0, t.now(), maxN);
 			} else {
 				messages = target.getPostedMessages(0,
-						DatabaseImpl.timestampFromString(endTime), maxN);
+						t.fromString(endTime), maxN);
 			}
 		} else {
 			if (endTime == null || endTime.equals("")) {
 				messages = target.getPostedMessages(
-						DatabaseImpl.timestampFromString(startTime), Calendar.getInstance()
-								.getTimeInMillis() / 1000, maxN);
+						t.fromString(startTime), t.now(), maxN);
 			} else {
 				messages = target.getPostedMessages(
-						DatabaseImpl.timestampFromString(startTime),
-						DatabaseImpl.timestampFromString(endTime), maxN);
+						t.fromString(startTime),
+						t.fromString(endTime), maxN);
 			}
 		}
 
@@ -243,8 +241,8 @@ public final class ServerImpl implements Server {
 				} else{//Contato ainda nao existe
 
 					c = new ContactImpl();
-					c.initialize(sessionUser, contactUser, Calendar.getInstance()
-								.getTimeInMillis() / 1000, relation);
+					Timestamp t = new TimestampImpl();
+					c.initialize(sessionUser, contactUser, t.now(), relation);
 					sessionUser.addDirectContact(c);
 					contactUser.addReverseContact(c);
 					this.numContacts += 1;
@@ -288,16 +286,17 @@ public final class ServerImpl implements Server {
 		long startTime;
 		long endTime;
 		long maxN;
+		Timestamp t = new TimestampImpl();
 		
 		if(request.getParameter("startTime") == null)
 			startTime = -1;
 		else
-			startTime = DatabaseImpl.timestampFromString((String) request.getParameter("startTime"));
+			startTime = t.fromString((String) request.getParameter("startTime"));
 		
 		if(request.getParameter("endTime") == null)
 			endTime = -1;
 		else
-			endTime = DatabaseImpl.timestampFromString((String) request.getParameter("endTime"));
+			endTime = t.fromString((String) request.getParameter("endTime"));
 		
 		if(request.getParameter("maxN") == null)
 			maxN = 15;
@@ -353,9 +352,9 @@ public final class ServerImpl implements Server {
 		messageBody = new String(request.getParameter("messageText").getBytes("iso-8859-1"), "UTF-8");
 		String replyLoginName = request.getParameter("replyLoginName");
 		Message message = new MessageImpl();
-					
+		Timestamp t = new TimestampImpl();			
 		if (replyLoginName == null || replyLoginName.equals("")) {
-			if (!message.initialize(messageBody, user, this.nextMessageId, Calendar.getInstance().getTimeInMillis()/1000)) {
+			if (!message.initialize(messageBody, user, this.nextMessageId, t.now())) {
 				html.errorPage(response, "message creation failed.");
 				return;
 			}
@@ -429,8 +428,9 @@ public final class ServerImpl implements Server {
 					
 				// nova mensagem
 				Message newMessage = new MessageImpl();
+				Timestamp t = new TimestampImpl();
 							
-					if (!newMessage.initialize(user, message, this.nextMessageId, Calendar.getInstance().getTimeInMillis()/1000)) {
+					if (!newMessage.initialize(user, message, this.nextMessageId, t.now())) {
 						html.errorPage(response, "message creation failed.");
 						return;
 					}

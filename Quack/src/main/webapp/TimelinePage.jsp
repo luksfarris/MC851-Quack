@@ -74,6 +74,7 @@ Server server = QuackService.getServer(getServletContext());
 List<Message> list = server.processShowReceivedMessagesReq(request, response, getServletContext());
 String numPosts = request.getParameter("maxN");
 int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
+Timestamp t = new TimestampImpl();
 %>
 </head>
 <body>
@@ -129,12 +130,7 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
 <%= list.get(i).getText() %><br/>
 <span class="datetime">
 <a href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getDBIndex() %>">Postado em
-<% 
-DateFormat dateFormat = new SimpleDateFormat("d 'de' MMMMM 'de' yyyy, HH:mm:ss", new Locale("pt"));
-dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-long cal = list.get(i).getDate();
-out.println(dateFormat.format(new Date(cal * 1000)).toLowerCase());
-%></a>
+<%= list.get(i).getFormattedDate() %></a>
 &ndash; <a href="RepostMessage?id=<%out.print(list.get(i).getDBIndex());%>&author=<%out.print(list.get(i).getUser().getLoginName());%>">➡ Repostar</a>
 &ndash; 0 repostagens </span>
 

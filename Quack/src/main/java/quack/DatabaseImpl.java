@@ -76,9 +76,10 @@ public class DatabaseImpl implements Database {
 							.executeQuery();
 					while (rs2.next()) {
 						Message m = new MessageImpl();
+						Timestamp t = new TimestampImpl();
 
 						if (m.initialize(rs2.getString("body"), u, rs2
-								.getLong("id"), timestampFromString(rs2
+								.getLong("id"), t.fromString(rs2
 								.getString("created"))) == false)
 							System.out.println("Erro ao carregar mensagens");
 						else {
@@ -115,20 +116,6 @@ public class DatabaseImpl implements Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public static long timestampFromString(String time) {
-		time = time.replaceAll("[()]", "");
-		String date[] = time.split("[- :\\.]");
-
-		// TODO - consertar timezone (ID de TimeZone eh uma string
-		// do tipo "Brazil/East", e nao (-0300))
-		Calendar a = Calendar.getInstance();
-		a.set(Integer.parseInt(date[0]), Integer.parseInt(date[1])-1,
-				Integer.parseInt(date[2]), Integer.parseInt(date[3]),
-				Integer.parseInt(date[4]), Integer.parseInt(date[5]));
-
-		return a.getTimeInMillis() / 1000;
 	}
 
 	@Override
