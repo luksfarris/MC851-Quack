@@ -466,4 +466,11 @@ public final class ServerImpl implements Server {
 		html.followsPage(response, username);
 			
 	}
+
+	@Override
+	public void processFileUploadRequest(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+	}
 }

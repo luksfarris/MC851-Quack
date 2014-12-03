@@ -32,5 +32,19 @@ public class TimestampImpl implements Timestamp {
 		}
 		return 0L;
 	}
+	
+	@Override
+	public long fromString(String timestamp, String format) {
+		DateFormat formatter = new SimpleDateFormat(format);
+		Date date;
+		try {
+			date = formatter.parse(timestamp);
+			return date.getTime() / 1000;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0L;
+	}
 
 }
