@@ -40,39 +40,74 @@ public class HTMLImpl implements HTML {
 	}
 
 	@Override
-	public void homePage(HttpServletResponse response) throws IOException {
-			response.sendRedirect("Quack/pub/LoginPage.jsp");
+	public void homePage(HttpServletResponse response) {
+			try {
+				response.sendRedirect("Quack/pub/LoginPage.jsp");
+			} catch (IOException e) {
+				this.errorPage(response, "Problemas ao gerar home page.");
+				e.printStackTrace();
+			}
 	}
 
 	@Override
-	public void loginPage(HttpServletResponse response) throws IOException {
-			response.sendRedirect("LoginPage.jsp");	
+	public void loginPage(HttpServletResponse response) {
+			try {
+				response.sendRedirect("LoginPage.jsp");
+			} catch (IOException e) {
+				this.errorPage(response, "Problemas ao gerar página de login.");
+				e.printStackTrace();
+			}	
 	}
 
 	@Override
-	public void timelinePage(HttpServletResponse response) throws IOException {
-			response.sendRedirect("/Quack/Timeline");
+	public void timelinePage(HttpServletResponse response) {
+			try {
+				response.sendRedirect("/Quack/Timeline");
+			} catch (IOException e) {
+				this.errorPage(response, "Problemas ao gerar timeline.");
+				e.printStackTrace();
+			}
 
 	}
 
 	@Override
-	public void userProfilePage(HttpServletResponse response, String loginName) throws IOException {
-		response.sendRedirect("/Quack/UserPage.jsp"+"?u="+loginName);
+	public void userProfilePage(HttpServletResponse response, String loginName) {
+		try {
+			response.sendRedirect("/Quack/UserPage.jsp"+"?u="+loginName);
+		} catch (IOException e) {
+			this.errorPage(response, "Problemas ao gerar página de usuário.");
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	public void userProfilePage(HttpServletResponse response) throws IOException {
-		response.sendRedirect("/Quack/UserPage.jsp");
+	public void userProfilePage(HttpServletResponse response) {
+		try {
+			response.sendRedirect("/Quack/UserPage.jsp");
+		} catch (IOException e) {
+			this.errorPage(response, "Problemas ao gerar perfil do usuário.");
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	public void followersPage(HttpServletResponse response, String username) throws IOException {
-		response.sendRedirect("/Quack/FollowersPage.jsp?user=" + username);
+	public void followersPage(HttpServletResponse response, String username) {
+		try {
+			response.sendRedirect("/Quack/FollowersPage.jsp?user=" + username);
+		} catch (IOException e) {
+			this.errorPage(response, "Problemas ao gerar página de seguidores.");
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	public void followsPage(HttpServletResponse response, String username) throws IOException {
-		response.sendRedirect("/Quack/FollowingPage.jsp?user=" + username);	
+	public void followsPage(HttpServletResponse response, String username) {
+		try {
+			response.sendRedirect("/Quack/FollowingPage.jsp?user=" + username);
+		} catch (IOException e) {
+			this.errorPage(response, "Problemas ao gerar página de seguidos.");
+			e.printStackTrace();
+		}	
 	}
 
 	@Override
