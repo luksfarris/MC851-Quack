@@ -44,7 +44,7 @@ public class UserImpl implements User {
 		this.email = email;
 		this.password = password;
 		this.dbIndex = dbIndex;
-		this.creationTime = t.fromString(created);
+		this.creationTime = t.fromString(created, "yyyy-MM-dd HH:mm:ss.SS");
 		
 		this.directContacts = new LinkedList<Contact>();
 		this.reverseContacts = new LinkedList<Contact>();

@@ -66,7 +66,7 @@ public class DatabaseImpl implements Database {
 				User u = new UserImpl();
 				if (u.initialize(rs.getString("login_name"),
 						rs.getString("email"), rs.getString("full_name"),
-						rs.getString("password"), rs.getLong("id"), rs.getString("created").concat(" UTC"))) {
+						rs.getString("password"), rs.getLong("id"), rs.getString("created"))) {
 
 					nextUserId = Math.max(nextUserId, u.getDbIndex());
 
@@ -80,7 +80,7 @@ public class DatabaseImpl implements Database {
 
 						if (m.initialize(rs2.getString("body"), u, rs2
 								.getLong("id"), t.fromString(rs2
-								.getString("created"))) == false)
+								.getString("created"), "yyyy-MM-dd HH:mm:ss.SS")) == false)
 							System.out.println("Erro ao carregar mensagens");
 						else {
 							u.addMessage(m);
