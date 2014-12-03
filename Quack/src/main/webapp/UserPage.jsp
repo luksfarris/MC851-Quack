@@ -137,14 +137,14 @@
                 </table>
               </c:when>
               <c:otherwise>
-                <div class="text-center empty-result">
+                <div class="panel-body text-center empty-result">
                   <i class="fa fa-pencil"></i>
                   <c:choose>
                     <c:when test="${isCurrentUserPage}">
                       <h4>Você ainda não possui nenhuma mensagem.</h4>
                     </c:when>
                     <c:otherwise>
-                      <h4>Este usuário ainda não possui nenhuma mensagem.</h4>
+                      <h4>${userName} ainda não possui nenhuma mensagem.</h4>
                     </c:otherwise>
                   </c:choose>
                 </div>

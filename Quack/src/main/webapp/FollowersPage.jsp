@@ -113,17 +113,34 @@
         </div>
         <div class="col-md-9">
           <div class="panel panel-default list">
-            <table class="table table-striped table-hover">
-              <tbody>
-                 <c:forEach items="${followers}" var="u" varStatus="loop">
-                    <tr id="row-${loop.index}" class="row">
-                      <td><img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" height="42" width="42"/></td>
-                      <td><a href="user/${u.getLoginName()}">@${u.getLoginName()}</a><td>
-                      <td><a href="user/${u.getLoginName()}">${u.getFullName()}</a></td>
-                    </tr>
-                </c:forEach>
-              </tbody>
-            </table>
+            <c:choose>
+              <c:when test="${followers.size() > 0}">
+                <table class="table table-striped table-hover">
+                  <tbody>
+                    <c:forEach items="${followers}" var="u" varStatus="loop">
+                      <tr id="row-${loop.index}" class="row">
+                        <td><img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" height="42" width="42"/></td>
+                        <td><a href="user/${u.getLoginName()}">@${u.getLoginName()}</a><td>
+                        <td><a href="user/${u.getLoginName()}">${u.getFullName()}</a></td>
+                      </tr>
+                    </c:forEach>
+                  </tbody>
+                </table>
+              </c:when>
+              <c:otherwise>
+                <div class="panel-body text-center empty-result">
+                  <i class="fa fa-users"></i>
+                  <c:choose>
+                    <c:when test="${isCurrentUserPage}">
+                      <h4>Você ainda não possui nenhum seguidor.</h4>
+                    </c:when>
+                    <c:otherwise>
+                      <h4>${userName} ainda não possui nenhum seguidor.</h4>
+                    </c:otherwise>
+                  </c:choose>
+                </div>
+              </c:otherwise>
+            </c:choose>
           </div>
         </div>
       </div>
