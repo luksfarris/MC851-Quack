@@ -111,7 +111,7 @@ public class HTMLImpl implements HTML {
 	}
 
 	@Override
-	public String formatMessage(MessageImpl message) {
+	public String formatMessage(Message message) {
 		return "<div align='left'>"+message.getText()+"</div>";
 	}
 }

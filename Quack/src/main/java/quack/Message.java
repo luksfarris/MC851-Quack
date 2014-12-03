@@ -25,9 +25,8 @@ public interface Message {
 	// Retorna a datahorade publicação da mensagem {this} (a datahora de repostagem,
 	// se for o caso)
 
-	public String getFormattedDate(String format);
-	// Retorna a data de postagem da mensagem no formato dado
-	// Ex.: dd/MM/yyyy HH:mm
+	public String getFormattedDate();
+	// Retorna a data de postagem da mensagem no formato indicado em {Timestamp}
 
 	public boolean initialize(String body, User user, long DBIndex, long timestamp);
 	// Inicializa uma nova instância {this} de {Message} como uma 

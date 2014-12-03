@@ -1,6 +1,5 @@
 package quack;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -22,12 +21,13 @@ public class UserImpl implements User {
 	@Override
 
 	public boolean initialize(String loginName, String email, String fullName, String password, long dbIndex) {
+		Timestamp t = new TimestampImpl();
 		this.loginName = loginName;
 		this.fullName = fullName;
 		this.email = email;
 		this.password = password;
 		this.dbIndex = dbIndex;
-		this.creationTime = Calendar.getInstance().getTimeInMillis() / 1000;
+		this.creationTime = t.now();
 		
 		this.directContacts = new LinkedList<Contact>();
 		this.reverseContacts = new LinkedList<Contact>();

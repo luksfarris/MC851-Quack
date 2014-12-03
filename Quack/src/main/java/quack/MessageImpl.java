@@ -6,10 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
-
 @Entity
 public class MessageImpl implements Message {
 	@Id
@@ -44,11 +40,9 @@ public class MessageImpl implements Message {
 		return timestamp;
 	}
 
-	public String getFormattedDate(String format) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-		Date date = new Date(this.getDate() * 1000);
-		return dateFormat.format(date);
+	public String getFormattedDate() {
+		Timestamp t = new TimestampImpl();
+		return t.toString(timestamp, "UTC");
 	}
 
 	@Override
