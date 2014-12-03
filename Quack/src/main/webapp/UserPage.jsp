@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="quack.User" %>
+<%@ page import="quack.HTMLImpl" %>
 <%@ page import="quack.Message" %>
 <%@ page import="java.util.List" %>
 <%@ page import="service.CookieHelper" %>
@@ -12,6 +13,7 @@
   User user;
   String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
   user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
+  HTMLImpl formatador = new HTMLImpl();
 
   if (loginName == null || (user != null && user.getLoginName().equals(loginName))) {
     pageContext.setAttribute("isCurrentUserPage", true);
@@ -25,6 +27,7 @@
   pageContext.setAttribute("user", user);
   pageContext.setAttribute("userName", user.getLoginName());
   pageContext.setAttribute("messages", user.getPostedMessages());
+  pageContext.setAttribute("formatador", formatador);
 %>
 
 <!DOCTYPE html>
@@ -113,7 +116,7 @@
                             <td><span class="label label-primary">
                               ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
                             </td>
-                            <td>${m.getText()}</td>
+                            <td>${formatador.formatMessage(m)}</td>
                           </tr>
                         </c:forEach>
                       </c:when>
@@ -123,7 +126,7 @@
                             <td><span class="label label-primary">
                               ${m.getFormattedDate("dd/MM/yyyy HH:mm:ss")}
                             </td>
-                            <td>${m.getText()}</td>
+                            <td>${formatador.formatMessage(m)}</td>
                             <td>
                               <a href="RepostMessage?id=${m.getDBIndex()}&author=${m.getUser().getLoginName()}" class="btn btn-info btn-xs">
                                 <i class="fa fa-refresh"></i> Repostar
