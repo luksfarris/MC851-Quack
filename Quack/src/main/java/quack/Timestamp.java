@@ -30,4 +30,8 @@ public interface Timestamp {
   // Por enquanto, a cadeia {timestamp} deve terminar com " UTC", e
   // a conversão vai usar o fuso horário UTC.
   
+  public long fromString(String timestamp, String format);
+  // Converte uma datahora do formato {format} para o formato interno.
+  // (Importante para a recuperação de dados do banco.)
+  
   }
