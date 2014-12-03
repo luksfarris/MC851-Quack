@@ -74,6 +74,7 @@ Server server = QuackService.getServer(getServletContext());
 List<Message> list = server.processShowReceivedMessagesReq(request, response, getServletContext());
 String numPosts = request.getParameter("maxN");
 int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
+HTMLImpl formatador = new HTMLImpl();
 %>
 </head>
 <body>
@@ -126,7 +127,7 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
 <img src="img/profilepics/<%= list.get(i).getUser().getLoginName() %>.png" style="width: 48px;" />
 </th>
 <td><b><%= list.get(i).getUser().getFullName() %></b>&ensp;<a href="user/<%= list.get(i).getUser().getLoginName() %>">@<%= list.get(i).getUser().getLoginName() %></a><br />
-<%= list.get(i).getText() %><br/>
+<%= formatador.formatMessage((MessageImpl)list.get(i))%><br/>
 <span class="datetime">
 <a href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getDBIndex() %>">Postado em
 <% 

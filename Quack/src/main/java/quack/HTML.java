@@ -66,7 +66,7 @@ public interface HTML {
 	// que contem o nome {username}
 	
 	public String formatMessage(MessageImpl message);
-	// Retorna uma string formatada contendo o texto do campo {body} da mensagem
-	// {message}.
+	// Retorna o trecho html devidamente formatado para a representação
+	// de uma mensagem {message} nas paginas do sistema.
 	
 }
