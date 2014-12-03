@@ -65,7 +65,7 @@ public interface HTML {
 	// Redireciona para a página que lista os usuarios seguidos pelo usuario
 	// que contem o nome {username}
 	
-	public String formatMessage(MessageImpl message);
+	public String formatMessage(Message message);
 	// Retorna o trecho html devidamente formatado para a representação
 	// de uma mensagem {message} nas paginas do sistema.
 	
