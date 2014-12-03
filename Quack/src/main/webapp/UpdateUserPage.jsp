@@ -3,7 +3,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="quack.User" %>
-<%@ page import="quack.HTMLImpl" %>
+<%@ page import="quack.TimestampImpl" %>
+<%@ page import="quack.Timestamp" %>
 <%@ page import="quack.Message" %>
 <%@ page import="java.util.List" %>
 <%@ page import="service.CookieHelper" %>
@@ -12,12 +13,12 @@
   User user;
   String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
   user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
-  HTMLImpl formatador = new HTMLImpl();
+  Timestamp time = new TimestampImpl();
 
   pageContext.setAttribute("id", user.getDbIndex());
   pageContext.setAttribute("user", user);
   pageContext.setAttribute("userName", user.getLoginName());
-  pageContext.setAttribute("formatador", formatador);
+  pageContext.setAttribute("time", time);
 %>
 
 <!DOCTYPE html>
@@ -110,6 +111,11 @@
    						<label>Nome de usuário</label>
       					<p class="form-control-static">@${user.getLoginName()}</p>
   					</div>
+  					<div class="form-group">
+   						<label>Criado em</label>
+      					<p class="form-control-static">${time.toString(user.getCreationTime(), "UTC")}</p>
+  					</div>
+  					
 
             		<div class="form-group">
     					<label for="fullName">Nome completo</label>

@@ -66,7 +66,7 @@ public class DatabaseImpl implements Database {
 				User u = new UserImpl();
 				if (u.initialize(rs.getString("login_name"),
 						rs.getString("email"), rs.getString("full_name"),
-						rs.getString("password"), rs.getLong("id"))) {
+						rs.getString("password"), rs.getLong("id"), rs.getString("created").concat(" UTC"))) {
 
 					nextUserId = Math.max(nextUserId, u.getDbIndex());
 

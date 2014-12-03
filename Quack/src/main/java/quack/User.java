@@ -25,6 +25,13 @@ public interface User {
 	// O parâmetro {dbIndex} é o identificador do usuario {this} na base de dados 
 	// persistente.
 
+	public boolean initialize(String loginName, String email, String fullName,
+			String password, long dbIndex, String created);
+	
+	// Inicailiza um objeto {User} como no método anterior, adicionando também o {created}
+	// passado como data de criação.
+	
+	
 	// -------------------------------------------------------------------------------
 	// ATRIBUTOS BÁSICOS
 

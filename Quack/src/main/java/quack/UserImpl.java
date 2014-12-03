@@ -34,6 +34,23 @@ public class UserImpl implements User {
 		this.messages = new LinkedList<Message>();
 		return true;
 	}
+	
+	@Override
+	public boolean initialize(String loginName, String email, String fullName,
+			String password, long dbIndex, String created) {
+		Timestamp t = new TimestampImpl();
+		this.loginName = loginName;
+		this.fullName = fullName;
+		this.email = email;
+		this.password = password;
+		this.dbIndex = dbIndex;
+		this.creationTime = t.fromString(created);
+		
+		this.directContacts = new LinkedList<Contact>();
+		this.reverseContacts = new LinkedList<Contact>();
+		this.messages = new LinkedList<Message>();
+		return true;
+	}
 
 	@Override
 	public String getLoginName() {
