@@ -306,7 +306,7 @@ public final class ServerImpl implements Server {
 		List<Message> messages = new LinkedList<Message>(); 
 		
 		for(Contact c : user.getDirectContacts()){
-			if(c.status().equals("Follow")){
+			if(c.status().equalsIgnoreCase("Follow")){
 				for(Message m : c.target().getPostedMessages(startTime, endTime, maxN)){
 					messages.add(m);
 				}
