@@ -360,7 +360,7 @@ public final class ServerImpl implements Server {
 			}
 
 			this.nextMessageId++;
-			if (database.addMessage(message, user)){
+			if (database.addMessage(message)){
 				user.addMessage(message);
 			}
 			
@@ -437,7 +437,7 @@ public final class ServerImpl implements Server {
 
 					this.nextMessageId++;
 					
-					if (database.addMessage(newMessage, user)) {
+					if (database.addMessage(newMessage)) {
 						user.addMessage(message);
 					}
 					

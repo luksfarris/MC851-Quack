@@ -156,20 +156,20 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
-	public boolean addMessage(Message message, User user) {
+	public boolean addMessage(Message message) {
 
 		boolean success = false;
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			getConnection();
 			getStatement("INSERT INTO message (id, user_id, body, parent,created)"
-				+ "VALUES ("+message.getDBIndex()+","+user.getDbIndex()+
+				+ "VALUES ("+message.getDBIndex()+","+message.getUser().getDbIndex()+
 				",'"+message.getText()+"',NULL,'"
 				+ dateFormat.format(new Date(message.getDate()*1000))+
 				"');").execute();
 			commit();
 			
-			user.addMessage(message);
+			message.getUser().addMessage(message);
 			
 			System.out.println("Mensagem inserida na tabela");
 			success = true;

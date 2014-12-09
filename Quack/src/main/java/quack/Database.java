@@ -35,7 +35,7 @@ public interface Database {
 	// Cria um novo contato entre dois usuários, {sessionUser} e {contactUser} para. {Status} marca o tipo de relacao que os usuarios terao. Podera
 	// ser follow para seguir, block para bloquear, ou inactive para nao ter relacao nenhuma.
 	
-	public boolean addMessage(Message message, User user);
-	// Adiciona uma mensagem {Message} a um usuario {User} no banco de dados. Retorna true se
+	public boolean addMessage(Message message);
+	// Adiciona uma mensagem {Message} a um usuario no banco de dados. Retorna true se
 	// a operacao teve sucesso, ou false caso contrario.
 }
