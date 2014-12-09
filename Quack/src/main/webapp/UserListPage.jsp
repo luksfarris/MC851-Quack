@@ -7,6 +7,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="service.CookieHelper" %>
 
+<%
+  Server server = QuackService.getServer(getServletContext());
+  pageContext.setAttribute("users", server.getAllUsers());
+%>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -44,12 +49,6 @@
       </nav>
     </header>
 
-    <%
-      Server server = QuackService.getServer(getServletContext());
-      
-      pageContext.setAttribute("users", server.getAllUsers());
-    %>
-
     <div class="container">
       <div class="row">
         <div class="col-md-12">
@@ -62,21 +61,16 @@
             <table class="table table-striped table-hover">
               <tbody>
                  <c:forEach items="${users}" var="u" varStatus="loop">
-                    <tr id="msg-${loop.index}" class="msg">
-                      
-                      <td>
-                    	<img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" height="42" width="42"/>
-                      	
-                        <a href="user/${u.getLoginName()}">@${u.getLoginName()}</a>
-                        &nbsp;&nbsp;&nbsp;<a href="user/${u.getLoginName()}">${u.getFullName()}</a>
-                      </td>
-                    </tr>
-                   
+                   <tr id="msg-${loop.index}" class="msg">
+                     <td><img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" height="42" width="42"/></td>
+                     <td><a href="user/${u.getLoginName()}">@${u.getLoginName()}</a></td>
+                     <td><a href="user/${u.getLoginName()}">${u.getFullName()}</a></td>
+                   </tr>
                 </c:forEach>
               </tbody>
             </table>
           </div>
-		</div>
+        </div>
       </div>
     </div>
   </body>

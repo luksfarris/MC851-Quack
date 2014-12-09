@@ -90,7 +90,7 @@
           <div class="profile-buttons">
             <c:choose>
               <c:when test="${isCurrentUserPage}">
-                <a href="#" class="btn btn-success btn-xs">
+                <a href="UpdateUserPage.jsp" class="btn btn-success btn-xs">
                   <i class="fa fa-edit"></i>
                   Editar perfil
                 </a>

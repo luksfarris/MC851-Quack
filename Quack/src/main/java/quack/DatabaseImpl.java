@@ -18,36 +18,20 @@ public class DatabaseImpl implements Database {
 	private String db_pass;
 
 	@Override
-	public Connection getConnection() throws ClassNotFoundException,
-			SQLException {
-		if (con != null && !con.isClosed())
-			return con;
-
-		Class.forName("com.mysql.jdbc.Driver");
-		con = DriverManager.getConnection(
-				"jdbc:mysql://sql2.lab.ic.unicamp.br:3306/" + db_name,
-				db_login_name, db_pass);
-		con.setAutoCommit(false);
-
-		return con;
+	public boolean closeConnection() {
+		boolean success = false;
+		try {
+			if (con != null && !con.isClosed()) {
+				con.close();
+				success = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao encerrar conexão no banco de dados.");
+			e.printStackTrace();
+		}
+		return success;
 	}
 
-	@Override
-	public void commit() throws SQLException {
-		con.commit();
-	}
-
-	@Override
-	public void closeConnection() throws ClassNotFoundException, SQLException {
-		if (con != null && !con.isClosed())
-			con.close();
-	}
-
-	@Override
-	public PreparedStatement getStatement(String query)
-			throws ClassNotFoundException, SQLException {
-		return con.prepareStatement(query);
-	}
 
 	@Override
 	public void initialize(String dbLoginName, String dbName, String dbPassword) {
@@ -111,9 +95,8 @@ public class DatabaseImpl implements Database {
 			nextUserId++;
 			nextMessageId++;
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro ao executar uma query.");
 			e.printStackTrace();
 		}
 	}
@@ -133,72 +116,131 @@ public class DatabaseImpl implements Database {
 			commit();
 		
 			System.out.println("User inserido na tabela");
-		} catch (ClassNotFoundException e) {
-			
-			e.printStackTrace();
 		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro ao executar uma query.");
 			e.printStackTrace();
 		}
 	}
 	
 	@Override
-	public void modifyContact(User sessionUser, User contactUser, String status) {
+	public void modifyContact(Contact contact) {
 		try {
 			
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			getConnection();
-			getStatement("UPDATE contact SET status="+status+", last_modified='"+
+			getStatement("UPDATE contact SET status="+contact.status()+", last_modified='"+
 					dateFormat.format(new Date(Calendar.getInstance()
 							.getTimeInMillis()))+"' where source_id='"+
-			sessionUser.getDbIndex() +"' and target_id='"+ contactUser.getDbIndex() +"';").execute();
+			contact.source().getDbIndex() +"' and target_id='"+ contact.target().getDbIndex() +"';").execute();
 			commit();	
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro ao executar uma query.");
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void insertContact (User sessionUser, User contactUser, String status) {
-
+	public void modifyUser(User user) {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			getConnection();
-			getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
-			dateFormat.format(new Date(Calendar.getInstance()
-					.getTimeInMillis()))+"',"+status+");").execute();
+			getStatement("UPDATE user SET full_name='"+user.getFullName()+"', last_modified='"+
+					dateFormat.format(new Date(Calendar.getInstance().getTimeInMillis()))+
+					"', password='"+user.getPassword()+"' where id='"+user.getDbIndex() +"';").execute();
 			commit();	
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	@Override
+	public void insertContact (Contact contact) {
+		
+		try {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			getConnection();
+			getStatement("INSERT INTO contact VALUES("+ contact.source().getDbIndex()+","+contact.target().getDbIndex()+",'"+
+			dateFormat.format(new Date(Calendar.getInstance()
+					.getTimeInMillis()))+"',"+contact.status()+");").execute();
+			commit();	
+		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro ao executar uma query.");
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public boolean addMessage(Message message, User user) {
+	public boolean addMessage(Message message) {
 
 		boolean success = false;
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			getConnection();
 			getStatement("INSERT INTO message (id, user_id, body, parent,created)"
-				+ "VALUES ("+message.getDBIndex()+","+user.getDbIndex()+
+				+ "VALUES ("+message.getDBIndex()+","+message.getUser().getDbIndex()+
 				",'"+message.getText()+"',NULL,'"
 				+ dateFormat.format(new Date(message.getDate()*1000))+
 				"');").execute();
 			commit();
 			
-			user.addMessage(message);
+			message.getUser().addMessage(message);
 			
 			System.out.println("Mensagem inserida na tabela");
 			success = true;
-		} catch (ClassNotFoundException e) {	
-			e.printStackTrace();
 		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro ao executar uma query.");
 			e.printStackTrace();
 		}
 		return success;
 	}
+	
+	// Abre conexao {this} com servidor do banco de dados persistente. Retorna {null} se
+	// houve algum problema.
+	private Connection getConnection() {
+		try {
+			if (con == null || con.isClosed()) {
+				Class.forName("com.mysql.jdbc.Driver");
+				con = DriverManager.getConnection(
+					"jdbc:mysql://sql2.lab.ic.unicamp.br:3306/" + db_name,
+					db_login_name, db_pass);
+				con.setAutoCommit(false);
+			}
+		} catch (Exception e) {
+			System.out.println("Erro ao criar conexão com o banco de dados.");
+			e.printStackTrace();
+		}
+		return con;
+	}
+
+	// Faz todas as alterações desde o último commit/rollback permanente e libera qualquer lock
+	// do bando de dados para a esta conexão. Retorna {true} se a operação teve sucesso,
+	// ou {false} caso contrario.	
+	private boolean commit() {
+		boolean success = false;
+		try {
+			con.commit();
+			success = true;
+		} catch (SQLException e) {
+			System.out.println("Erro ao commitar no banco de dados.");
+			e.printStackTrace();
+		}
+		return success;
+	}
+
+	// Prepara uma query SQL pré compilada. Essa função não executa a query
+	// para dar liberdade ao usuário de definir argumentos na string SQL
+	// para, enfim, executá-la. Retorna {null} se houve algum problema.
+	private PreparedStatement getStatement(String query){
+		PreparedStatement statement = null;
+		try {
+			statement = con.prepareStatement(query);
+		} catch (SQLException e) {
+			System.out.println("Erro ao preparar query do banco de dados.");
+			e.printStackTrace();
+		}
+		return statement;
+	}
+
 }
+
+

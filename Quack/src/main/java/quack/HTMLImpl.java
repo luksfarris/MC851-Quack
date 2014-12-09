@@ -107,7 +107,7 @@ public class HTMLImpl implements HTML {
 		} catch (IOException e) {
 			this.errorPage(response, "Problemas ao gerar página de seguidos.");
 			e.printStackTrace();
-		}	
+		}
 	}
 
 	@Override
