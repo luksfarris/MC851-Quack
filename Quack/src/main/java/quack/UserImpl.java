@@ -82,6 +82,11 @@ public class UserImpl implements User {
 	}
 
 	@Override
+	public void setFullName(String newFullName) {
+		this.fullName = newFullName;
+	}
+	
+	@Override
 	public long getCreationTime() {
 		return this.creationTime;
 	}

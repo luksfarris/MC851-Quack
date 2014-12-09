@@ -60,7 +60,6 @@ public final class ServerImpl implements Server {
 	public void processRegistrationReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
 
-		System.out.println(request.getParameter("username"));
 		// Restringe os caracteres válidos de {loginName} para 
 		// dígitos de 0 a 9, letras de A a Z (maiúsculas ou
 		// minúsculas) e o caractere '_'.
@@ -100,8 +99,8 @@ public final class ServerImpl implements Server {
 				// Cria o usuário e acrescenta à tabela:
 				user = new UserImpl();
 				if (!user.initialize(request.getParameter("username"), request.getParameter("email"), 
-						request.getParameter("fullName"), request.getParameter("password"), 
-						this.nextUserId)) {
+						new String(request.getParameter("fullName").getBytes("iso-8859-1"), "UTF-8"),
+						request.getParameter("password"), this.nextUserId)) {
 					html.errorPage(response, "Falha ao criar user");  
 				} else {
 					this.nextUserId++;
@@ -251,6 +250,43 @@ public final class ServerImpl implements Server {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void processModifyUserReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context)
+			throws IOException {
+		String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+		User sessionUser = (User)getUserFromCookie(cookie);
+		String newFullName = new String(request.getParameter("fullName").getBytes("iso-8859-1"), "UTF-8");
+		String newPassword = request.getParameter("newPassword");
+		String oldPassword = request.getParameter("oldPassword");
+				
+
+		if(sessionUser.checkPassword(oldPassword) == false){
+			html.errorPage(response, "Senha inválida");
+			return;
+		}
+		
+		User user = this.userTable.getUserByLoginName(sessionUser.getLoginName());
+		
+		if(newPassword != null && !newPassword.equals("")){
+			// Restringe os caracteres válidos de {password} para
+			// qualquer caractere da tabela ASCII, exceto
+			// caracteres de controle.
+			for (int i = 0; i < newPassword.length(); i++)	{
+				char c = newPassword.charAt(i);
+				if (c < ' ' || c > '~')	{
+					html.errorPage(response, "Caractere inválido na senha.");
+					return;
+				}
+			}
+			user.setPassword(newPassword);
+		}
+		
+		user.setFullName(newFullName);
+		database.modifyUser(user);
+		html.userProfilePage(response);
 	}
 
 	@Override
@@ -473,4 +509,5 @@ public final class ServerImpl implements Server {
 		// TODO Auto-generated method stub
 		
 	}
+
 }
