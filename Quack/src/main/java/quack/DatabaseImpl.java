@@ -140,6 +140,22 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
+	public void modifyUser(User user) {
+		try {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			getConnection();
+			getStatement("UPDATE user SET full_name ="+user.getFullName()+", last_modified='"+
+					dateFormat.format(new Date(Calendar.getInstance().getTimeInMillis()))+
+					"', pasword = '"+user.getPassword()+"' where id='"+user.getDbIndex() +"';").execute();
+			commit();	
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	@Override
 	public void insertContact (User sessionUser, User contactUser, String status) {
 
 		try {

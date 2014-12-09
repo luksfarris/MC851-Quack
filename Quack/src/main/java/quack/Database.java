@@ -31,6 +31,9 @@ public interface Database {
 	// Altera o contato entre dois usuários, {sessionUser} e {contactUser} para. {Status} marca o tipo de relacao que os usuarios terao. Podera
 	// ser follow para seguir, block para bloquear, ou inactive para nao ter relacao nenhuma.
 	
+	public void modifyUser(User user);
+	// Altera o usuário com os novos dados.
+	
 	public void insertContact (User sessionUser, User contactUser, String status);
 	// Cria um novo contato entre dois usuários, {sessionUser} e {contactUser} para. {Status} marca o tipo de relacao que os usuarios terao. Podera
 	// ser follow para seguir, block para bloquear, ou inactive para nao ter relacao nenhuma.
@@ -38,4 +41,6 @@ public interface Database {
 	public boolean addMessage(Message message);
 	// Adiciona uma mensagem {Message} a um usuario no banco de dados. Retorna true se
 	// a operacao teve sucesso, ou false caso contrario.
+
+	
 }

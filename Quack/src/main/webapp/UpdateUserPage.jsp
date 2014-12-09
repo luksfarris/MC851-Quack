@@ -106,7 +106,7 @@
         </div>
         <div class="col-md-9">
           <div class="panel panel-default list">
-            <form role="form" name="Update" action="Update" method="get" accept-charset="utf-8">
+            <form role="form" name="Update" action="ModifyUser" method="get" accept-charset="utf-8">
             		<div class="form-group">
    						<label>Nome de usuário</label>
       					<p class="form-control-static">@${user.getLoginName()}</p>
