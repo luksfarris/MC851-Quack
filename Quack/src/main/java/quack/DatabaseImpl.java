@@ -18,35 +18,60 @@ public class DatabaseImpl implements Database {
 	private String db_pass;
 
 	@Override
-	public Connection getConnection() throws ClassNotFoundException,
-			SQLException {
-		if (con != null && !con.isClosed())
-			return con;
-
-		Class.forName("com.mysql.jdbc.Driver");
-		con = DriverManager.getConnection(
-				"jdbc:mysql://sql2.lab.ic.unicamp.br:3306/" + db_name,
-				db_login_name, db_pass);
-		con.setAutoCommit(false);
-
+	public Connection getConnection() {
+		try {
+			if (con == null || con.isClosed()) {
+				Class.forName("com.mysql.jdbc.Driver");
+				con = DriverManager.getConnection(
+					"jdbc:mysql://sql2.lab.ic.unicamp.br:3306/" + db_name,
+					db_login_name, db_pass);
+				con.setAutoCommit(false);
+			}
+		} catch (Exception e) {
+			System.out.println("Erro ao criar conexão com o banco de dados.");
+			e.printStackTrace();
+		}
 		return con;
 	}
 
 	@Override
-	public void commit() throws SQLException {
-		con.commit();
+	public boolean commit() {
+		boolean success = false;
+		try {
+			con.commit();
+			success = true;
+		} catch (SQLException e) {
+			System.out.println("Erro ao commitar no banco de dados.");
+			e.printStackTrace();
+		}
+		return success;
 	}
 
 	@Override
-	public void closeConnection() throws ClassNotFoundException, SQLException {
-		if (con != null && !con.isClosed())
-			con.close();
+	public boolean closeConnection() {
+		boolean success = false;
+		try {
+			if (con != null && !con.isClosed()) {
+				con.close();
+				success = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao encerrar conexão no banco de dados.");
+			e.printStackTrace();
+		}
+		return success;
 	}
 
 	@Override
-	public PreparedStatement getStatement(String query)
-			throws ClassNotFoundException, SQLException {
-		return con.prepareStatement(query);
+	public PreparedStatement getStatement(String query){
+		PreparedStatement statement = null;
+		try {
+			statement = con.prepareStatement(query);
+		} catch (SQLException e) {
+			System.out.println("Erro ao preparar query do banco de dados.");
+			e.printStackTrace();
+		}
+		return statement;
 	}
 
 	@Override
@@ -111,9 +136,8 @@ public class DatabaseImpl implements Database {
 			nextUserId++;
 			nextMessageId++;
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro ao executar uma query.");
 			e.printStackTrace();
 		}
 	}
@@ -133,10 +157,8 @@ public class DatabaseImpl implements Database {
 			commit();
 		
 			System.out.println("User inserido na tabela");
-		} catch (ClassNotFoundException e) {
-			
-			e.printStackTrace();
 		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro ao executar uma query.");
 			e.printStackTrace();
 		}
 	}
@@ -152,9 +174,8 @@ public class DatabaseImpl implements Database {
 							.getTimeInMillis()))+"' where source_id='"+
 			sessionUser.getDbIndex() +"' and target_id='"+ contactUser.getDbIndex() +"';").execute();
 			commit();	
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro ao executar uma query.");
 			e.printStackTrace();
 		}
 	}
@@ -169,9 +190,8 @@ public class DatabaseImpl implements Database {
 			dateFormat.format(new Date(Calendar.getInstance()
 					.getTimeInMillis()))+"',"+status+");").execute();
 			commit();	
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro ao executar uma query.");
 			e.printStackTrace();
 		}
 	}
@@ -194,9 +214,8 @@ public class DatabaseImpl implements Database {
 			
 			System.out.println("Mensagem inserida na tabela");
 			success = true;
-		} catch (ClassNotFoundException e) {	
-			e.printStackTrace();
 		} catch (SQLException e) {
+			System.out.println("Ocorreu um erro ao executar uma query.");
 			e.printStackTrace();
 		}
 		return success;
