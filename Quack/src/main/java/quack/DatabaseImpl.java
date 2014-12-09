@@ -148,8 +148,6 @@ public class DatabaseImpl implements Database {
 					dateFormat.format(new Date(Calendar.getInstance().getTimeInMillis()))+
 					"', pasword = '"+user.getPassword()+"' where id='"+user.getDbIndex() +"';").execute();
 			commit();	
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
