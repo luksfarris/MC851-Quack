@@ -15,7 +15,7 @@ public class TimestampImpl implements Timestamp {
 	@Override
 	public String toString(long timestamp, String timezone) {
 		// Por enquanto, o fuso horário deve ser UTC:
-		assert timezone.equal("UTC");
+		assert timezone.equals("UTC");
 		DateFormat formatter = new SimpleDateFormat(DEFAULT_FORMAT);
 		formatter.setTimeZone(TimeZone.getTimeZone(timezone));
 		return formatter.format(new Date(timestamp * 1000)) + " " + timezone;
