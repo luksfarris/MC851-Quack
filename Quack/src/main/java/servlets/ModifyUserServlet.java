@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import quack.Server;
+import service.QuackService;
+
 /**
  * Servlet implementation class FileUploadServlet
  */
@@ -30,7 +33,8 @@ public class ModifyUserServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		Server server = QuackService.getServer(getServletContext());
+		server.processModifyUserReq(request, response, getServletContext());
 	}
 
 	/**

@@ -261,16 +261,15 @@ public final class ServerImpl implements Server {
 		String newFullName = new String(request.getParameter("fullName").getBytes("iso-8859-1"), "UTF-8");
 		String newPassword = request.getParameter("newPassword");
 		String oldPassword = request.getParameter("oldPassword");
-				
-
-		if(sessionUser.checkPassword(oldPassword) == false){
-			html.errorPage(response, "Senha inválida");
-			return;
-		}
 		
 		User user = this.userTable.getUserByLoginName(sessionUser.getLoginName());
 		
 		if(newPassword != null && !newPassword.equals("")){
+			if(sessionUser.checkPassword(oldPassword) == false){
+				html.errorPage(response, "Senha antiga inválida");
+				return;
+			}
+			
 			// Restringe os caracteres válidos de {password} para
 			// qualquer caractere da tabela ASCII, exceto
 			// caracteres de controle.
@@ -286,7 +285,7 @@ public final class ServerImpl implements Server {
 		
 		user.setFullName(newFullName);
 		database.modifyUser(user);
-		html.userProfilePage(response);
+		html.errorPage(response, "Dados alterados com sucesso");
 	}
 
 	@Override

@@ -137,7 +137,7 @@
   					</div>
   					<div class="form-group">
     					<label for="newPass">Nova senha</label>
-    					<input type="password" class="form-control" name="password" id="pass1" 
+    					<input type="password" class="form-control" name="newPassword" id="pass1" 
     					placeholder="Digite sua nova senha" onKeyUp='checkPass(); return false;'>
   					</div>
   					<div class="form-group">
