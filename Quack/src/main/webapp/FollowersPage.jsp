@@ -14,6 +14,7 @@
   User user;
   String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
   user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
+  pageContext.setAttribute("currentUserName", user.getLoginName());
 
   if (loginName == null || (user != null && user.getLoginName().equals(loginName))) {
     pageContext.setAttribute("isCurrentUserPage", true);
@@ -64,6 +65,7 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+              <li><a href="user/${currentUserName}">Meu perfil</a></li>
               <li><a href="Timeline">Timeline</a></li>
               <li><a href="UserListPage.jsp">Usuários do Sistema</a></li>
             </ul>

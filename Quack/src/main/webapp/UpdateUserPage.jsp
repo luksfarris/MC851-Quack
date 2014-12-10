@@ -53,6 +53,7 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+              <li><a href="user/${userName}">Meu perfil</a></li>
               <li><a href="Timeline">Timeline</a></li>
               <li><a href="UserListPage.jsp">Usuários do Sistema</a></li>
             </ul>
