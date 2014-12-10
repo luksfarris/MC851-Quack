@@ -27,39 +27,6 @@
     <meta charset="UTF-8" />
     <title>Quack - Perfil de @${user.getLoginName()}</title>
 
-	<script>
-		function checkPass() {
-			//Store the password field objects into variables ...
-			var pass1 = document.getElementById('pass1');
-			var pass2 = document.getElementById('pass2');
-			//Store the Confimation Message Object ...
-			var message = document.getElementById('confirmMessage');
-			//Set the colors we will be using ...
-			var goodColor = "#FFFFFF";
-			var badColor = "#ff6666";
-			document.getElementById('botao');
-			//Compare the values in the password field
-			//and the confirmation field
-			if (pass1.value == pass2.value) {
-				//The passwords match.
-				//Set the color to the good color and inform
-				//the user that they have entered the correct password
-				pass2.style.backgroundColor = goodColor;
-				message.innerHTML = ""
-				document.getElementById('botao').disabled = false;
-
-			} else {
-				//The passwords do not match.
-				//Set the color to the bad color and
-				//notify the user.
-				pass2.style.backgroundColor = badColor;
-				message.style.color = badColor;
-				message.innerHTML = "Senhas não batem!"
-				document.getElementById('botao').disabled = true;
-			}
-		}
-	</script>
-
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
@@ -68,8 +35,14 @@
     <!-- Font Awesome CDN -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
+    <!-- JQuery CDN -->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
     <!-- Custom style -->
     <link rel="stylesheet" type="text/css" href="pub/css/user-profile.css">
+
+    <!-- Custom script -->
+    <script src="pub/js/edit-user-profile.js"></script>
   </head>
   <body>
     <header>
@@ -93,6 +66,13 @@
 
     <div class="container">
       <div class="row">
+        <div class="col-md-12 profile-title messages">
+          <div id="required-msg" class="alert alert-danger msg" role="alert">Você precisa preencher todos os campos obrigatórios.</div>
+          <div id="old-pass-msg" class="alert alert-danger msg" role="alert">A senha antiga foi digitada incorretamente.</div>
+          <div id="pass-cmp-msg" class="alert alert-danger msg" role="alert">A confirmação da nova senha não bate.</div>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-md-12 profile-title">
           <h2 class="fullname">${user.getFullName()}</h2>
           <h2 class="username"><small>@${userName}</small></h2>
@@ -103,54 +83,63 @@
           <div class="thumbnail">
             <img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" />
           </div>
+          <div>
+            <strong>Membro desde</strong>
+            <p>${time.toString(user.getCreationTime(), "UTC")}</p>
+          </div>
         </div>
         <div class="col-md-9">
-          <div class="panel panel-default list">
-            <form role="form" name="Update" action="ModifyUser" method="get" accept-charset="utf-8">
-            		<div class="form-group">
-   						<label>Nome de usuário</label>
-      					<p class="form-control-static">@${user.getLoginName()}</p>
-  					</div>
-  					<div class="form-group">
-   						<label>Criado em</label>
-      					<p class="form-control-static">${time.toString(user.getCreationTime(), "UTC")}</p>
-  					</div>
-  					
-
-            		<div class="form-group">
-    					<label for="fullName">Nome completo</label>
-    					<input type="text" class="form-control" name="fullName" value="${user.getFullName()}" id="fullName" placeholder="Digite seu novo nome completo">
-  					</div>
-  					<br><br>
-					
-					<div class="form-group">
-    					<label for="profileImage">Imagem de perfil</label>
-    					<input type="file" id="profileImage">
-    					<p class="help-block">Escolha sua nova imagem de perfil (tamanho máximo 600 KB)</p>
-  					</div>
-					<br><br>
-					
-					<div class="form-group">
-    					<label for="oldPass">Senha antiga</label>
-    					<input type="password" class="form-control" name="oldPassword" id="oldPassword" 
-    					placeholder="Digite sua antiga senha">
-  					</div>
-  					<div class="form-group">
-    					<label for="newPass">Nova senha</label>
-    					<input type="password" class="form-control" name="newPassword" id="pass1" 
-    					placeholder="Digite sua nova senha" onKeyUp='checkPass(); return false;'>
-  					</div>
-  					<div class="form-group">
-    					<label for="newPass1">Redigite sua nova senha</label>
-    					<input type="password" class="form-control" name="passwordcheck" id="pass2" 
-    					placeholder="Digite sua nova senha novamente" onKeyUp='checkPass(); return false;'>
-  					</div>
-  					
-					<span id="confirmMessage" class="confirmMessage"></span><br>
-					<input type="submit" class="btn btn-success" value="Atualizar Dados" id="botao">
-					<input type="button" class="btn btn-info" value="Voltar" onClick="history.back();">
-				</form>
-          </div>
+          <form id="edit-user-profile"class="form-horizontal" role="form" name="Update" action="Update" method="get" accept-charset="utf-8">
+            <fieldset>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Nome de usuário</label>
+                <div class="col-sm-10">
+                  <span class="form-control" disabled="disabled">@${user.getLoginName()}</p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="fullName">Nome completo</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control required" name="fullName" value="${user.getFullName()}" id="fullName" placeholder="Digite seu novo nome completo">
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="profileImage">Imagem de perfil</label>
+                <div class="col-sm-10">
+                  <input type="file" id="profileImage">
+                  <span class="help-block">Escolha sua nova imagem de perfil (tamanho máximo 600 KB)</span>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="old-pass">Senha antiga</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control required" name="oldPassword" id="old-password" placeholder="Digite sua antiga senha">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="new-pass-1">Nova senha</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control required" name="newPassword" id="pass1" placeholder="Digite sua nova senha">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="new-pass-2">Redigite sua nova senha</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control required" name="passwordcheck" id="pass2" placeholder="Digite sua nova senha novamente">
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <div class="form-group pull-right">
+                <button id="back" type="button" class="btn btn-info">Voltar</button>
+                <input id="form-submit" type="submit" class="btn btn-success" value="Atualizar Dados">
+              </div>
+            </fieldset>
+          </form>
         </div>
       </div>
     </div>
