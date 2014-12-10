@@ -123,15 +123,15 @@ public class DatabaseImpl implements Database {
 	}
 	
 	@Override
-	public void modifyContact(User sessionUser, User contactUser, String status) {
+	public void modifyContact(Contact contact) {
 		try {
 			
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			getConnection();
-			getStatement("UPDATE contact SET status="+status+", last_modified='"+
+			getStatement("UPDATE contact SET status="+contact.status()+", last_modified='"+
 					dateFormat.format(new Date(Calendar.getInstance()
 							.getTimeInMillis()))+"' where source_id='"+
-			sessionUser.getDbIndex() +"' and target_id='"+ contactUser.getDbIndex() +"';").execute();
+			contact.source().getDbIndex() +"' and target_id='"+ contact.target().getDbIndex() +"';").execute();
 			commit();	
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro ao executar uma query.");
@@ -154,14 +154,14 @@ public class DatabaseImpl implements Database {
 		
 	}
 	@Override
-	public void insertContact (User sessionUser, User contactUser, String status) {
-
+	public void insertContact (Contact contact) {
+		
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			getConnection();
-			getStatement("INSERT INTO contact VALUES("+ sessionUser.getDbIndex()+","+contactUser.getDbIndex()+",'"+
+			getStatement("INSERT INTO contact VALUES("+ contact.source().getDbIndex()+","+contact.target().getDbIndex()+",'"+
 			dateFormat.format(new Date(Calendar.getInstance()
-					.getTimeInMillis()))+"',"+status+");").execute();
+					.getTimeInMillis()))+"',"+contact.status()+");").execute();
 			commit();	
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro ao executar uma query.");

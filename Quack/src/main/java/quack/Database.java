@@ -27,15 +27,15 @@ public interface Database {
 	public void insertUser(User user);
 	// Insere um usuário {User} no banco de dados.
 	
-	public void modifyContact(User sessionUser, User contactUser, String status);
-	// Altera o contato entre dois usuários, {sessionUser} e {contactUser} para. {Status} marca o tipo de relacao que os usuarios terao. Podera
+	public void modifyContact(Contact contact);
+	// Altera o contato {contact} entre dois usuários para o status, que marca o tipo de relacao que os usuarios terao. Podera
 	// ser follow para seguir, block para bloquear, ou inactive para nao ter relacao nenhuma.
 	
 	public void modifyUser(User user);
 	// Altera o usuário com os novos dados.
 	
-	public void insertContact (User sessionUser, User contactUser, String status);
-	// Cria um novo contato entre dois usuários, {sessionUser} e {contactUser} para. {Status} marca o tipo de relacao que os usuarios terao. Podera
+	public void insertContact (Contact contact);
+	// Cria um novo contato {contact} entre dois usuários.O status do contact marca o tipo de relacao que os usuarios terao. Podera
 	// ser follow para seguir, block para bloquear, ou inactive para nao ter relacao nenhuma.
 	
 	public boolean addMessage(Message message);

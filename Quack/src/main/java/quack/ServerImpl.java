@@ -234,7 +234,7 @@ public final class ServerImpl implements Server {
 					Contact c_contactUser = contactUser.getReverseContact(sessionUser);
 					c_sessionUser.setStatus(relation);
 					c_contactUser.setStatus(relation);						
-					database.modifyContact(sessionUser, contactUser, relation);
+					database.modifyContact(c_sessionUser);
 					html.errorPage(response, "acao concluida!");
 
 				} else{//Contato ainda nao existe
@@ -245,7 +245,7 @@ public final class ServerImpl implements Server {
 					sessionUser.addDirectContact(c);
 					contactUser.addReverseContact(c);
 					this.numContacts += 1;
-					database.insertContact(sessionUser, contactUser, relation);
+					database.insertContact(c);
 					html.errorPage(response, "acao concluida!");
 				}
 			}
