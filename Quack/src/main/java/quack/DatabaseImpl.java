@@ -1,5 +1,6 @@
 package quack;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -200,5 +201,31 @@ public class DatabaseImpl implements Database {
 			e.printStackTrace();
 		}
 		return success;
+	}
+
+	@Override
+	public void insertImage(User sessionUser, InputStream fileStream) {
+		// TODO Auto-generated method stub
+		try {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			getConnection();
+			
+			PreparedStatement ps =  getStatement("INSERT INTO profilePicture (user_id, filename, last_modified, photo)"+
+			"VALUES (" + sessionUser.getDbIndex() + ", '" + sessionUser.getDbIndex() + ".jpg', '" + 
+			dateFormat.format(new Date(Calendar.getInstance().getTimeInMillis())) + "', ?);");
+			
+			ps.setBlob(1, fileStream);
+			
+			ps.execute();
+			commit();
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

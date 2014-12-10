@@ -1,5 +1,6 @@
 package quack;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -53,4 +54,8 @@ public interface Database {
 	public boolean addMessage(Message message, User user);
 	// Adiciona uma mensagem {Message} a um usuario {User} no banco de dados. Retorna true se
 	// a operacao teve sucesso, ou false caso contrario.
+	
+	public void insertImage(User sessionUser, InputStream fileStream);
+	// Adiciona uma imagem de perfil codificada em {fileStream} de um usuario {sessionUser}
+	// na base de dados do sistema.
 }
