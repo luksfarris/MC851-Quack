@@ -1,6 +1,12 @@
 package quack;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,6 +16,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import javax.servlet.ServletContext;
 
 public class DatabaseImpl implements Database {
 	private Connection con = null;
@@ -42,7 +50,7 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
-	public void loadDatabase(UserTable userTable, Long nextUserId, Long nextMessageId) {
+	public void loadDatabase(UserTable userTable, Long nextUserId, Long nextMessageId, ServletContext context) {
 		try {
 			getConnection();
 			ResultSet rs = getStatement("SELECT * FROM user;")
@@ -74,6 +82,7 @@ public class DatabaseImpl implements Database {
 						}
 					}
 					userTable.add(u);
+					//loadProfileImage(u, context);
 				}
 
 				else {
@@ -262,6 +271,55 @@ public class DatabaseImpl implements Database {
 			e.printStackTrace();
 		}
 		return statement;
+	}
+
+
+	@Override
+	public void loadProfileImage(User user, ServletContext context) {
+		String filePath = context.getRealPath("/") + "pub/profileImages";
+		getConnection();
+
+		try {
+			ResultSet rs = getStatement("SELECT * FROM profilePicture WHERE user_id =" +
+					String.valueOf(user.getDbIndex())).executeQuery();
+			
+			if(rs.next()){
+				Blob blob = rs.getBlob("photo");
+				
+				InputStream inputStream = blob.getBinaryStream();
+                OutputStream outputStream = null;
+				try {
+					outputStream = new FileOutputStream(filePath);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+ 
+                int bytesRead = -1;
+                byte[] buffer = new byte[1024];
+                try {
+					while ((bytesRead = inputStream.read(buffer)) != -1) {
+					    outputStream.write(buffer, 0, bytesRead);
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+ 
+                inputStream.close();
+                outputStream.close();
+                System.out.println("Arquivo salvo em " + filePath);
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

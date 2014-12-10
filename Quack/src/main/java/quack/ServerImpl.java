@@ -39,7 +39,7 @@ public final class ServerImpl implements Server {
 	// ??{ O s procedimentos a seguir deveriam construir e devolver
 	// a construir página HTML de resultado adequada. }??
 
-	public void initialize(String dbLoginName, String dbName, String dbPassword) {
+	public void initialize(String dbLoginName, String dbName, String dbPassword, ServletContext context) {
 		// Conecta com a base de dados persitente e carrega na memória:
 		this.database = new DatabaseImpl();
 		this.database.initialize(dbLoginName, dbName, dbPassword);
@@ -52,7 +52,7 @@ public final class ServerImpl implements Server {
 		this.userTable = new UserTableImpl();
 		this.userTable.initialize();
 		
-		this.database.loadDatabase(userTable, nextUserId, nextMessageId);
+		this.database.loadDatabase(userTable, nextUserId, nextMessageId, context);
 
 		// Inicializa o criador de paginas html:
 		html = new HTMLImpl();
@@ -567,7 +567,7 @@ public final class ServerImpl implements Server {
 		
 	}
 	
-	private String getFileName(final Part part) {
+	public String getFileName(final Part part) {
 	    final String partHeader = part.getHeader("content-disposition");
 	   // LOGGER.log(Level.INFO, "Part Header = {0}", partHeader);
 	    for (String content : part.getHeader("content-disposition").split(";")) {

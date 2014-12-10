@@ -1,9 +1,12 @@
 package quack;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import javax.servlet.ServletContext;
 
 public interface Database {
 	
@@ -24,7 +27,7 @@ public interface Database {
 	// Inicializa um banco de dados com parametros de login {dbLoginName}, senha {dbPassword}
 	// e banco de nome {dbName}
 	
-	public void loadDatabase(UserTable userTable, Long nextUserId, Long nextMessageId);
+	public void loadDatabase(UserTable userTable, Long nextUserId, Long nextMessageId, ServletContext context);
 	// Carrega a base de dados {this.database} na memória, criando os objetos
 	// {User,Message,Contact} e ligando-os entre si. Supõe que a conexão com o
 	// servidor da base de dados já foi estabelecida.
@@ -50,5 +53,9 @@ public interface Database {
 	public void insertImage(User sessionUser, InputStream fileStream);
 	// Adiciona uma imagem de perfil codificada em {fileStream} de um usuario {sessionUser}
 	// na base de dados do sistema.
+	
+	public void loadProfileImage(User user, ServletContext context);
+	// Busca a imagem de perfil de um usuário {user} e cria o arquivo
+	// correspondente no sistema de arquivos do servidor.
 
 }

@@ -27,7 +27,7 @@ public final class QuackService {
 			sharedServer = new ServerImpl();
 			context.setAttribute(SERVER_CONTEXT_NAME, sharedServer);
 			// inicializa o banco de dados
-			sharedServer.initialize("mc851u4", "mc851db4", "ohjairah");
+			sharedServer.initialize("mc851u4", "mc851db4", "ohjairah", context);
 		}
 		return sharedServer;
 	}

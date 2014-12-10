@@ -7,6 +7,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 public interface Server {
 
@@ -71,7 +72,7 @@ public interface Server {
 	// ----------------------------------------------------------------------
 	// INICIALIZAÇÃO
 
-	public void initialize(String dbLoginName, String dbName, String dbPassword);
+	public void initialize(String dbLoginName, String dbName, String dbPassword, ServletContext context);
 
 	// Inicializa uma instância recém-criada de {Server}, inicializando
 	// as tabelas de usuários, contatos e mensagens a partir do banco de dados
@@ -351,5 +352,9 @@ public interface Server {
 	// que fica salva na instância de {Server}, e caso exista retorna o usuario correspondente.
 	// Caso contrario retorna {null};
 	
+	public String getFileName(final Part part);
+	// Este metodo é chamado quando é necessário descobrir o nome de um arquivo a ser
+	// enviado para o servidor. O parâmetro {part} corresponde à uma parte (bloco de bytes)
+	// do arquivo. Retorna uma string contendo o nome do arquivo.
 	
 }
