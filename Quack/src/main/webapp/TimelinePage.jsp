@@ -83,16 +83,18 @@ HTMLImpl formatador = new HTMLImpl();
 									<p><strong><%= list.get(i).getUser().getFullName() %></strong>&emsp;<a href="user/<%= list.get(i).getUser().getLoginName() %>">@<%= list.get(i).getUser().getLoginName() %></a></p>
 									<p><%= formatador.formatMessage(list.get(i)) %></p>
 									<p>
-										<span class="label label-default"><%= list.get(i).getFormattedDate() %></span> &ndash;
-										<a class="label label-default" href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getDBIndex() %>">∞ Permalink</a> &ndash;
-										<a class="label label-primary" href="RepostMessage?id=<%out.print(list.get(i).getDBIndex());%>&author=<%out.print(list.get(i).getUser().getLoginName());%>">➡ Repostar</a></p>
+										<span class="label label-default">Postado em <%= list.get(i).getFormattedDate() %></span> &ndash;
+										<a class="label label-default" href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getDBIndex() %>"><span class="glyphicon glyphicon-link"></span> Permalink</a> &ndash;
+										<a class="label label-primary" href="RepostMessage?id=<%out.print(list.get(i).getDBIndex());%>&author=<%out.print(list.get(i).getUser().getLoginName());%>"><span class="glyphicon glyphicon-retweet"></span> Repostar</a></p>
 								</td>
 							</tr>
 							<% } %>
 						</table>
 						<% if (maxposts <= list.size()) { %>
 						<p class="text-center" style="margin-top: 5px;">
-							<a class="btn btn-default" href="timeline.jsp?maxN=<%= maxposts + 30 %>">↓ Mostrar mais ↓</a>
+							<a class="btn btn-default" href="timeline.jsp?maxN=<%= maxposts + 30 %>">
+								<span class="glyphicon glyphicon-arrow-down"></span> Mostrar mais <span class="glyphicon glyphicon-arrow-down"></span>
+							</a>
 						</p>
 						<% } %>
 						<% } %>
