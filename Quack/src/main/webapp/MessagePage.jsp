@@ -4,113 +4,80 @@
 <%@ page import="java.text.*" %>
 <%@ page import="quack.*" %>
 <%@ page import="service.*" %>
-<!DOCTYPE html>
-<html>
-	<!-- Página em teste -->
-	<head>
-	<meta charset="UTF-8" />
-	<title>Mensagem</title>
-	<style>
-	body {
-	background-color: #888;
-	}
-	
-	.box {
-	float: left;
-	background-color: #FFF;
-	padding: 10px;
-	border-radius: 1em 1em 1em;
-	
-	}
-	
-	#fullname { 
-	font: bold 20pt 'Helvetica Neue','Arial',sans-serif; 
-	}
-	
-	#loginname {
-	font: 14pt 'Helvetica Neue','Arial',sans-serif;
-	color: #22F;
-	}
-	
-	#message {
-	font: 20pt 'Georgia',serif;
-	text-align: left;
-	}
-	
-	.datetime {
-	font: 10pt 'Helvetica Neue','Arial',sans-serif;
-	color: #808080;
-	}
-	
-	th {
-	font: 20pt 'Helvetica Neue','Arial',sans-serif;
-	padding: 0 5px;
-	}
-	
-	td {
-	font: 8pt 'Helvetica Neue','Arial',sans-serif;
-	padding: 0 5px;
-	}
-	
-	li, p {
-	font: 10pt 'Helvetica Neue','Arial',sans-serif;
-	}
-	
-	a {
-	color: #22F;
-	text-decoration: none;
-	}
-	
-	a:hover, a:active {
-	text-decoration: underline;
-	}
-	</style>
+
 <%
 String u = request.getParameter("u");
-User user;
-user = QuackService.getServer(getServletContext()).getUserFromLoginName(u);
+User user = QuackService.getServer(getServletContext()).getUserFromLoginName(u);
 String id = request.getParameter("id");
-Message message;
-message = user.getMessageByDBIndex(Long.parseLong(id));
-%>	
-	</head>
-	<body>
-		<div style="width: 700px; margin-left: auto; margin-right: auto;">
-			<div class="box">
-			<% if (message != null) { %>
-				<div style="float: left;">
-					<img src="img/profilepics/<%= user.getLoginName() %>.png" style="width: 64px;" alt="Imagem de <%= user.getFullName() %>" />
+Message message = user.getMessageByDBIndex(Long.parseLong(id));
+HTMLImpl formatador = new HTMLImpl();
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+		<title>Quack - Mensagem de <%= user.getFullName() %></title>
+		<!-- Bootstrap CDN -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" />
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css" />
+	    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	
+	    <!-- Font Awesome CDN -->
+	    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+	
+	    <!-- Custom style -->
+	    <link rel="stylesheet" type="text/css" href="pub/css/user-profile.css" />
+</head>
+<body>
+	<header>
+	  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	    <div class="container">
+	      <div class="navbar-header">
+	        <a class="navbar-brand" href="#">Quack</a>
+	      </div>
+	      <div class="navbar-collapse collapse">
+	        <ul class="nav navbar-nav">
+	          <li><a href="Timeline">Timeline</a></li>
+	          <li><a href="UserPage.jsp">Perfil</a></li>
+	          <li><a href="UserListPage.jsp">Usuários do Sistema</a></li>
+	        </ul>
+	        <ul class="nav navbar-nav navbar-right">
+	          <li><a href="Logout">Logout</a></li>
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+	</header>
+	<div class="container">
+		<div class="panel panel-default list">
+		<div style="margin: 5px;">
+			<div class="row">
+				<div class="col-md-2">
+					<img src="img/profilepics/<%= user.getLoginName() %>.png" style="width: 96px;" />
 				</div>
-				<div style="float: left; padding-left: 8px; vertical-align: top;">
+				<div class="col-md-10">
+					<h3><%= user.getFullName() %><br />
+					<small><a href="user/<%= user.getLoginName() %>">@<%= user.getLoginName() %></a></small></h3>
+				</div>
+			</div>
+			<hr />
+			<div class="row">
+				<div class="col-md-12">
+					<div><span style="font: 20pt 'Georgia',serif;"><%= formatador.formatMessage(message) %></span></div>
+				</div>
+			</div>
+			<hr />
+			<div class="row">
+				<div class="col-md-12">
 					<p>
-						<span id="fullname"><%= user.getFullName() %></span><br />
-						<a id="loginname" href="user/<%= user.getLoginName() %>">@<%= user.getLoginName() %></a>
-					</p>
+					<span class="label label-default">Postado em <%= message.getFormattedDate() %></span> &ndash;
+					<a class="label label-primary" href="RepostMessage?id=<%out.print(message.getDBIndex());%>&author=<%out.print(user.getLoginName());%>"><span class="glyphicon glyphicon-retweet"></span> Repostar</a></p>
 				</div>
-				<div style="float: left; clear: left;">
-					<hr />
-					<p id="message"><%= message.getText() %></p>
-					<p class="datetime">Postado em <%= message.getFormattedDate() %></p>
-					
-					<p>
-						<a href="#">➡ Repostar</a>
-					</p>
-					
-					<table style="margin-left: auto; margin-right: auto; color: #888;">
-						<tr>
-							<th>0</th>
-						</tr>
-						<tr>
-							<td>REPOSTAGENS</td>
-						</tr>
-					</table>
-					
-				
-					
-					
-				</div>
-			<% } %>
 			</div>
 		</div>
-	</body>
+		</div>
+	</div>
+</body>
 </html>
