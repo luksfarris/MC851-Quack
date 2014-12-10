@@ -322,6 +322,20 @@ public interface Server {
 	// Em caso de sucesso, o parâmetro {response} conterá uma página
 	// notificando que o arquivo foi enviado com sucesso.
 	
+	public void processModifyUserReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context) throws IOException;
+	// Chamado quando o servidor HTTP recebe um pedido de alteracao de dados de um
+	// usuario do sistema {Quack}.
+	//
+	// O parâmetro {request} deve especificar uma sessão aberta; o dono {u} da sessão
+	// é o usuario a ser mudado.  O {request} deve conter também 
+	// um campo {fullName} cujo valor é o novo fullName do usuário {u},
+	// um campo {newPassword} cujo valor é a nova senha do usuario {u}, e um campo
+	// {oldPassword} com a senha atual do usuário {u}.
+	//
+	// Em caso de sucesso, o parâmetro {respose} conterá a pagina de perfil do usuario.
+	// A alteração é gravada na base de dados persistennte.
+	
 	// -------------------------------------------------------------------------------
 	// UTLITÁRIOS
 

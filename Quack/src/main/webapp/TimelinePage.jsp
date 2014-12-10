@@ -4,71 +4,6 @@
 <%@ page import="java.text.*" %>
 <%@ page import="quack.*" %>
 <%@ page import="service.*" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8" />
-<title>Linha do tempo</title>
-<style>
-
-header nav.navbar-fixed-top, div.container.panel {
-  background: rgba(255, 255, 255, 0.75);
-}
-
-body {
-background-color: #888;
-}
-	
-.box {
-	float: left;
-	background-color: #FFF;
-	padding: 10px;
-	border-radius: 1em 1em 1em;
-}
-	
-	#fullname { 
-	font: bold 20pt 'Helvetica Neue','Arial',sans-serif; 
-	}
-	
-	h1 {
-	font: bold 16pt 'Helvetica Neue','Arial',sans-serif; 
-	}
-	
-	td {
-	font: 12pt 'Helvetica Neue','Arial',sans-serif;
-	width: 600px;
-	vertical-align: top;
-	}
-	
-	th {
-	width: 48px;
-	vertical-align: top;
-	}
-	
-	#loginname {
-	font: 14pt 'Helvetica Neue','Arial',sans-serif;
-	color: #22F;
-	}
-	
-	p {
-	font: 10pt 'Helvetica Neue','Arial',sans-serif;
-	}
-	
-	a {
-	color: #22F;
-	text-decoration: none;
-	}
-	
-	a:hover, a:active {
-	text-decoration: underline;
-	}
-	
-	.datetime {
-	font: 10pt 'Helvetica Neue','Arial',sans-serif;
-	color: #808080;
-	}
-	
-</style>
 <%
 Server server = QuackService.getServer(getServletContext());
 List<Message> list = server.processShowReceivedMessagesReq(request, response, getServletContext());
@@ -77,78 +12,93 @@ int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
 Timestamp t = new TimestampImpl();
 HTMLImpl formatador = new HTMLImpl();
 %>
-</head>
-<body>
-
-<header>
-      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="UserPage.jsp">Perfil</a> |
-            <a class="navbar-brand" href="UserListPage.jsp">Usuários do Sistema</a> |
-            <a class="navbar-brand" href="Logout">Logout</a>
-          </div>
-        </div>
-      </nav>
-</header>
-
-<div style="width: 700px; margin-left: auto; margin-right: auto;">
-
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Quack - Timeline</title>
+		<!-- Bootstrap CDN -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" />
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css" />
+	    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	
-
+	    <!-- Font Awesome CDN -->
+	    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
 	
-<div class="box">
-
-<p>
-<span id="fullname">Postar Mensagem</span><br />
-</p>
-<form name="createMessage" action="CreateMessage" method="post" accept-charset="utf-8">
-<div align="center">
-	<textarea rows="4" cols="70" name="messageText" maxlength="100" required></textarea>
-	<p style="text-align: right;"><input type="submit" value="Quack!"></p>
-</div>				
-</form>
-
-<hr /><hr />
-<div style="float: left; padding-left: 8px; vertical-align: top;">
-<p>
-<span id="fullname">Linha do tempo</span><br />
-</p>
-</div>
-
-<div style="float: left; clear: left;">
-<hr />
-
-<table style="width: 650px;">
-<% if (list != null) { %>
-<% for (int i = 0; i < maxposts && i < list.size(); i++) { %>
-
-<tr>
-<th>
-<img src="img/profilepics/<%= list.get(i).getUser().getLoginName() %>.png" style="width: 48px;" />
-</th>
-<td><b><%= list.get(i).getUser().getFullName() %></b>&ensp;<a href="user/<%= list.get(i).getUser().getLoginName() %>">@<%= list.get(i).getUser().getLoginName() %></a><br />
-<%= formatador.formatMessage((MessageImpl)list.get(i))%><br/>
-<span class="datetime">
-<a href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getDBIndex() %>">Postado em
-<%= list.get(i).getFormattedDate() %></a>
-&ndash; <a href="RepostMessage?id=<%out.print(list.get(i).getDBIndex());%>&author=<%out.print(list.get(i).getUser().getLoginName());%>">➡ Repostar</a>
-&ndash; 0 repostagens </span>
-
-</td>
-
-</tr>
-<% } %>
-
-</table>
-
-<% if (maxposts <= list.size()) { %>
-<p style="text-align: center;"><a href="timeline.jsp?maxN=<%= maxposts + 30 %>">↓ Mostrar mais ↓</a></p>
-<% } %>
-<% } %>
-</div>
-
-</div>
-</div>
-</body>
+	    <!-- Custom style -->
+	    <link rel="stylesheet" type="text/css" href="pub/css/user-profile.css" />
+	</head>
+	<body>
+		<header>
+	      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	        <div class="container">
+	          <div class="navbar-header">
+	            <a class="navbar-brand" href="#">Quack</a>
+	          </div>
+	          <div class="navbar-collapse collapse">
+	            <ul class="nav navbar-nav">
+	              <li><a href="UserPage.jsp">Perfil</a></li>
+	              <li><a href="UserListPage.jsp">Usuários do Sistema</a></li>
+	            </ul>
+	            <ul class="nav navbar-nav navbar-right">
+	              <li><a href="Logout">Logout</a></li>
+	            </ul>
+	          </div>
+	        </div>
+	      </nav>
+	    </header>
+	    <div class="container">
+	    	<h1>Timeline</h1>
+	    	<div class="row">
+	    		<div class="col-md-3 user-info">
+          			<div class="thumbnail">
+           				 <img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" />
+         			 </div>
+         		</div>
+		    	<div class="col-md-9">
+			    	<div class="panel panel-default">
+			    		<div class="panel-body">
+				   			<form name="createMessage" action="CreateMessage" method="post" accept-charset="utf-8" role="form">
+				   				<div class="form-group">
+								<textarea class="form-control" rows="4" cols="70" name="messageText" required="required"></textarea>
+								</div>
+								<div class="form-group">
+								<p class="text-right">
+									<input class="btn btn-primary" type="submit" value="Postar mensagem" />
+								</p>
+								</div>			
+							</form>
+						</div>
+					</div>
+					<div class="panel panel-default list">
+						<table class="table">
+						<% if (list != null) { %>
+						<% for (int i = 0; i < maxposts && i < list.size(); i++) { %>
+							<tr>
+								<td>
+									<img src="img/profilepics/<%= list.get(i).getUser().getLoginName() %>.png" style="width: 48px;" />
+								</td>
+								<td>
+									<p><strong><%= list.get(i).getUser().getFullName() %></strong>&emsp;<a href="user/<%= list.get(i).getUser().getLoginName() %>">@<%= list.get(i).getUser().getLoginName() %></a></p>
+									<p><%= formatador.formatMessage(list.get(i)) %></p>
+									<p>
+										<span class="label label-default"><%= list.get(i).getFormattedDate() %></span> &ndash;
+										<a class="label label-default" href="MessagePage.jsp?u=<%= list.get(i).getUser().getLoginName() %>&id=<%= list.get(i).getDBIndex() %>">∞ Permalink</a> &ndash;
+										<a class="label label-primary" href="RepostMessage?id=<%out.print(list.get(i).getDBIndex());%>&author=<%out.print(list.get(i).getUser().getLoginName());%>">➡ Repostar</a></p>
+								</td>
+							</tr>
+							<% } %>
+						</table>
+						<% if (maxposts <= list.size()) { %>
+						<p class="text-center" style="margin-top: 5px;">
+							<a class="btn btn-default" href="timeline.jsp?maxN=<%= maxposts + 30 %>">↓ Mostrar mais ↓</a>
+						</p>
+						<% } %>
+						<% } %>
+					</div>
+				</div>
+			</div>
+	    </div>
+	</body>
 </html>

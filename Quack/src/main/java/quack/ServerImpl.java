@@ -67,7 +67,6 @@ public final class ServerImpl implements Server {
 	public void processRegistrationReq(HttpServletRequest request,
 			HttpServletResponse response, ServletContext context) throws IOException {
 
-		System.out.println(request.getParameter("username"));
 		// Restringe os caracteres válidos de {loginName} para 
 		// dígitos de 0 a 9, letras de A a Z (maiúsculas ou
 		// minúsculas) e o caractere '_'.
@@ -107,8 +106,8 @@ public final class ServerImpl implements Server {
 				// Cria o usuário e acrescenta à tabela:
 				user = new UserImpl();
 				if (!user.initialize(request.getParameter("username"), request.getParameter("email"), 
-						request.getParameter("fullName"), request.getParameter("password"), 
-						this.nextUserId)) {
+						new String(request.getParameter("fullName").getBytes("iso-8859-1"), "UTF-8"),
+						request.getParameter("password"), this.nextUserId)) {
 					html.errorPage(response, "Falha ao criar user");  
 				} else {
 					this.nextUserId++;
@@ -242,7 +241,7 @@ public final class ServerImpl implements Server {
 					Contact c_contactUser = contactUser.getReverseContact(sessionUser);
 					c_sessionUser.setStatus(relation);
 					c_contactUser.setStatus(relation);						
-					database.modifyContact(sessionUser, contactUser, relation);
+					database.modifyContact(c_sessionUser);
 					html.errorPage(response, "acao concluida!");
 
 				} else{//Contato ainda nao existe
@@ -253,11 +252,47 @@ public final class ServerImpl implements Server {
 					sessionUser.addDirectContact(c);
 					contactUser.addReverseContact(c);
 					this.numContacts += 1;
-					database.insertContact(sessionUser, contactUser, relation);
+					database.insertContact(c);
 					html.errorPage(response, "acao concluida!");
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void processModifyUserReq(HttpServletRequest request,
+			HttpServletResponse response, ServletContext context)
+			throws IOException {
+		String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+		User sessionUser = (User)getUserFromCookie(cookie);
+		String newFullName = new String(request.getParameter("fullName").getBytes("iso-8859-1"), "UTF-8");
+		String newPassword = request.getParameter("newPassword");
+		String oldPassword = request.getParameter("oldPassword");
+		
+		User user = this.userTable.getUserByLoginName(sessionUser.getLoginName());
+		
+		if(newPassword != null && !newPassword.equals("")){
+			if(sessionUser.checkPassword(oldPassword) == false){
+				html.errorPage(response, "Senha antiga inválida");
+				return;
+			}
+			
+			// Restringe os caracteres válidos de {password} para
+			// qualquer caractere da tabela ASCII, exceto
+			// caracteres de controle.
+			for (int i = 0; i < newPassword.length(); i++)	{
+				char c = newPassword.charAt(i);
+				if (c < ' ' || c > '~')	{
+					html.errorPage(response, "Caractere inválido na senha.");
+					return;
+				}
+			}
+			user.setPassword(newPassword);
+		}
+		
+		user.setFullName(newFullName);
+		database.modifyUser(user);
+		html.errorPage(response, "Dados alterados com sucesso");
 	}
 
 	@Override
@@ -313,7 +348,7 @@ public final class ServerImpl implements Server {
 		List<Message> messages = new LinkedList<Message>(); 
 		
 		for(Contact c : user.getDirectContacts()){
-			if(c.status().equals("Follow")){
+			if(c.status().equalsIgnoreCase("Follow")){
 				for(Message m : c.target().getPostedMessages(startTime, endTime, maxN)){
 					messages.add(m);
 				}
@@ -367,7 +402,7 @@ public final class ServerImpl implements Server {
 			}
 
 			this.nextMessageId++;
-			if (database.addMessage(message, user)){
+			if (database.addMessage(message)){
 				user.addMessage(message);
 			}
 			
@@ -444,7 +479,7 @@ public final class ServerImpl implements Server {
 
 					this.nextMessageId++;
 					
-					if (database.addMessage(newMessage, user)) {
+					if (database.addMessage(newMessage)) {
 						user.addMessage(message);
 					}
 					
@@ -543,4 +578,5 @@ public final class ServerImpl implements Server {
 	    }
 	    return null;
 	}
+
 }

@@ -34,3 +34,15 @@ body {
   margin-top: 0;
   margin-bottom: 20px;
 }
+
+fieldset {
+  margin-bottom: 25px;
+}
+
+.error {
+  border-color: red;
+}
+
+.messages, .msg {
+  display: none;
+}

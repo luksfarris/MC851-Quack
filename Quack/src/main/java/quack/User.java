@@ -50,6 +50,10 @@ public interface User {
 	public void setEmail(String newEmail);
 
 	// Altera o e-mail de {this} para {newEmail}.
+	
+	public void setFullName(String newFullName);
+	
+	// Altera o nome completo de {this} para {newFullName}.
 
 	public void setPassword(String newPassword);
 
@@ -156,4 +160,5 @@ public interface User {
 	
 	public int followersCount();
 	// Retorna quantos usuarios seguem {this}.
+
 }
