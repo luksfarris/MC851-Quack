@@ -9,6 +9,9 @@
 <%
   String loginName = request.getParameter("u");
   User user;
+  boolean follow = false;
+  boolean block = false;
+  boolean blocked = false;
   String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
   String imgURL;
   user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
@@ -23,13 +26,24 @@
     user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
     pageContext.setAttribute("isCurrentUserPage", false);
     
-    
-    
-    
-    
-    
-    
-    
+    if (logged != user) {
+	    for (Contact c : logged.getDirectContacts()) {
+	    	if (c.target().getDbIndex() == user.getDbIndex()){
+	    		if (c.status().equalsIgnoreCase("follow")) {
+	    			follow = true;
+	    		} else if (c.status().equalsIgnoreCase("block")) {
+	    			block = true;
+	    		}
+	    	}
+	    }
+	    for (Contact c : user.getDirectContacts()) {
+	    	if (c.target().getDbIndex() == logged.getDbIndex()) {
+	    		if (c.status().equalsIgnoreCase("block")){
+	    			blocked = true;
+	    		}
+	    	}
+	    }
+    }   
   }
 
   
@@ -45,6 +59,7 @@
   pageContext.setAttribute("imgURL", imgURL);
   pageContext.setAttribute("follow", follow);
   pageContext.setAttribute("block", block);
+  pageContext.setAttribute("blocked", blocked);
 %>
 
 <!DOCTYPE html>
@@ -106,17 +121,15 @@
                 </a>
               </c:when>
               <c:otherwise>
-              	<c:when test="${!follow}">
-                	<a href="Contato?state=follow&userName=${userName}" class="btn btn-success btn-xs">
+              	<c:choose>
+              	<c:when test="${follow}">
+                	<a href="Contato?state=inactive&userName=${userName}" class="btn btn-success btn-xs">
                   	<i class="fa fa-plus"></i>
-                  	Seguir
-                	</a>
-                	<a href="Contato?state=block&userName=${userName}" class="btn btn-success btn-xs">
-                  	<i class="fa fa-plus"></i>
-                  	Bloquear
+                  	Deixar de Seguir
                 	</a>
                 </c:when>
                 <c:otherwise>
+                	<c:choose>
                 	<c:when test="${block}">
                 		<a href="Contato?state=inactive&userName=${userName}" class="btn btn-success btn-xs">
                   		<i class="fa fa-plus"></i>
@@ -124,12 +137,28 @@
                 		</a>
                 	</c:when>
                 	<c:otherwise>
-                		<a href="Contato?state=inactive&userName=${userName}" class="btn btn-success btn-xs">
-                  		<i class="fa fa-plus"></i>
-                  		Deixar de Seguir
-                		</a>
+                		<c:choose>
+                		<c:when test="${blocked}">
+	                		<a href="Contato?state=follow&userName=${userName}" class="btn btn-success btn-xs">
+		                  	<i class="fa fa-plus"></i>
+		                  	Seguir
+		                	</a>
+		                </c:when>
+		                <c:otherwise>
+		                	<a href="#" class="btn btn-success btn-xs">
+		                  	<i class="fa fa-plus"></i>
+		                  	Seguir
+		                	</a>
+		                </c:otherwise>
+		                </c:choose>
+	                	<a href="Contato?state=block&userName=${userName}" class="btn btn-success btn-xs">
+	                  	<i class="fa fa-plus"></i>
+	                  	Bloquear
+	                	</a>
                 	</c:otherwise>
+                	</c:choose>
               	</c:otherwise>
+              	</c:choose>
               </c:otherwise>
             </c:choose>
           </div>
