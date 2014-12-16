@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import service.CookieHelper;
-import servlets.DatabaseListener;
 
 public final class ServerImpl implements Server {
 

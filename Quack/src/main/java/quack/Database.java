@@ -4,8 +4,6 @@ import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 
-import servlets.DatabaseListener;
-
 public interface Database {
 	
 	// Interface com o banco de dados persistente.

@@ -18,8 +18,6 @@ import java.util.Date;
 
 import javax.servlet.ServletContext;
 
-import servlets.DatabaseListener;
-
 public class DatabaseImpl implements Database {
 	private Connection con = null;
 
