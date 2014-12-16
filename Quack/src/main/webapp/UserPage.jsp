@@ -19,10 +19,22 @@
     pageContext.setAttribute("isCurrentUserPage", true);
   }
   else {
+	User logged = user;
     user = QuackService.getServer(getServletContext()).getUserFromLoginName(loginName);
     pageContext.setAttribute("isCurrentUserPage", false);
+    
+    
+    
+    
+    
+    
+    
+    
   }
 
+  
+  
+  
   imgURL =  "pub/img/profilepics/" + String.valueOf(user.getDbIndex()) + ".jpg";
   
   pageContext.setAttribute("id", user.getDbIndex());
@@ -31,6 +43,8 @@
   pageContext.setAttribute("messages", user.getPostedMessages());
   pageContext.setAttribute("formatador", formatador);
   pageContext.setAttribute("imgURL", imgURL);
+  pageContext.setAttribute("follow", follow);
+  pageContext.setAttribute("block", block);
 %>
 
 <!DOCTYPE html>
@@ -92,10 +106,30 @@
                 </a>
               </c:when>
               <c:otherwise>
-                <a href="Contato?state=follow&userName=${userName}" class="btn btn-success btn-xs">
-                  <i class="fa fa-plus"></i>
-                  Seguir
-                </a>
+              	<c:when test="${!follow}">
+                	<a href="Contato?state=follow&userName=${userName}" class="btn btn-success btn-xs">
+                  	<i class="fa fa-plus"></i>
+                  	Seguir
+                	</a>
+                	<a href="Contato?state=block&userName=${userName}" class="btn btn-success btn-xs">
+                  	<i class="fa fa-plus"></i>
+                  	Bloquear
+                	</a>
+                </c:when>
+                <c:otherwise>
+                	<c:when test="${block}">
+                		<a href="Contato?state=inactive&userName=${userName}" class="btn btn-success btn-xs">
+                  		<i class="fa fa-plus"></i>
+                  		Desbloquear
+                		</a>
+                	</c:when>
+                	<c:otherwise>
+                		<a href="Contato?state=inactive&userName=${userName}" class="btn btn-success btn-xs">
+                  		<i class="fa fa-plus"></i>
+                  		Deixar de Seguir
+                		</a>
+                	</c:otherwise>
+              	</c:otherwise>
               </c:otherwise>
             </c:choose>
           </div>
@@ -117,7 +151,7 @@
                       <c:when test="${isCurrentUserPage}">
                         <c:forEach items="${messages}" var="m" varStatus="loop">
                           <tr id="row-${loop.index}" class="row">
-                            <td><img src="img/profilepics/${m.getUser().getLoginName()}.png" style="width: 48px;" /></td>
+                            <td><img src="pub/img/profilepics/${m.getUser().getDbIndex()}.jpg" style="width: 48px;" /></td>
                             <td>
                             <p><strong>${m.getUser().getFullName()}</strong>&emsp;<a href="user/${m.getUser().getLoginName()}">@${m.getUser().getLoginName()}</a></p>
 								<p>${formatador.formatMessage(m)}</p>

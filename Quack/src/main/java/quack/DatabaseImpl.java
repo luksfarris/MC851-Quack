@@ -176,7 +176,7 @@ public class DatabaseImpl implements Database {
 			getConnection();
 			getStatement("INSERT INTO contact VALUES("+ contact.source().getDbIndex()+","+contact.target().getDbIndex()+",'"+
 			dateFormat.format(new Date(Calendar.getInstance()
-					.getTimeInMillis()))+"',"+contact.status()+");").execute();
+					.getTimeInMillis()))+"','"+contact.status()+"');").execute();
 			commit();	
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro ao executar uma query.");
