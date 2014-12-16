@@ -46,7 +46,7 @@ public interface Database {
 	// Adiciona uma mensagem {Message} a um usuario no banco de dados. Retorna true se
 	// a operacao teve sucesso, ou false caso contrario.
 	
-	public void insertImage(User sessionUser, InputStream fileStream);
+	public void insertImage(User sessionUser, InputStream fileStream, ServletContext context);
 	// Adiciona uma imagem de perfil codificada em {fileStream} de um usuario {sessionUser}
 	// na base de dados do sistema.
 	

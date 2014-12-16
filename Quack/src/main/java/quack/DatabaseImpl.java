@@ -241,7 +241,7 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
-	public void insertImage(User sessionUser, InputStream fileStream) {
+	public void insertImage(User sessionUser, InputStream fileStream, ServletContext context) {
 		// TODO Auto-generated method stub
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -255,7 +255,7 @@ public class DatabaseImpl implements Database {
 			
 			ps.execute();
 			commit();
-			
+			loadProfileImage(sessionUser, context);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
