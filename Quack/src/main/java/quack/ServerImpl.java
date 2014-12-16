@@ -544,8 +544,10 @@ public final class ServerImpl implements Server {
 	                + fileName));
 	        filecontent = filePart.getInputStream();
 
-	        this.database.insertImage(user, filecontent);
+	        this.database.insertImage(user, filecontent, context);
 	        
+			html.errorPage(response, "Imagem alterada com sucesso");
+
 	        /*int read = 0;
 	        final byte[] bytes = new byte[1024];
 
