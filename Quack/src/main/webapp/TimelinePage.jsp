@@ -84,7 +84,7 @@ pageContext.setAttribute("imgURL", imgURL);
 						<% for (int i = 0; i < maxposts && i < list.size(); i++) { %>
 							<tr>
 								<td>
-									<img src="img/profilepics/<%= list.get(i).getUser().getLoginName() %>.png" style="width: 48px;" />
+									<img src=<%="pub/img/profilepics/" + String.valueOf(list.get(i).getUser().getDbIndex()) + ".jpg"%> style="width: 48px;" />
 								</td>
 								<td>
 									<p><strong><%= list.get(i).getUser().getFullName() %></strong>&emsp;<a href="user/<%= list.get(i).getUser().getLoginName() %>">@<%= list.get(i).getUser().getLoginName() %></a></p>
