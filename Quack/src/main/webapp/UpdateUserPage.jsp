@@ -125,7 +125,7 @@
         </div>
         <div class="col-md-9">
         
-          <form id="edit-user-profile"class="form-horizontal" role="form" name="Update" action="ModifyUser" method="get" accept-charset="utf-8">
+          <form id="edit-user-profile"class="form-horizontal" role="form" name="Update" action="ModifyUser" method="post" accept-charset="utf-8">
             <fieldset>
               <div class="form-group">
                 <label class="col-sm-2 control-label">Nome de usuário</label>
@@ -137,15 +137,6 @@
                 <label class="col-sm-2 control-label" for="fullName">Nome completo</label>
                 <div class="col-sm-10">
                   <input type="text" class="form-control required" name="fullName" value="${user.getFullName()}" id="fullName" placeholder="Digite seu novo nome completo">
-                </div>
-              </div>
-            </fieldset>
-            <fieldset>
-              <div class="form-group">
-                <label class="col-sm-2 control-label" for="profileImage">Imagem de perfil</label>
-                <div class="col-sm-10">
-                  <input type="file" id="profileImage">
-                  <span class="help-block">Escolha sua nova imagem de perfil (tamanho máximo 600 KB)</span>
                 </div>
               </div>
             </fieldset>
@@ -176,6 +167,25 @@
               </div>
             </fieldset>
           </form>
+          
+          	<form id="edit-user-profile"class="form-horizontal" role="form" name="Upload" action="FileUpload" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+          		<fieldset>
+              	<div class="form-group">
+                	<label class="col-sm-2 control-label" for="profileImage">Imagem de perfil</label>
+                	<div class="col-sm-10">
+                 	 <input type="file" name="file" id="file">
+                  	<span class="help-block">Escolha sua nova imagem de perfil (tamanho máximo 600 KB)</span>
+               	 	</div>
+              	</div>
+            	</fieldset>
+            	<fieldset>
+             	<div class="form-group pull-right">
+                	<button id="back" type="button" class="btn btn-info">Voltar</button>
+                	<input id="form-submit" type="submit" class="btn btn-success" value="Atualizar Imagem de Perfil">
+              	</div>
+            </fieldset>
+            
+            </form>
         </div>
       </div>
     </div>

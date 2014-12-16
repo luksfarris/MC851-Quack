@@ -292,15 +292,8 @@ public final class ServerImpl implements Server {
 		
 		user.setFullName(newFullName);
 		database.modifyUser(user);
-		
-		if(request.getParameter("profileImage") != null)
-			try {
-				this.processFileUploadReq(request, response, context);
-			} catch (ServletException e) {
-				e.printStackTrace();
-			}
-		else
-			html.errorPage(response, "Dados alterados com sucesso");
+
+		html.errorPage(response, "Dados alterados com sucesso");
 	}
 
 	@Override
@@ -529,6 +522,7 @@ public final class ServerImpl implements Server {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 	    final String path = request.getServletContext().getRealPath("/") + "pub/img/profilepics";
 	    final Part filePart = request.getPart("file");
+	    
 	    final String fileName = getFileName(filePart);
 	    String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
 		User user = (User)getUserFromCookie(cookie);
