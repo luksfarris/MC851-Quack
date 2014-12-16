@@ -113,25 +113,27 @@
                       <c:when test="${isCurrentUserPage}">
                         <c:forEach items="${messages}" var="m" varStatus="loop">
                           <tr id="row-${loop.index}" class="row">
-                            <td><span class="label label-primary">
-                              ${m.getFormattedDate()}
-                              </span>
-                            </td>
-                            <td>${formatador.formatMessage(m)}</td>
+                            <td><img src="img/profilepics/${m.getUser().getLoginName()}.png" style="width: 48px;" /></td>
+                            <td>
+                            <p><strong>${m.getUser().getFullName()}</strong>&emsp;<a href="user/${m.getUser().getLoginName()}">@${m.getUser().getLoginName()}</a></p>
+								<p>${formatador.formatMessage(m)}</p>
+								<p>
+								<span class="label label-default">Postado em ${m.getFormattedDate()}</span> &ndash;
+								<a class="label label-default" href="MessagePage.jsp?u=${m.getUser().getLoginName()}&id=${m.getDBIndex()}"><span class="glyphicon glyphicon-link"></span> Permalink</a>                            </td>
                           </tr>
                         </c:forEach>
                       </c:when>
                       <c:otherwise>
                         <c:forEach items="${messages}" var="m" varStatus="loop">
                           <tr id="row-${loop.index}" class="row">
-                            <td><span class="label label-primary">
-                              ${m.getFormattedDate()}
-                            </span></td>
-                            <td>${formatador.formatMessage(m)}</td>
+                            <td><img src="img/profilepics/${m.getUser().getLoginName()}.png" style="width: 48px;" /></td>
                             <td>
-                              <a href="RepostMessage?id=${m.getDBIndex()}&author=${m.getUser().getLoginName()}" class="btn btn-info btn-xs">
-                                <i class="fa fa-refresh"></i> Repostar
-                              </a>
+                            <p><strong>${m.getUser().getFullName()}</strong>&emsp;<a href="user/${m.getUser().getLoginName()}">@${m.getUser().getLoginName()}</a></p>
+								<p>${formatador.formatMessage(m)}</p>
+								<p>
+								<span class="label label-default">Postado em ${m.getFormattedDate()}</span> &ndash;
+								<a class="label label-default" href="MessagePage.jsp?u=${m.getUser().getLoginName()}&id=${m.getDBIndex()}"><span class="glyphicon glyphicon-link"></span> Permalink</a> &ndash;
+								<a class="label label-primary" href="RepostMessage?id=${m.getDBIndex()}&author=${m.getUser().getLoginName()}"><span class="glyphicon glyphicon-retweet"></span> Repostar</a></p>
                             </td>
                           </tr>
                         </c:forEach>
