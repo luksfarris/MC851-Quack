@@ -194,7 +194,7 @@ public class UserImpl implements User {
 	public int followsCount() {
 		int count = 0;
 		for(Contact c: this.directContacts){
-			if(c.status().equals("Follow"))
+			if(c.status().equalsIgnoreCase("Follow"))
 				count++;
 		}
 		

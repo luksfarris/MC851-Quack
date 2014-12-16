@@ -87,7 +87,14 @@ pageContext.setAttribute("imgURL", imgURL);
 									<img src=<%="pub/img/profilepics/" + String.valueOf(list.get(i).getUser().getDbIndex()) + ".jpg"%> style="width: 48px;" />
 								</td>
 								<td>
-									<p><strong><%= list.get(i).getUser().getFullName() %></strong>&emsp;<a href="user/<%= list.get(i).getUser().getLoginName() %>">@<%= list.get(i).getUser().getLoginName() %></a></p>
+									<p><strong><%= list.get(i).getUser().getFullName() %></strong>&emsp;<a href="user/<%= list.get(i).getUser().getLoginName() %>">@<%= list.get(i).getUser().getLoginName() %></a>
+									
+									<% if (list.get(i).getParent() != null) { %>
+									&ndash; <span class="glyphicon glyphicon-retweet"></span> Repostado de <%= list.get(i).getParent().getUser().getFullName() %> 
+									(<a href="user/<%= list.get(i).getParent().getUser().getLoginName() %>">@<%= list.get(i).getParent().getUser().getLoginName() %></a>)
+									<% } %>
+									
+									</p>
 									<p><%= formatador.formatMessage(list.get(i)) %></p>
 									<p>
 										<span class="label label-default">Postado em <%= list.get(i).getFormattedDate() %></span> &ndash;
