@@ -10,6 +10,7 @@
   String loginName = request.getParameter("u");
   User user;
   String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+  String imgURL;
   user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
   pageContext.setAttribute("currentUserName", user.getLoginName());
 
@@ -22,11 +23,14 @@
     pageContext.setAttribute("isCurrentUserPage", false);
   }
 
+  imgURL =  "pub/img/profilepics/" + String.valueOf(user.getDbIndex()) + ".jpg";
+  
   pageContext.setAttribute("id", user.getDbIndex());
   pageContext.setAttribute("user", user);
   pageContext.setAttribute("userName", user.getLoginName());
   pageContext.setAttribute("messages", user.getPostedMessages());
   pageContext.setAttribute("formatador", formatador);
+  pageContext.setAttribute("imgURL", imgURL);
 %>
 
 <!DOCTYPE html>
@@ -77,7 +81,7 @@
       <div class="row">
         <div class="col-md-3 user-info">
           <div class="thumbnail">
-            <img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" />
+            <img src="${imgURL}" />
           </div>
           <div class="profile-buttons">
             <c:choose>
@@ -113,25 +117,27 @@
                       <c:when test="${isCurrentUserPage}">
                         <c:forEach items="${messages}" var="m" varStatus="loop">
                           <tr id="row-${loop.index}" class="row">
-                            <td><span class="label label-primary">
-                              ${m.getFormattedDate()}
-                              </span>
-                            </td>
-                            <td>${formatador.formatMessage(m)}</td>
+                            <td><img src="img/profilepics/${m.getUser().getLoginName()}.png" style="width: 48px;" /></td>
+                            <td>
+                            <p><strong>${m.getUser().getFullName()}</strong>&emsp;<a href="user/${m.getUser().getLoginName()}">@${m.getUser().getLoginName()}</a></p>
+								<p>${formatador.formatMessage(m)}</p>
+								<p>
+								<span class="label label-default">Postado em ${m.getFormattedDate()}</span> &ndash;
+								<a class="label label-default" href="MessagePage.jsp?u=${m.getUser().getLoginName()}&id=${m.getDBIndex()}"><span class="glyphicon glyphicon-link"></span> Permalink</a>                            </td>
                           </tr>
                         </c:forEach>
                       </c:when>
                       <c:otherwise>
                         <c:forEach items="${messages}" var="m" varStatus="loop">
                           <tr id="row-${loop.index}" class="row">
-                            <td><span class="label label-primary">
-                              ${m.getFormattedDate()}
-                            </span></td>
-                            <td>${formatador.formatMessage(m)}</td>
+                            <td><img src="img/profilepics/${m.getUser().getLoginName()}.png" style="width: 48px;" /></td>
                             <td>
-                              <a href="RepostMessage?id=${m.getDBIndex()}&author=${m.getUser().getLoginName()}" class="btn btn-info btn-xs">
-                                <i class="fa fa-refresh"></i> Repostar
-                              </a>
+                            <p><strong>${m.getUser().getFullName()}</strong>&emsp;<a href="user/${m.getUser().getLoginName()}">@${m.getUser().getLoginName()}</a></p>
+								<p>${formatador.formatMessage(m)}</p>
+								<p>
+								<span class="label label-default">Postado em ${m.getFormattedDate()}</span> &ndash;
+								<a class="label label-default" href="MessagePage.jsp?u=${m.getUser().getLoginName()}&id=${m.getDBIndex()}"><span class="glyphicon glyphicon-link"></span> Permalink</a> &ndash;
+								<a class="label label-primary" href="RepostMessage?id=${m.getDBIndex()}&author=${m.getUser().getLoginName()}"><span class="glyphicon glyphicon-retweet"></span> Repostar</a></p>
                             </td>
                           </tr>
                         </c:forEach>

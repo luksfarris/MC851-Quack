@@ -14,7 +14,9 @@
   String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
   user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
   Timestamp time = new TimestampImpl();
+  String imgURL =  "pub/img/profilepics/" + String.valueOf(user.getDbIndex()) + ".jpg";
 
+  pageContext.setAttribute("imgURL", imgURL);
   pageContext.setAttribute("id", user.getDbIndex());
   pageContext.setAttribute("user", user);
   pageContext.setAttribute("userName", user.getLoginName());
@@ -82,7 +84,7 @@
       <div class="row">
         <div class="col-md-3 user-info">
           <div class="thumbnail">
-            <img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" />
+            <img src="${imgURL}" />
           </div>
           <div>
             <strong>Membro desde</strong>

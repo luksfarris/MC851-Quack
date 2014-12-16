@@ -83,7 +83,7 @@ public class DatabaseImpl implements Database {
 						}
 					}
 					userTable.add(u);
-					//loadProfileImage(u, context);
+					loadProfileImage(u, context);
 				}
 
 				else {
@@ -279,7 +279,8 @@ public class DatabaseImpl implements Database {
 
 	@Override
 	public void loadProfileImage(User user, ServletContext context) {
-		String filePath = context.getRealPath("/") + "pub/profileImages";
+		String filePath = context.getRealPath("/pub/img/profilepics")  + "/" +  
+	String.valueOf(user.getDbIndex()) + ".jpg";
 		getConnection();
 
 		try {
