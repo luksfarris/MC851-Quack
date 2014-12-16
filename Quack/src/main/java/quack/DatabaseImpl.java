@@ -1,6 +1,5 @@
 package quack;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,8 +49,10 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
-	public void loadDatabase(UserTable userTable, Long nextUserId, Long nextMessageId, ServletContext context) {
+	public void loadDatabase(UserTable userTable, ServletContext context, DatabaseListener listener) {
 		try {
+			long nextUserId = 0;
+			long nextMessageId = 0;
 			getConnection();
 			ResultSet rs = getStatement("SELECT * FROM user;")
 					.executeQuery();
@@ -82,7 +83,7 @@ public class DatabaseImpl implements Database {
 						}
 					}
 					userTable.add(u);
-					//loadProfileImage(u, context);
+					loadProfileImage(u, context);
 				}
 
 				else {
@@ -104,6 +105,10 @@ public class DatabaseImpl implements Database {
 
 			nextUserId++;
 			nextMessageId++;
+			
+			if (listener != null) {
+				listener.onDatabaseLoaded(nextUserId, nextMessageId);
+			}
 
 		} catch (SQLException e) {
 			System.out.println("Ocorreu um erro ao executar uma query.");
@@ -193,8 +198,6 @@ public class DatabaseImpl implements Database {
 				"');").execute();
 			commit();
 			
-			message.getUser().addMessage(message);
-			
 			System.out.println("Mensagem inserida na tabela");
 			success = true;
 		} catch (SQLException e) {
@@ -276,7 +279,8 @@ public class DatabaseImpl implements Database {
 
 	@Override
 	public void loadProfileImage(User user, ServletContext context) {
-		String filePath = context.getRealPath("/") + "pub/profileImages";
+		String filePath = context.getRealPath("/pub/img/profilepics")  + "/" +  
+	String.valueOf(user.getDbIndex()) + ".jpg";
 		getConnection();
 
 		try {

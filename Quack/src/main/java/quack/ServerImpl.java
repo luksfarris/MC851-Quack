@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import javassist.bytecode.Mnemonic;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +54,13 @@ public final class ServerImpl implements Server {
 		this.userTable = new UserTableImpl();
 		this.userTable.initialize();
 		
-		this.database.loadDatabase(userTable, nextUserId, nextMessageId, context);
+		this.database.loadDatabase(userTable, context, new DatabaseListener() {	
+			@Override
+			public void onDatabaseLoaded(long users, long messages) {
+				nextUserId = users;
+				nextMessageId = messages;
+			}
+		});
 
 		// Inicializa o criador de paginas html:
 		html = new HTMLImpl();
@@ -292,6 +300,7 @@ public final class ServerImpl implements Server {
 		
 		user.setFullName(newFullName);
 		database.modifyUser(user);
+
 		html.errorPage(response, "Dados alterados com sucesso");
 	}
 
@@ -521,6 +530,7 @@ public final class ServerImpl implements Server {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 	    final String path = request.getServletContext().getRealPath("/") + "pub/img/profilepics";
 	    final Part filePart = request.getPart("file");
+	    
 	    final String fileName = getFileName(filePart);
 	    String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
 		User user = (User)getUserFromCookie(cookie);

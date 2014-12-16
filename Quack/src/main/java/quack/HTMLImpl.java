@@ -12,7 +12,6 @@ public class HTMLImpl implements HTML {
 	@Override
 	public void errorPage(HttpServletResponse response, String msg) {
 		response.setContentType("text/html");
-		System.out.println("Erro: " + msg);
 		try {
 			response.getWriter().println("<script type=\"text/javascript\">history.back(alert('"+msg+"'));</script>");
 		} catch (IOException e) {

@@ -10,6 +10,7 @@
   String loginName = request.getParameter("u");
   User user;
   String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+  String imgURL;
   user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
   pageContext.setAttribute("currentUserName", user.getLoginName());
 
@@ -22,11 +23,14 @@
     pageContext.setAttribute("isCurrentUserPage", false);
   }
 
+  imgURL =  "pub/img/profilepics/" + String.valueOf(user.getDbIndex()) + ".jpg";
+  
   pageContext.setAttribute("id", user.getDbIndex());
   pageContext.setAttribute("user", user);
   pageContext.setAttribute("userName", user.getLoginName());
   pageContext.setAttribute("messages", user.getPostedMessages());
   pageContext.setAttribute("formatador", formatador);
+  pageContext.setAttribute("imgURL", imgURL);
 %>
 
 <!DOCTYPE html>
@@ -77,7 +81,7 @@
       <div class="row">
         <div class="col-md-3 user-info">
           <div class="thumbnail">
-            <img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" />
+            <img src="${imgURL}" />
           </div>
           <div class="profile-buttons">
             <c:choose>

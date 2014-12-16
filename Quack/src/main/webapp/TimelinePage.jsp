@@ -11,6 +11,13 @@ String numPosts = request.getParameter("maxN");
 int maxposts = (numPosts == null) ? 30 : Integer.parseInt(numPosts);
 Timestamp t = new TimestampImpl();
 HTMLImpl formatador = new HTMLImpl();
+String imgURL;
+User user;
+String cookie = CookieHelper.getCookieValue(request, CookieHelper.COOKIE_NAME);
+user = QuackService.getServer(getServletContext()).getUserFromCookie(cookie);
+imgURL =  "pub/img/profilepics/" + String.valueOf(user.getDbIndex()) + ".jpg";
+
+pageContext.setAttribute("imgURL", imgURL);
 %>
 <!DOCTYPE html>
 <html>
@@ -53,7 +60,7 @@ HTMLImpl formatador = new HTMLImpl();
 	    	<div class="row">
 	    		<div class="col-md-3 user-info">
           			<div class="thumbnail">
-           				 <img src="https://www.wevi.com.br/static/img/placeholder/placeholder_user.png" />
+           				 <img src="${imgURL}" />
          			 </div>
          		</div>
 		    	<div class="col-md-9">
