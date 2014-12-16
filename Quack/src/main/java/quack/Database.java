@@ -1,10 +1,6 @@
 package quack;
 
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 import javax.servlet.ServletContext;
 
@@ -27,7 +23,7 @@ public interface Database {
 	// Inicializa um banco de dados com parametros de login {dbLoginName}, senha {dbPassword}
 	// e banco de nome {dbName}
 	
-	public void loadDatabase(UserTable userTable, Long nextUserId, Long nextMessageId, ServletContext context);
+	public void loadDatabase(UserTable userTable, ServletContext context, DatabaseListener listener);
 	// Carrega a base de dados {this.database} na memória, criando os objetos
 	// {User,Message,Contact} e ligando-os entre si. Supõe que a conexão com o
 	// servidor da base de dados já foi estabelecida.
