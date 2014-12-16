@@ -292,7 +292,15 @@ public final class ServerImpl implements Server {
 		
 		user.setFullName(newFullName);
 		database.modifyUser(user);
-		html.errorPage(response, "Dados alterados com sucesso");
+		
+		if(request.getParameter("profileImage") != null)
+			try {
+				this.processFileUploadReq(request, response, context);
+			} catch (ServletException e) {
+				e.printStackTrace();
+			}
+		else
+			html.errorPage(response, "Dados alterados com sucesso");
 	}
 
 	@Override

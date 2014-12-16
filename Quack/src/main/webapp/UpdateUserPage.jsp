@@ -23,6 +23,38 @@
 
 <!DOCTYPE html>
 <html>
+	<script>		
+		function checkPass() {		
+			//Store the password field objects into variables ...		
+			var pass1 = document.getElementById('pass1');		
+			var pass2 = document.getElementById('pass2');		
+			//Store the Confimation Message Object ...		
+			var message = document.getElementById('confirmMessage');		
+			//Set the colors we will be using ...		
+			var goodColor = "#FFFFFF";		
+			var badColor = "#ff6666";		
+			document.getElementById('botao');		
+			//Compare the values in the password field		
+			//and the confirmation field		
+			if (pass1.value == pass2.value) {		
+				//The passwords match.		
+				//Set the color to the good color and inform		
+				//the user that they have entered the correct password		
+				pass2.style.backgroundColor = goodColor;		
+				message.innerHTML = ""		
+				document.getElementById('botao').disabled = false;		
+		
+			} else {		
+				//The passwords do not match.		
+				//Set the color to the bad color and		
+				//notify the user.		
+				pass2.style.backgroundColor = badColor;		
+				message.style.color = badColor;		
+				message.innerHTML = "Senhas não batem!"		
+				document.getElementById('botao').disabled = true;		
+			}		
+		}		
+	</script>
   <head>
     <meta charset="UTF-8" />
     <title>Quack - Perfil de @${user.getLoginName()}</title>
@@ -42,7 +74,7 @@
     <link rel="stylesheet" type="text/css" href="pub/css/user-profile.css">
 
     <!-- Custom script -->
-    <script src="pub/js/edit-user-profile.js"></script>
+    <!-- <script src="pub/js/edit-user-profile.js"></script> -->
   </head>
   <body>
     <header>
@@ -90,7 +122,8 @@
           </div>
         </div>
         <div class="col-md-9">
-          <form id="edit-user-profile"class="form-horizontal" role="form" name="Update" action="Update" method="get" accept-charset="utf-8">
+        
+          <form id="edit-user-profile"class="form-horizontal" role="form" name="Update" action="ModifyUser" method="get" accept-charset="utf-8">
             <fieldset>
               <div class="form-group">
                 <label class="col-sm-2 control-label">Nome de usuário</label>
@@ -124,13 +157,13 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label" for="new-pass-1">Nova senha</label>
                 <div class="col-sm-10">
-                  <input type="password" class="form-control required" name="newPassword" id="pass1" placeholder="Digite sua nova senha">
+                  <input type="password" class="form-control required" name="newPassword" id="pass1" placeholder="Digite sua nova senha" onKeyUp='checkPass(); return false;'>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label" for="new-pass-2">Redigite sua nova senha</label>
                 <div class="col-sm-10">
-                  <input type="password" class="form-control required" name="passwordcheck" id="pass2" placeholder="Digite sua nova senha novamente">
+                  <input type="password" class="form-control required" name="passwordcheck" id="pass2" placeholder="Digite sua nova senha novamente" onKeyUp='checkPass(); return false;'>
                 </div>
               </div>
             </fieldset>
